@@ -1,2 +1,2 @@
 # discord.js-collector
-A customizable card collecting framework for Discord.js
+A customizable card collecting framework for Discord.js-commando
