@@ -6,5 +6,8 @@
   "repository": "https://github.com/SoggyPiggy/discord.js-collector.git",
   "author": "SoggyPiggy <soggypiggy@gmail.com>",
   "license": "Apache-2.0",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "random-js": "^1.0.8"
+  }
 }
