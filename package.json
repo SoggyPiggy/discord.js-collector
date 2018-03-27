@@ -10,5 +10,9 @@
   "dependencies": {
     "canvas": "^2.0.0-alpha.12",
     "random-js": "^1.0.8"
+  },
+  "peerDependencies": {
+    "discord.js": "^11.3.2",
+    "discord.js-commando": "^0.9.0"
   }
 }
