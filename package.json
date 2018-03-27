@@ -1,6 +1,6 @@
 {
   "name": "discord.js-collector",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A customizable card collecting framework for Discord.js-commando",
   "main": "./src/index",
   "repository": "https://github.com/SoggyPiggy/discord.js-collector.git",
@@ -8,6 +8,7 @@
   "license": "Apache-2.0",
   "private": false,
   "dependencies": {
+    "canvas": "^1.6.10",
     "random-js": "^1.0.8"
   }
 }
