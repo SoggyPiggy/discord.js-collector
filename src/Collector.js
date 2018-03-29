@@ -12,6 +12,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.setIDPrefix === 'undefined') options.setIDPrefix = '#';
 		if (typeof options.setIDLength === 'undefined') options.setIDLength = 4;
 		if (typeof options.setIDFiller === 'undefined') options.setIDFiller = '0';
+		if (typeof options.creditPrefix === 'undefined') options.creditPrefix = '¤';
 		if (typeof options.features === 'undefined') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
 		if (typeof options.features.credits === 'undefined') options.features.credits = true;
@@ -19,6 +20,11 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.features.credits === 'undefined') options.features.credits = true;
 		if (typeof options.features.trading === 'undefined') options.features.trading = true;
 		if (typeof options.features.market === 'undefined') options.features.market = true;
+		if (typeof options.pricing === 'undefined') options.pricing = {};
+		if (typeof options.pricing.boosterpack === 'undefined') options.pricing.boosterpack = 400;
+		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 600;
+		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
+		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		this.options = options;
 	}
 
