@@ -28,6 +28,7 @@ module.exports = class CardRegistry
 	registerSeries(data = {})
 	{
 		let series = new Series(data, this);
+		series.id = this.collector.utils.formatSeriesID(series.id);
 		if (this.series.has(series.id)) throw new Error(`Series with id ${series.id} already registered`);
 		this.series.set(series.id, series);
 		this.collector.emit('debug', `Registered series ${series.id}.`);
@@ -37,9 +38,11 @@ module.exports = class CardRegistry
 	registerSet(set)
 	{
 		if (!set instanceof Set) throw new Error('registerSet only accepts instances of the Set class');
+		set.id = this.collector.utils.formatSetID(set.id);
 		if (this.sets.has(set.id)) throw new Error(`Set with id ${set.id} already registered`);
 		if (!(set.series instanceof Series))
 		{
+			set.series = this.collector.utils.formatSeriesID(set.series);
 			if (!this.series.has(set.series)) throw new Error(`Series with id ${set.series} has not been registered yet`);
 			set.series = this.series.get(set.series);
 		}
@@ -52,9 +55,11 @@ module.exports = class CardRegistry
 	registerCard(card)
 	{
 		if (!card instanceof Card) throw new Error('registerCard only accepts instances of the Card class');
+		card.id = this.collector.utils.formatCardID(card.id);
 		if (this.cards.has(card.id)) throw new Error(`Card with id ${card.id} already registered`);
 		if (!(card.set instanceof Set))
 		{
+			card.set = this.collector.utils.formatSetID(card.set);
 			if (!this.sets.has(card.set)) throw new Error(`Set with id ${card.set} has not been registered yet`);
 			card.set = this.sets.get(card.set);
 			card.inheritProperties();
