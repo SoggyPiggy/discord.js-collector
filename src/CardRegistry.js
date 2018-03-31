@@ -26,9 +26,8 @@ module.exports = class CardRegistry
 
 	registerSeries(data = {})
 	{
-		let series = new Series(data);
+		let series = new Series(data, this);
 		if (this.series.has(series.id)) throw new Error(`Series with id ${series.id} already registered`);
-		series.registery = this;
 		this.series.set(series.id, series);
 		this.collector.emit('debug', `Registered series ${series.id}.`);
 		this.collector.emit('seriesRegister', series, this);
