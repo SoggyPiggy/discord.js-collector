@@ -1,4 +1,3 @@
-
 const ChanceMap = require('./utils/ChanceMap');
 const Series = require('./structures/Series');
 const Set = require('./structures/Set');
