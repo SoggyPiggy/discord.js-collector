@@ -37,6 +37,11 @@ module.exports = class Card
 		this.omit			= data.omit;
 	}
 
+	get value()
+	{
+		return ((this.chance / this.set.cards._total) * this.set.value);
+	}
+
 	inheritProperties()
 	{
 		if (this.author === null && this.set.author !== null) this.author = this.set.author;

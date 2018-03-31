@@ -17,5 +17,29 @@ module.exports = class
 		this.packable		= data.packable;
 		this.mutatable		= data.mutatable;
 		this.sets			= new ChanceMap;
+		this.registery		= registery;
+	}
+
+	get value()
+	{
+		let total = 0;
+		let count = 0;
+		if (this.collectable)
+		{
+			total += (this.chance / this.registery.collectable._total);
+			count ++;
+		}
+		if (this.mutatable)
+		{
+			total += (this.chance / this.registery.mutatable._total);
+			count ++;
+		}
+		if (this.packable)
+		{
+			total += (this.chance / this.registery.packable._total);
+			count ++;
+		}
+		if (total === 0) return 0;
+		else return (total / count);
 	}
 }

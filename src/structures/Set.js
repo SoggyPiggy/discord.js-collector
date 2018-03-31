@@ -33,4 +33,9 @@ module.exports = class Set
 		this.omit			= data.omit;
 		this.cards			= new ChanceMap();
 	}
+
+	get value()
+	{
+		return ((this.chance / this.series.sets._total) * this.series.value);
+	}
 }
