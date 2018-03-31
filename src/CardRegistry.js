@@ -21,7 +21,8 @@ module.exports = class CardRegistry
 	{
 		this.registerSeries({id: 'standard'});
 		this.registerSeries({id: 'seasonal', chance: 40});
-		this.registerSeries({id: 'valuable', chance: 5, packable: false})
+		this.registerSeries({id: 'valuable', chance: 5, packable: false});
+		this.registerSeries({id: 'exclusive', chance: 0, collectable: false, packable: false, mutatable: false});
 	}
 
 	registerSeries(data = {})
