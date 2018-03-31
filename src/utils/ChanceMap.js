@@ -22,6 +22,7 @@ module.exports = class extends Map
 
 	set(key, value)
 	{
+		if (typeof value.chance === 'undefined') throw new Error('Value must possess a Number chance property');
 		if (this.has(key))
 		{
 			super.set(key, value);
