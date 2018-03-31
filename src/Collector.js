@@ -28,21 +28,6 @@ module.exports = class Collector extends EventEmitter
 		this.options = options;
 	}
 
-	registerGroup(group)
-	{}
-	registerGroups(groups)
-	{}
-
-	registerSet(set)
-	{}
-	registerSets(sets)
-	{}
-
-	registerCard(card)
-	{}
-	registerCards(cards)
-	{}
-
 	registerCommando(client)
 	{
 		this.Commando = client;
