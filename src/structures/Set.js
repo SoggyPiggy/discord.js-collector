@@ -6,6 +6,7 @@ module.exports = class Set
 	{
 		if (typeof data					!== 'object')		throw new Error('Set data must be an object');
 		if (typeof data.id				=== 'undefined')	throw new Error('Set missing ID');
+		if (typeof data.series			=== 'undefined')	throw new Error('Set missing Series ID');
 		if (typeof data.title			=== 'undefined')	data.title			= 'undefined';
 		if (typeof data.author			=== 'undefined')	data.author			= null;
 		if (typeof data.description	=== 'undefined')	data.description	= null;
@@ -19,6 +20,7 @@ module.exports = class Set
 		if (typeof data.omit				=== 'undefined')	data.omit			= false;
 
 		this.id				= data.id;
+		this.series			= data.series;
 		this.title			= data.title;
 		this.chance			= data.chance;
 		this.author			= data.author;

@@ -13,7 +13,7 @@ module.exports = class Card
 		if (typeof data.author			=== 'undefined')	data.author			= null;
 		if (typeof data.xp				=== 'undefined')	data.xp				= 100;
 		if (typeof data.chance			=== 'undefined')	data.chance			= 100;
-		if (typeof daat.visibility		=== 'undefined')	data.visibility	= 1;
+		if (typeof data.visibility		=== 'undefined')	data.visibility	= 1;
 		if (typeof data.image			=== 'undefined')	data.image			= null;
 		if (typeof data.fullart			=== 'undefined')	data.fullart		= false;
 		if (typeof data.guarded			=== 'undefined')	data.guarded		= false;
@@ -39,11 +39,11 @@ module.exports = class Card
 
 	inheritProperties()
 	{
-		if (this.author === null && card.set.author !== null) this.author = card.set.author;
-		if (this.visibility < card.set.visibility) this.visibility = card.set.visibility;
-		if (card.set.guarded === true) this.guarded = true;
-		if (card.set.untradable === true) this.untradable = true;
-		for (let tag of card.set.tags)
+		if (this.author === null && this.set.author !== null) this.author = this.set.author;
+		if (this.visibility < this.set.visibility) this.visibility = this.set.visibility;
+		if (this.set.guarded === true) this.guarded = true;
+		if (this.set.untradable === true) this.untradable = true;
+		for (let tag of this.set.tags)
 		{
 			if (!this.tags.includes(tag)) this.tags.push(tag);
 		}

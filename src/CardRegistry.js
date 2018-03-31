@@ -3,7 +3,7 @@ const Series = require('./structures/Series');
 const Set = require('./structures/Set');
 const Card = require('./structures/Card');
 
-module.exports = class CardManager
+module.exports = class CardRegistry
 {
 	constructor(collector)
 	{
@@ -15,8 +15,6 @@ module.exports = class CardManager
 		this.collectable = new ChanceMap();
 		this.packable = new ChanceMap();
 		this.mutatable = new ChanceMap();
-
-		if (this.collector.options.seriesStandard) this.registerSeriesStandard;
 	}
 
 	registerDefaultSeries()
@@ -40,7 +38,7 @@ module.exports = class CardManager
 	{
 		if (!set instanceof Set) throw new Error('registerSet only accepts instances of the Set class');
 		if (this.sets.has(set.id)) throw new Error(`Set with id ${set.id} already registered`);
-		if (!set.series instanceof Series)
+		if (!(set.series instanceof Series))
 		{
 			if (!this.series.has(set.series)) throw new Error(`Series with id ${set.series} has not been registered yet`);
 			set.series = this.series.get(set.series);
@@ -55,7 +53,7 @@ module.exports = class CardManager
 	{
 		if (!card instanceof Card) throw new Error('registerCard only accepts instances of the Card class');
 		if (this.cards.has(card.id)) throw new Error(`Card with id ${card.id} already registered`);
-		if (!card.set instanceof Set)
+		if (!(card.set instanceof Set))
 		{
 			if (!this.sets.has(card.set)) throw new Error(`Set with id ${card.set} has not been registered yet`);
 			card.set = this.sets.get(card.set);
@@ -78,6 +76,7 @@ module.exports = class CardManager
 				{
 					data = new data();
 					this.register(data);
+					break;
 				}
 				case 'object':
 				{
@@ -86,6 +85,7 @@ module.exports = class CardManager
 					else if (typeof data.set !== 'undefined') this.registerCard(new Card(data));
 					else if (typeof data.series !== 'undefined') this.registerSet(new Set(data));
 					else throw new Error(`Unable to register object as a Card/Set`);
+					break;
 				}
 				default: throw new Error(`Unable to register ${typeof data} as a Card/Set`);
 			}
@@ -125,7 +125,7 @@ module.exports = class CardManager
 
 	_enableSet(set)
 	{
-		if (!set.series.has(set.id)) set.series.sets.set(set.id, set);
+		if (!set.series.sets.has(set.id)) set.series.sets.set(set.id, set);
 		this._enableSeries(set.series);
 	}
 
