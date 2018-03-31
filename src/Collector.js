@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const CardRegistry = require('./CardRegistry');
+const Utils = require('./utils/Utils');
 
 module.exports = class Collector extends EventEmitter
 {
@@ -28,6 +29,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		this.options = options;
 		this.registry = new CardRegistry(this);
+		this.utils = new Utils(this);
 	}
 
 	registerCommando(client)
