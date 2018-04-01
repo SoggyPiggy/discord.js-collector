@@ -6,10 +6,10 @@ module.exports = class _Command extends Commando.Command
 	{
 		super(Client,
 			{
-				name: 'set-info',
+				name: 'set',
 				group: 'collector_sets',
-				memberName: 'set-info',
-				description: 'set-info'
+				memberName: 'set',
+				description: 'set'
 			});
 		this.Collector = Collector;
 	}
