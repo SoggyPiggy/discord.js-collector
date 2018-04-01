@@ -124,25 +124,26 @@ module.exports = class CardRegistry
 	_enableSeries(series)
 	{
 		if (series._enabled) return;
+		series._enabled = true;
 		if (series.collectable && !this.collectable.has(series.id)) this.collectable.set(series.id, series);
 		if (series.packable && !this.packable.has(series.id)) this.packable.set(series.id, series);
 		if (series.mutatable && !this.mutatable.has(series.id)) this.mutatable.set(series.id, series);
-		series._enabled = true;
 	}
 
 	_enableSet(set)
 	{
 		if (set._enabled) return;
+		set._enabled = true;
+		if (set.obtainable === false) return;
 		if (!set.series.sets.has(set.id)) set.series.sets.set(set.id, set);
 		this._enableSeries(set.series);
-		set._enabled = true;
 	}
 
 	_enableCard(card)
 	{
 		if (card._enabled) return;
+		card._enabled = true;
 		card.set.cards.set(card.id, card);
 		this._enableSet(card.set);
-		card._enabled = true;
 	}
 }
