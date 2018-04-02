@@ -1,3 +1,5 @@
+const Random = require('./random');
+
 module.exports = class Utils
 {
 	constructor(collector)
@@ -47,5 +49,18 @@ module.exports = class Utils
 			count++;
 		}
 		return this.options.creditPrefix + number;
+	}
+
+	static shuffle(array)
+	{
+		var m = array.length, t, i;
+		while(m)
+		{
+			i = Random.integer(0, m--);
+			t = array[m];
+			array[m] = array[i];
+			array[i] = t;
+		}
+		return array;
 	}
 }
