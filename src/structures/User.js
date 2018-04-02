@@ -28,4 +28,19 @@ class User
 	{
 		return (this.xp / this.collector.options.levelXP)
 	}
+
+	compress()
+	{
+		let data = {};
+		data.id = this.id;
+		data.username = this.username;
+		data.credits = this.credits;
+		data.xp = this.xp;
+		data.cooldowns = {};
+		for (let v of this.cooldowns.keys())
+		{
+			data.cooldowns[v] = this.cooldowns.get(v).compress();
+		}
+		data.cards = this.cards.compress();
+	}
 }

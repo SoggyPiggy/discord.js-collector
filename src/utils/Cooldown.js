@@ -49,6 +49,6 @@ module.exports = class Cooldown extends EventEmitter
 	
 	compress()
 	{
-		return {min: this.min, max: this.max, cooldown: this.cooldown};
+		return {cooldown: this.cooldown};
 	}
 }
