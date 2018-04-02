@@ -9,8 +9,8 @@ module.exports = class UserManager extends Map
 		super();
 		this.collector = collector;
 
-		let db = diskdb.connect(collector.options.database, ['users']);
-		let userDB = diskdb.connect(path.join(collector.options.database, ['users']))
+		let db = diskdb.connect(path.join(collector.options.database), ['users']);
+		let userDB = diskdb.connect(path.join(collector.options.database, 'users'))
 		let users = db.users.find();
 		for (let user of users)
 		{
