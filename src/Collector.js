@@ -1,4 +1,6 @@
 const EventEmitter = require('events');
+const path = require('path');
+const fs = require('fs');
 const CardRegistry = require('./CardRegistry');
 const Utils = require('./utils/Utils');
 
@@ -15,6 +17,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.setIDLength === 'undefined') options.setIDLength = 4;
 		if (typeof options.setIDFiller === 'undefined') options.setIDFiller = '0';
 		if (typeof options.creditPrefix === 'undefined') options.creditPrefix = '¤';
+		if (typeof options.database === 'undefined') options.database = path.join(__dirname, 'db/collector');
 		if (typeof options.features === 'undefined') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
 		if (typeof options.features.credits === 'undefined') options.features.credits = true;
@@ -28,6 +31,10 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		this.options = options;
+
+		if (!fs.existsSync(options.database)) fs.mkdirSync(options.database);
+		if (!fs.existsSync(path.join(options.database, 'users'))) fs.mkdirSync(path.join(options.database, 'users'));
+
 		this.registry = new CardRegistry(this);
 		this.utils = new Utils(this);
 	}
