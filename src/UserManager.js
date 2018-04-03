@@ -8,26 +8,22 @@ module.exports = class UserManager extends Map
 	{
 		super();
 		this.collector = collector;
-
 		this.db = diskdb.connect(path.join(collector.options.database), ['users']);
 		this.userDB = diskdb.connect(path.join(collector.options.database, 'users'))
+
 		let users = this.db.users.find();
-		for (let user of users)
+		for (let p in users)
 		{
-			let id = String(user.id);
+			let id = String(users[p].id);
 			this.userDB.loadCollections([id]);
-			let userData = this.userDB[id].find();
-			if (typeof userData.id === 'undefined')
+			let data = this.userDB[id].find()[0];
+			if (typeof data.id === 'undefined')
 			{
-				this.collector.emit('warn', `Attempting to register a User without ID: ${user}; skipping`);
+				this.collector.emit('warn', `Attempting to register a User without ID: ${id}; skipping`);
 				continue;
 			}
-			this.registerUser(new User(userData));
+			let user = new User(collector, data);
+			this.set(user.id, user);
 		}
-	}
-
-	registerUser(user)
-	{
-		this.set(user.id, user);
 	}
 }
