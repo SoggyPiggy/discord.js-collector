@@ -1,7 +1,7 @@
 const Cooldown = require('./../utils/Cooldown');
 const CardCollection = require('./CardCollection');
 
-class User
+module.exports = class User
 {
 	constructor(collector, data)
 	{

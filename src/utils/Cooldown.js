@@ -5,6 +5,7 @@ module.exports = class Cooldown extends EventEmitter
 {
 	constructor(options = {})
 	{
+		super();
 		if (typeof options !== 'object') options = {};
 		if (typeof options.timeout !== 'undefined') options.min = options.timeout;
 		if (typeof options.min === 'undefined') options.min = 1000;

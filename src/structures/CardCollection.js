@@ -1,4 +1,4 @@
-class CardCollection extends Map
+module.exports = class CardCollection extends Map
 {
 	constructor(cards)
 	{
