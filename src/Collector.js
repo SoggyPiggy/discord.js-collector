@@ -49,65 +49,65 @@ module.exports = class Collector extends EventEmitter
 		this.Commando = client;
 
 		client.registry.registerGroup('collector_basic', 'Collector: Basics');
-		client.registry.registerCommand(new (require('./src/commands/basics/collect'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/basics/collection'))(client, this));
+		client.registry.registerCommand(new (require('./commands/basics/collect'))(client, this));
+		client.registry.registerCommand(new (require('./commands/basics/collection'))(client, this));
 
 		client.registry.registerGroup('collector_card', 'Collector: Card Basics');
-		client.registry.registerCommand(new (require('./src/commands/card/display'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/card/info'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/card/cards'))(client, this));
+		client.registry.registerCommand(new (require('./commands/card/display'))(client, this));
+		client.registry.registerCommand(new (require('./commands/card/card'))(client, this));
+		client.registry.registerCommand(new (require('./commands/card/cards'))(client, this));
 
 		client.registry.registerGroup('collector_sets', 'Collector: Set Basics');
-		client.registry.registerCommand(new (require('./src/commands/set/info'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/set/sets'))(client, this));
+		client.registry.registerCommand(new (require('./commands/set/set'))(client, this));
+		client.registry.registerCommand(new (require('./commands/set/sets'))(client, this));
 
 		if (this.options.features.credits)
 		{
 			client.registry.registerGroup('collector_credits', 'Collector: Credit Basics');
-			client.registry.registerCommand(new (require('./src/commands/credit/balance'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/credit/transfer'))(client, this));
+			client.registry.registerCommand(new (require('./commands/credit/balance'))(client, this));
+			client.registry.registerCommand(new (require('./commands/credit/transfer'))(client, this));
 		}
 
 		if (this.options.features.packs)
 		{
 			client.registry.registerGroup('collector_packs', 'Collector: Card Packs');
-			client.registry.registerCommand(new (require('./src/commands/packs/starter'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/packs/booster'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/packs/set'))(client, this));
+			client.registry.registerCommand(new (require('./commands/packs/starter'))(client, this));
+			client.registry.registerCommand(new (require('./commands/packs/booster'))(client, this));
+			client.registry.registerCommand(new (require('./commands/packs/set'))(client, this));
 		}
 
 		if (this.options.features.managment)
 		{
 			client.registry.registerGroup('collector_managment', 'Collector: Card Managment');
-			client.registry.registerCommand(new (require('./src/commands/managment/grindx'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/managment/grinddupe'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/managment/grindall'))(client, this));
+			client.registry.registerCommand(new (require('./commands/managment/grindx'))(client, this));
+			client.registry.registerCommand(new (require('./commands/managment/grinddupe'))(client, this));
+			client.registry.registerCommand(new (require('./commands/managment/grindall'))(client, this));
 		}
 
 		if (this.options.features.trading)
 		{
 			client.registry.registerGroup('collector_trading', 'Collector: Trading');
-			client.registry.registerCommand(new (require('./src/commands/trading/trade'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/trading/accept'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/trading/decline'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/trading/info'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/trading/offers'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/trade'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/accept'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/decline'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/info'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/offers'))(client, this));
 		}
 
 		if (this.options.features.market)
 		{
 			client.registry.registerGroup('collector_market', 'Collector: Market');
-			client.registry.registerCommand(new (require('./src/commands/market/buy'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/market/sell'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/market/cancel'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/market/history'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/market/info'))(client, this));
-			client.registry.registerCommand(new (require('./src/commands/market/listings'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/buy'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/sell'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/cancel'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/history'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/info'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/listings'))(client, this));
 		}
 
 		client.registry.registerGroup('collector_informative', 'Collector: Help Center');
-		client.registry.registerCommand(new (require('./src/commands/informative/news'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/informative/startup'))(client, this));
-		client.registry.registerCommand(new (require('./src/commands/informative/search'))(client, this));
+		client.registry.registerCommand(new (require('./commands/informative/news'))(client, this));
+		client.registry.registerCommand(new (require('./commands/informative/startup'))(client, this));
+		client.registry.registerCommand(new (require('./commands/informative/search'))(client, this));
 	}
 }
