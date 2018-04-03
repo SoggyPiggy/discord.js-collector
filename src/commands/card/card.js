@@ -7,7 +7,7 @@ module.exports = class _Command extends Commando.Command
 		super(Client,
 			{
 				name: 'card-info',
-				group: 'collector_card-info',
+				group: 'collector_card',
 				memberName: 'card-info',
 				description: 'card-info'
 			});
