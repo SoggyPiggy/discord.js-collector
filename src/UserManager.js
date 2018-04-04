@@ -16,7 +16,12 @@ module.exports = class UserManager extends Map
 		{
 			let id = String(users[p].id);
 			this.userDB.loadCollections([id]);
-			let data = this.userDB[id].find()[0];
+			let data = this.userDB[id].find();
+			if (data.length <= 0)
+			{
+				this.userDB[id].update({id: id}, (this.get(id).compress()), {upsert: true});
+				data = this.userDB[id].find()[0];
+			}
 			if (typeof data.id === 'undefined')
 			{
 				this.collector.emit('warn', `Attempting to register a User without ID: ${id}; skipping`);
