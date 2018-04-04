@@ -90,7 +90,7 @@ module.exports = class Collector extends EventEmitter
 			client.registry.registerCommand(new (require('./commands/trading/trade'))(client, this));
 			client.registry.registerCommand(new (require('./commands/trading/accept'))(client, this));
 			client.registry.registerCommand(new (require('./commands/trading/decline'))(client, this));
-			client.registry.registerCommand(new (require('./commands/trading/info'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/offer'))(client, this));
 			client.registry.registerCommand(new (require('./commands/trading/offers'))(client, this));
 		}
 
@@ -101,7 +101,7 @@ module.exports = class Collector extends EventEmitter
 			client.registry.registerCommand(new (require('./commands/market/sell'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/cancel'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/history'))(client, this));
-			client.registry.registerCommand(new (require('./commands/market/info'))(client, this));
+			client.registry.registerCommand(new (require('./commands/market/listing'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/listings'))(client, this));
 		}
 
