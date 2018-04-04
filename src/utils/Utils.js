@@ -29,9 +29,32 @@ module.exports = class Utils
 			{
 				key: 'page',
 				label: 'Page Number',
-				prompt: 'What page are you looking for',
-				type: 'number',
+				prompt: 'Which page would you like to view?',
+				type: 'integer',
 				default: 1
+			},
+			user:
+			{
+				key: 'member',
+				label: 'User',
+				prompt: 'Who?',
+				type: 'user',
+				default: false
+			},
+			pageSearch:
+			{
+				key: 'page',
+				label: 'Page Number / Search Query',
+				prompt: 'Which page would you like to view? or what is your search query?',
+				type: 'integer|string',
+				default: 1
+			},
+			pageUser:
+			{
+				key: 'page',
+				label: 'Page Number / User',
+				prompt: 'Which page would you like to view? or who?',
+				type: 'integer|user'
 			}
 		}
 	}
