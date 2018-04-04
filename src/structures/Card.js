@@ -27,6 +27,7 @@ module.exports = class Card
 		this.source			= data.source;
 		this.description	= data.description;
 		this.tags			= data.tags;
+		this.author			= data.author;
 		this.xp				= data.xp;
 		this.chance			= data.chance;
 		this.visibility	= data.visibility;
