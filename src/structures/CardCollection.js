@@ -5,18 +5,30 @@ module.exports = class CardCollection extends Map
 		super(cards);
 	}
 
-	add(id, count = 1)
+	add(card, count = 1)
 	{
+		let id = this.parseID(card);
+		let num;
+		if (this.has(id)) num = this.get(id) + count;
+		else num = count;
+		this.set(id, num);
 	}
 
-	remove(id, count = 1)
+	remove(card, count = 1)
 	{
+		let id = this.parseID(card);
 		if (this.has(id))
 		{
-			let num = Number(this.get(id)) - count;
+			let num = this.get(id) - count;
 			if (num > 0) this.set(id, num);
 			else this.delete(id);
 		}
+	}
+
+	parseID(card)
+	{
+		if (typeof card === 'string') return card;
+		else if (typeof card.id !== 'undefined') return card.id;
 	}
 
 	compress()
