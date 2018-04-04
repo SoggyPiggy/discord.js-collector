@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				memberName: 'card-info',
 				description: 'card-info'
 			});
-		this.Collector = Collector;
+		this.collector = Collector;
 	}
 
 	async run(message, args)

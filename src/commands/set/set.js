@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				memberName: 'set-info',
 				description: 'set-info'
 			});
-		this.Collector = Collector;
+		this.collector = Collector;
 	}
 
 	async run(message, args)

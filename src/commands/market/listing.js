@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				memberName: 'listing-info',
 				description: 'listing-info'
 			});
-		this.Collector = Collector;
+		this.collector = Collector;
 	}
 
 	async run(message, args)
