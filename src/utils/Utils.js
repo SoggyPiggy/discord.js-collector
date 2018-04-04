@@ -6,6 +6,34 @@ module.exports = class Utils
 	{
 		this.collector = collector;
 		this.options = collector.options;
+
+		this.args = 
+		{
+			cardID:
+			{
+				key: 'cardID',
+				label: 'Card ID',
+				prompt: 'What is the ID of the Card?',
+				type: 'string',
+				parse: this.formatCardID
+			},
+			setID:
+			{
+				key: 'setID',
+				label: 'Set ID',
+				prompt: 'What is the ID of the Set?',
+				type: 'string',
+				parse: this.formatSetID
+			},
+			page:
+			{
+				key: 'page',
+				label: 'Page Number',
+				prompt: 'What page are you looking for',
+				type: 'number',
+				default: 1
+			}
+		}
 	}
 	
 	formatSeriesID(id)
@@ -16,21 +44,27 @@ module.exports = class Utils
 	formatSetID(id)
 	{
 		id = id.replace(/\W/g, '').toUpperCase();
-		while (id.length < this.options.setIDLength)
+		let options;
+		if (typeof this.options !== 'undefined') options = this.options;
+		else if (typeof this.command.collector.options !== 'undefined') options = this.command.collector.options;
+		while (id.length < options.setIDLength)
 		{
-			id = this.options.setIDFiller + id;
+			id = options.setIDFiller + id;
 		}
-		return this.options.setIDPrefix + id;
+		return options.setIDPrefix + id;
 	}
 
 	formatCardID(id)
 	{
 		id = id.replace(/\W/g, '').toUpperCase();
-		while(id.length < this.options.cardIDLength)
+		let options;
+		if (typeof this.options !== 'undefined') options = this.options;
+		else if (typeof this.command.collector.options !== 'undefined') options = this.command.collector.options;
+		while (id.length < options.cardIDLength)
 		{
-			id = this.options.cardIDFiller + id;
+			id = options.cardIDFiller + id;
 		}
-		return this.options.cardIDPrefix + id;
+		return options.cardIDPrefix + id;
 	}
 
 	formatCredits(credits)
