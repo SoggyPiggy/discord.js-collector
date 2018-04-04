@@ -20,8 +20,8 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.setIDFiller === 'undefined') options.setIDFiller = '0';
 		if (typeof options.creditPrefix === 'undefined') options.creditPrefix = '¤';
 		if (typeof options.database === 'undefined') options.database = 'db/collector';
-		if (typeof options.collectMinCooldown === 'undefined') options.collectMinCooldown = (1000 * 60 * 60 * 6);
 		if (typeof options.collectMinCooldown === 'undefined') options.collectMinCooldown = (1000 * 60 * 60 * 3);
+		if (typeof options.collectMaxCooldown === 'undefined') options.collectMaxCooldown = (1000 * 60 * 60 * 6);
 		if (typeof options.levelXP === 'undefined') options.levelXP = 100;
 		if (typeof options.features === 'undefined') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
