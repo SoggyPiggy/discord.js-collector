@@ -32,15 +32,16 @@ module.exports = class User
 	compress()
 	{
 		let data = {};
-		data.id = this.id;
-		data.username = this.username;
-		data.credits = this.credits;
-		data.xp = this.xp;
+		data.id = String(this.id);
+		data.username = String(this.username);
+		data.credits = Number(this.credits);
+		data.xp = Number(this.xp);
 		data.cooldowns = {};
 		for (let v of this.cooldowns.keys())
 		{
 			data.cooldowns[v] = this.cooldowns.get(v).compress();
 		}
 		data.cards = this.cards.compress();
+		return data;
 	}
 }

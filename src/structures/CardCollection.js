@@ -21,11 +21,11 @@ module.exports = class CardCollection extends Map
 
 	compress()
 	{
-		let compression = [];
+		let data = [];
 		for (let key of this.keys())
 		{
-			compression.push([key, this.get(key)]);
+			data.push([String(key), Number(this.get(key))]);
 		}
-		return compression;
+		return data;
 	}
 }

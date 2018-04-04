@@ -50,6 +50,8 @@ module.exports = class Cooldown extends EventEmitter
 	
 	compress()
 	{
-		return {cooldown: this.cooldown};
+		let data = {};
+		data.cooldown = Number(this.cooldown);
+		return data;
 	}
 }
