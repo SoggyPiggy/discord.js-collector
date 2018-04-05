@@ -54,4 +54,25 @@ module.exports = class Card
 			if (!this.tags.includes(tag)) this.tags.push(tag);
 		}
 	}
+
+	compress()
+	{
+		let data = {};
+		data.id = this.id;
+		data.title = this.title;
+		data.rarity = this.rarity;
+		data.source = this.source;
+		data.description = this.description;
+		data.tags = this.tags;
+		data.author = this.author;
+		data.xp = this.xp;
+		data.chance = this.chance;
+		data.visibility = this.visibility;
+		data.image = this.image;
+		data.fullart = this.fullart;
+		data.guarded = this.guarded;
+		data.untradable = this.untradable;
+		data.omit = this.omit;
+		return data;
+	}
 }
