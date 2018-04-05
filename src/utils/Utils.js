@@ -15,7 +15,7 @@ module.exports = class Utils
 				label: 'Card ID',
 				prompt: 'What is the ID of the Card?',
 				type: 'string',
-				parse: this.formatCardID
+				// parse: this.formatCardID
 			},
 			setID:
 			{
@@ -23,7 +23,7 @@ module.exports = class Utils
 				label: 'Set ID',
 				prompt: 'What is the ID of the Set?',
 				type: 'string',
-				parse: this.formatSetID
+				// parse: this.formatSetID
 			},
 			page:
 			{
