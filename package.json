@@ -20,6 +20,8 @@
     "discord.js-commando": "gawdl3y/discord.js-commando#master"
   },
   "devDependencies": {
+    "discord.js": "hydrabolt/discord.js#master",
+    "discord.js-commando": "gawdl3y/discord.js-commando#master",
     "sqlite": "^2.9.1"
   }
 }
