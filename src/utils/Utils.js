@@ -1,4 +1,5 @@
 const Random = require('./random');
+const Searcher = require('./Searcher');
 
 module.exports = class Utils
 {
@@ -6,6 +7,7 @@ module.exports = class Utils
 	{
 		this.collector = collector;
 		this.options = collector.options;
+		this.Searcher = Searcher;
 
 		this.args = 
 		{
@@ -33,6 +35,14 @@ module.exports = class Utils
 				type: 'integer',
 				default: 1
 			},
+			search:
+			{
+				key: 'filters',
+				label: 'Filter(s)',
+				prompt: 'What filters would you like to apply?',
+				type: 'string',
+				default: false
+			},
 			user:
 			{
 				key: 'member',
@@ -44,8 +54,8 @@ module.exports = class Utils
 			pageSearch:
 			{
 				key: 'page',
-				label: 'Page Number / Search Query',
-				prompt: 'Which page would you like to view? or what is your search query?',
+				label: 'Page Number / Filter',
+				prompt: 'Which page would you like to view? or what filters would you like to apply?',
 				type: 'integer|string',
 				default: 1
 			},
@@ -57,6 +67,25 @@ module.exports = class Utils
 				type: 'integer|user'
 			}
 		}
+	}
+
+	pagify(page, items)
+	{
+		page = page - 1;
+		let pageItems = [];
+		let itemsPerPage = 30;
+		let pageMax = Math.ceil(items.length / itemsPerPage);
+		if (page < 0) page = 0;
+		if (page >= pageMax) page = pageMax - 1;
+		for (let i = (itemsPerPage * page); (i < (itemsPerPage * (page + 1))) && i < items.length; i++)
+		{
+			pageItems.push(items[i]);
+		}
+		let data = {};
+		data.page = page + 1;
+		data.max = pageMax;
+		data.results = pageItems;
+		return data;
 	}
 	
 	formatSeriesID(id)
