@@ -20,6 +20,7 @@ module.exports = class _Command extends Commando.Command
 
 	async run(message, args)
 	{
+		args.cardID = this.collector.utils.formatCardID(args.cardID);
 		let card = this.collector.registry.cards.get(args.cardID);
 		if (typeof card === 'undefined')
 		{
@@ -66,7 +67,7 @@ module.exports = class _Command extends Commando.Command
 		if (card.untradable) footer += 'Untradable ';
 		footer = footer.replace(/ $/g, '');
 
-		let embed = new Discord.RichEmbed();
+		let embed = new Discord.MessageEmbed();
 		embed.setDescription(description);
 		embed.setFooter(footer);
 		message.channel.send(embed);
