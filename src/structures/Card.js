@@ -55,6 +55,12 @@ module.exports = class Card
 		}
 	}
 
+	owned(user)
+	{
+		if (user.cards.has(this.id)) return user.cards.get(this.id);
+		else return false;
+	}
+
 	compress()
 	{
 		let data = {};

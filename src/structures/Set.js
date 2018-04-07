@@ -38,4 +38,14 @@ module.exports = class Set
 	{
 		return ((this.chance / this.series.sets._total) * this.series.value);
 	}
+
+	ownedCards(user)
+	{
+		let owned = [];
+		for (let [key, card] of this.cards)
+		{
+			if (user.cards.has(key)) owned.push(card);
+		}
+		return owned;
+	}
 }
