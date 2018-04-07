@@ -11,8 +11,8 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['card', 'c'],
 				group: 'collector_card',
 				memberName: 'card-info',
-				description: 'View information about a specific card.',
-				details: 'View information about a card such as what set the card belongs to, the card\'s rarity, if you\'ve collected the card yet, and if you have collected the card more details will be shown.',
+				description: 'View information about a card.',
+				details: 'View card properties like the set it belongs to, rarity, if you\'ve collected the card, and more if you own the card.',
 				args: [Collector.utils.args.cardID]
 			});
 		this.collector = Collector;
@@ -20,11 +20,11 @@ module.exports = class _Command extends Commando.Command
 
 	async run(message, args)
 	{
-		args.cardID = this.collector.utils.formatCardID(args.cardID);
-		let card = this.collector.registry.cards.get(args.cardID);
+		let cardID = this.collector.utils.formatCardID(args.cardID);
+		let card = this.collector.registry.cards.get(cardID);
 		if (typeof card === 'undefined')
 		{
-			message.reply(`Unable to find Card: \`${args.cardID}\``);
+			message.reply(`Unable to find Card: \`${cardID}\``);
 			return;
 		}
 		let user = this.collector.users.get(message.author);
@@ -32,12 +32,11 @@ module.exports = class _Command extends Commando.Command
 		let visible = card.visibility <= 0;
 		if (card.visibility > 1 && !(owned || visible))
 		{
-			message.reply(`Unable to find Card: \`${args.cardID}\``);
+			message.reply(`Unable to find Card: \`${cardID}\``);
 			return;
 		}
 
-		let description = '';
-		description = '**Card:** ';
+		let description = '**Card:** ';
 		if (visible || owned) description += `${card.title} \`${card.id}\``;
 		else description += `????? \`${card.id}\``;
 		description += `\n**Set:** ${card.set.title} \`${card.set.id}\``;
