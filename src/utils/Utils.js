@@ -137,6 +137,67 @@ module.exports = class Utils
 		return this.options.creditPrefix + number;
 	}
 
+	cardList(cards, user = false, options = {})
+	{
+		if (typeof options !== 'object') options = {};
+		if (typeof options.collected === 'undefined') options.collected = true;
+		if (typeof options.count === 'undefined') options.count = true;
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.title === 'undefined') options.title = true;
+		if (typeof options.rarity === 'undefined') options.rarity = true;
+		if (typeof options.spliter === 'undefined') options.spliter = '\n';
+		let highest = 0;
+		if (user)
+		{
+			for (let card of cards)
+			{
+				let count = card.owned(user);
+				if (count)
+				{
+					if (count > highest) highest = count;
+				}
+			}
+			highest = String(highest).replace(/\d/g, '0');
+			while (highest.length < 2)
+			{
+				highest = '0' + highest;
+			}
+		}
+		let list = '';
+		for (let card of cards)
+		{
+			let line = '';
+			let owned = false;
+			if (user) owned = card.owned(user);
+			if (user && (options.collected || options.count)) line += '`';
+			if (options.collected && user)
+			{
+				if (owned) line += `✔️`;
+				else line += `❌`;
+			} 
+			if (options.count && user)
+			{
+				if (owned)
+				{
+					owned = String(owned);
+					while(owned.length < highest.length) {owned = '0' + owned;}
+					line += owned;
+				}
+				else line += highest;
+			}
+			if (user && (options.collected || options.count)) line += '`';
+			if (options.id) line += ` \`${card.id}\``;
+			if (options.title && ((user && owned) || !user)) line += ` **${card.title}**`;
+			else line += ` **~~?????~~**`;
+			if (options.rarity) line += ` *${card.rarity}*`;
+			line += options.spliter;
+			line = line.replace(/^ /g, '');
+			list += line;
+		}
+		let regexEnd = new RegExp(options.spliter + '$', 'g');
+		return list.replace(regexEnd, '');
+	}
+
 	static shuffle(array)
 	{
 		var m = array.length, t, i;
