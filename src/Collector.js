@@ -42,6 +42,10 @@ module.exports = class Collector extends EventEmitter
 		this.users = new UserManager(this);
 		this.registry = new CardRegistry(this);
 		this.utils = new Utils(this);
+		
+		this.series = this.registry.series;
+		this.sets = this.registry.sets;
+		this.cards = this.registry.cards;
 	}
 
 	registerCommando(client)
