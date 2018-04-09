@@ -5,6 +5,18 @@ module.exports = class CardCollection extends Map
 		super(cards);
 	}
 
+	has(card)
+	{
+		let id = this.parseID(card);
+		return super.has(id);
+	}
+
+	get(card)
+	{
+		let id = this.parseID(card);
+		return super.get(id);
+	}
+
 	add(card, count = 1)
 	{
 		let id = this.parseID(card);

@@ -26,6 +26,7 @@ module.exports = class Set
 		this.author			= data.author;
 		this.description	= data.description;
 		this.tags			= data.tags;
+		this.visibility	= data.visibility;
 		this.purchasable	= data.purchasable;
 		this.obtainable	= data.obtainable;
 		this.guarded		= data.guarded;
