@@ -64,7 +64,8 @@ module.exports = class Utils
 				key: 'page',
 				label: 'Page Number / User',
 				prompt: 'Which page would you like to view? or who?',
-				type: 'integer|user'
+				type: 'integer|user', 
+				default: 1
 			}
 		}
 	}
@@ -194,29 +195,29 @@ module.exports = class Utils
 			}
 			else
 			{
-			let owned = false;
+				let owned = false;
 				if (user) owned = user.cards.get(card);
-			if (user && (options.collected || options.count)) line += '`';
-			if (options.collected && user)
-			{
-				if (owned) line += `✔️`;
-				else line += `❌`;
-			} 
-			if (options.count && user)
-			{
-				if (owned)
+				if (user && (options.collected || options.count)) line += '`';
+				if (options.collected && user)
 				{
-					owned = String(owned);
-					while(owned.length < highest.length) {owned = '0' + owned;}
-					line += owned;
+					if (owned) line += `✔️`;
+					else line += `❌`;
+				} 
+				if (options.count && user)
+				{
+					if (owned)
+					{
+						owned = String(owned);
+						while(owned.length < highest.length) {owned = '0' + owned;}
+						line += owned;
+					}
+					else line += highest;
 				}
-				else line += highest;
-			}
-			if (user && (options.collected || options.count)) line += '`';
-			if (options.id) line += ` \`${card.id}\``;
-			if (options.title && ((user && owned) || !user)) line += ` **${card.title}**`;
-			else line += ` **~~?????~~**`;
-			if (options.rarity) line += ` *${card.rarity}*`;
+				if (user && (options.collected || options.count)) line += '`';
+				if (options.id) line += ` \`${card.id}\``;
+				if (options.title && ((user && owned) || !user)) line += ` **${card.title}**`;
+				else line += ` **~~?????~~**`;
+				if (options.rarity) line += ` *${card.rarity}*`;
 			}
 			line += options.spliter;
 			line = line.replace(/^ /g, '');
@@ -224,6 +225,17 @@ module.exports = class Utils
 		}
 		let regexEnd = new RegExp(options.spliter + '$', 'g');
 		return list.replace(regexEnd, '');
+	}
+
+	convertCards(cards)
+	{
+		let data = [];
+		for (let card of cards)
+		{
+			if (this.collector.cards.has(card)) data.push(this.collector.cards.get(card));
+			else data.push(card);
+		}
+		return data;
 	}
 
 	static shuffle(array)
