@@ -149,9 +149,19 @@ module.exports = class Utils
 		let highest = 0;
 		if (user)
 		{
-			for (let card of cards)
+			for (let i = 0; i < cards.length; i++)
 			{
-				let count = card.owned(user);
+				let card = cards[i];
+				if (typeof card === 'string')
+				{
+					let temp = this.collector.registry.cards.get(card);
+					if (typeof temp !== 'undefined')
+					{
+						cards[i] = temp;
+						card = temp;
+					}
+				}
+				let count = user.cards.get(card);
 				if (count)
 				{
 					if (count > highest) highest = count;
@@ -167,8 +177,25 @@ module.exports = class Utils
 		for (let card of cards)
 		{
 			let line = '';
+			if (typeof card === 'string')
+			{
+				if (user && (options.collected || options.count)) line += '`';
+				if (options.collected && user) line += `⛔`
+				if (options.count && user)
+				{
+					let owned = false;
+					if (user) owned = user.cards.get(card);
+					owned = String(owned);
+					while (owned.length < highest.length) { owned = '0' + owned; }
+					line += owned;
+				}
+				if (user && (options.collected || options.count)) line += '`';
+				line += ` \`${card}\` __Card Unavailable__`;
+			}
+			else
+			{
 			let owned = false;
-			if (user) owned = card.owned(user);
+				if (user) owned = user.cards.get(card);
 			if (user && (options.collected || options.count)) line += '`';
 			if (options.collected && user)
 			{
@@ -190,6 +217,7 @@ module.exports = class Utils
 			if (options.title && ((user && owned) || !user)) line += ` **${card.title}**`;
 			else line += ` **~~?????~~**`;
 			if (options.rarity) line += ` *${card.rarity}*`;
+			}
 			line += options.spliter;
 			line = line.replace(/^ /g, '');
 			list += line;
