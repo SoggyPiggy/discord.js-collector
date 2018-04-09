@@ -2,7 +2,7 @@ const ChanceMap = require('./../utils/ChanceMap');
 
 module.exports = class
 {
-	constructor(data = {}, registery)
+	constructor(data = {}, registry)
 	{
 		if (typeof data					!== 'object')		throw new Error('Series data must be an object');
 		if (typeof data.id				=== 'undefined')	throw new Error('Series missing ID');
@@ -17,7 +17,7 @@ module.exports = class
 		this.packable		= data.packable;
 		this.mutatable		= data.mutatable;
 		this.sets			= new ChanceMap;
-		this.registery		= registery;
+		this.registry		= registry;
 	}
 
 	get value()
@@ -26,17 +26,17 @@ module.exports = class
 		let count = 0;
 		if (this.collectable)
 		{
-			total += (this.chance / this.registery.collectable._total);
+			total += (this.chance / this.registry.collectable._total);
 			count ++;
 		}
 		if (this.mutatable)
 		{
-			total += (this.chance / this.registery.mutatable._total);
+			total += (this.chance / this.registry.mutatable._total);
 			count ++;
 		}
 		if (this.packable)
 		{
-			total += (this.chance / this.registery.packable._total);
+			total += (this.chance / this.registry.packable._total);
 			count ++;
 		}
 		if (total === 0) return 0;

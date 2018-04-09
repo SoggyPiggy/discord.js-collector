@@ -8,7 +8,6 @@ module.exports = class CardRegistry
 	constructor(collector)
 	{
 		this.collector = collector;
-		this.locations = new Map();
 		this.cards = new Map();
 		this.sets = new Map();
 		this.series = new Map();
