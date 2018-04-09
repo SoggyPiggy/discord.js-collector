@@ -31,44 +31,51 @@ module.exports = class Searcher
 
 	searchCards(filterString = '')
 	{
+		let appliedFilters = [];
 		let usedFilters = [];
-		let ignoredFilters = []
+		let ignoredFilters = [];
 		let filters = splitFilters(filterString);
 		let cards = new Map(this.cards);
 		for (let [key, card] of cards)
 		{
 			let owned = this.user.cards.has(card.id);
-			if ((card.visibility >= 2 && !owned) || card.visibility >= 3) cards.delete(key);
-		}
-		for (let filter of filters)
-		{
-			filter = filter.toLowerCase();
-			let filterCards = [];
-			if (filter.startsWith('-'))
+			if (card.visibility > 1)
 			{
-				filterCards = this.filterCards(filter.replace(/^-/g, ''), cards);
-				if (filterCards.length > 0)
+				if (card.visibility > 2) cards.delete(key);
+				else if (!owned) cards.delete(key);
+			}
+		}
+		for (let rawFilter of filters)
+		{
+			let filter = rawFilter.toLowerCase();
+			let exclude = filter.startsWith('-');
+			filter = filter.replace(/^(-|\+)/g, '');
+			if (!appliedFilters.includes(filter)) appliedFilters.push(filter);
+			else
+			{
+				ignoredFilters.push(rawFilter);
+				continue;
+			}
+			let filterCards = this.filterCards(filter, cards);
+			if (filterCards.length > 0) usedFilters.push(rawFilter);
+			else
+			{
+				ignoredFilters.push(rawFilter);
+				continue;
+			}
+			if (exclude)
+			{
+				for (let v of filterCards)
 				{
-					for (let v of filterCards)
-					{
-						if (cards.has(v)) cards.delete(v);
-					}
-					usedFilters.push(filter);
+					if (cards.has(v)) cards.delete(v);
 				}
-				else ignoredFilters.push(filter);
 			}
 			else
 			{
-				filterCards = this.filterCards(filter.replace(/^\+/g, ''), cards);
-				if (filterCards.length > 0)
+				for (let [key, card] of cards)
 				{
-					for (let [key, card] of cards)
-					{
-						if (!filterCards.includes(card.id)) cards.delete(key);
-					}
-					usedFilters.push(filter);
+					if (!filterCards.includes(key)) cards.delete(key);
 				}
-				else ignoredFilters.push(filter);
 			}
 		}
 		let data = {};
@@ -97,9 +104,9 @@ module.exports = class Searcher
 		{
 			return [this.utils.formatCardID(filter)];
 		}
-		else if (filter.search(/^((owned|collected)(:|))/gi) >= 0)
+		else if (filter.search(/^((owned)(:|))/gi) >= 0)
 		{
-			let user = filter.replace(/^((owned|collected)(:|))/gi, '');
+			let user = filter.replace(/^((owned)(:|))/gi, '');
 			user = this.filterUser(user);
 			if (!user) return [];
 			let results = [];
