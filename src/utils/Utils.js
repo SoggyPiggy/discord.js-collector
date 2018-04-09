@@ -147,28 +147,19 @@ module.exports = class Utils
 		if (typeof options.title === 'undefined') options.title = true;
 		if (typeof options.rarity === 'undefined') options.rarity = true;
 		if (typeof options.spliter === 'undefined') options.spliter = '\n';
+		cards = this.convertCards(cards);
 		let highest = 0;
 		if (user)
 		{
-			for (let i = 0; i < cards.length; i++)
+			for (let card of cards)
 			{
-				let card = cards[i];
-				if (typeof card === 'string')
-				{
-					let temp = this.collector.registry.cards.get(card);
-					if (typeof temp !== 'undefined')
-					{
-						cards[i] = temp;
-						card = temp;
-					}
-				}
 				let count = user.cards.get(card);
 				if (count)
 				{
 					if (count > highest) highest = count;
 				}
 			}
-			highest = String(highest).replace(/\d/g, '0');
+			highest = String(highest).replace(/./g, '0');
 			while (highest.length < 2)
 			{
 				highest = '0' + highest;
