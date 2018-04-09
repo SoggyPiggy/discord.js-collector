@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 
 module.exports = class _Command extends Commando.Command
@@ -27,21 +28,21 @@ module.exports = class _Command extends Commando.Command
 		let user = this.collector.users.get(message.author);
 		let searcher = new this.collector.utils.Searcher(this.collector, user);
 		let cards = searcher.searchCards(filter);
-		// console.log(cards.results);
-		for (let p in cards)
-		{
-			console.log(`cards.${p} => ${typeof cards[p]}`);
-			console.log(`Instance of Map: ${cards[p] instanceof Map}`);
-		}
 		
 		page = this.collector.utils.pagify(page, Array.from(cards.results.values()));
-		let description = `Used: ${cards.used}\nIgnored: ${cards.ignored}\n`;
-		
-		for (let v of page.results)
+		let description = ``;
+		if ((cards.used.length + cards.ignored.length) > 0)
 		{
-			description += `${v.id} `;
+			description += `**Filters:** `;
+			for (let filter of cards.used) { description += `${filter}, `; }
+			for (let filter of cards.ignored) { description += `~~${filter}~~, `; }
+			description = description.replace(/, $/g, '');
 		}
-		console.log(description);
-		message.reply(description);
+		description += `\n~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;
+		description += this.collector.utils.cardList(page.results, user);
+
+		let embed = new Discord.MessageEmbed();
+		embed.setDescription(description);
+		message.channel.send(`<@${user.id}>`, embed);
 	}
 }
