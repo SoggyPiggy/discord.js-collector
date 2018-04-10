@@ -27,14 +27,14 @@ module.exports = class _Command extends Commando.Command
 			message.reply(`Unable to find Set: \`${setID}\``);
 			return
 		}
-		if (set.visibilty > 2)
+		if (set.visibility > 2)
 		{
 			message.reply(`Unable to find Set: \`${setID}\``);
 			return
 		}
 		let user = this.collector.users.get(message.author);
 		let cards = Array.from(set.cards.values());
-		if (set.visibilty > 1)
+		if (set.visibility > 1)
 		{
 			cards = set.ownedCards(user);
 			if (cards.length <= 0)
