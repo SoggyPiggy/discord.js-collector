@@ -37,7 +37,7 @@ module.exports = class Set
 
 	get value()
 	{
-		return ((this.chance / this.series.sets._total) * this.series.value);
+		return (((this.series.all._total / this.series.all.size) / this.chance) * this.series.value);
 	}
 
 	ownedCards(user)

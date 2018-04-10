@@ -17,6 +17,7 @@ module.exports = class
 		this.packable		= data.packable;
 		this.mutatable		= data.mutatable;
 		this.sets			= new ChanceMap;
+		this.all				= new ChanceMap;
 		this.registry		= registry;
 	}
 
@@ -26,17 +27,17 @@ module.exports = class
 		let count = 0;
 		if (this.collectable)
 		{
-			total += (this.chance / this.registry.collectable._total);
+			total += ((this.registry.allCollectable._total / this.registry.allCollectable.size) / this.chance);
 			count ++;
 		}
 		if (this.mutatable)
 		{
-			total += (this.chance / this.registry.mutatable._total);
+			total += ((this.registry.allMutatable._total / this.registry.allMutatable.size) / this.chance);
 			count ++;
 		}
 		if (this.packable)
 		{
-			total += (this.chance / this.registry.packable._total);
+			total += ((this.registry.allPackable._total / this.registry.allPackable.size) / this.chance);
 			count ++;
 		}
 		if (total === 0) return 0;

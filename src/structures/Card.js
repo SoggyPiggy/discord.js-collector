@@ -40,7 +40,7 @@ module.exports = class Card
 
 	get value()
 	{
-		return ((this.chance / this.set.cards._total) * this.set.value);
+		return (((this.set.cards._total / this.set.cards.size) / this.chance) * this.set.value);
 	}
 
 	inheritProperties()

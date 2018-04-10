@@ -11,6 +11,9 @@ module.exports = class CardRegistry
 		this.cards = new Map();
 		this.sets = new Map();
 		this.series = new Map();
+		this.allCollectable = new ChanceMap();
+		this.allPackable = new ChanceMap();
+		this.allMutatable = new ChanceMap();
 		this.collectable = new ChanceMap();
 		this.packable = new ChanceMap();
 		this.mutatable = new ChanceMap();
@@ -124,9 +127,16 @@ module.exports = class CardRegistry
 	{
 		if (series._enabled) return;
 		series._enabled = true;
-		if (series.collectable && !this.collectable.has(series.id)) this.collectable.set(series.id, series);
-		if (series.packable && !this.packable.has(series.id)) this.packable.set(series.id, series);
-		if (series.mutatable && !this.mutatable.has(series.id)) this.mutatable.set(series.id, series);
+		if (series.collectable) this.collectable.set(series.id, series);
+		if (series.packable) this.packable.set(series.id, series);
+		if (series.mutatable) this.mutatable.set(series.id, series);
+	}
+
+	_enableSeriesAll(series)
+	{
+		if (series.collectable) this.allCollectable.set(series.id, series);
+		if (series.packable) this.allPackable.set(series.id, series);
+		if (series.mutatable) this.allMutatable.set(series.id, series);
 	}
 
 	_enableSet(set)
@@ -134,8 +144,14 @@ module.exports = class CardRegistry
 		if (set._enabled) return;
 		set._enabled = true;
 		if (set.obtainable === false) return;
-		if (!set.series.sets.has(set.id)) set.series.sets.set(set.id, set);
+		set.series.sets.set(set.id, set);
 		this._enableSeries(set.series);
+	}
+	
+	_enableSetAll(set)
+	{
+		set.series.all.set(set.id, set);
+		this._enableSeriesAll(set.series);
 	}
 
 	_enableCard(card)
@@ -144,5 +160,6 @@ module.exports = class CardRegistry
 		card._enabled = true;
 		card.set.cards.set(card.id, card);
 		this._enableSet(card.set);
+		this._enableSetAll(card.set);
 	}
 }
