@@ -62,8 +62,15 @@ module.exports = class CardRegistry
 		if (!(card.set instanceof Set))
 		{
 			card.set = this.collector.utils.formatSetID(card.set);
+			card.$set = this.collector.utils.formatCardID(card.$set);
 			if (!this.sets.has(card.set)) throw new Error(`Set with id ${card.set} has not been registered yet`);
 			card.set = this.sets.get(card.set);
+			if (card.$set == card.set.id) card.$set = card.set;
+			else
+			{
+				if (!this.sets.has(card.$set)) throw new Error(`Set with id ${card.$set} has not been registered yet`);
+				card.$set = this.sets.get(card.$set);
+			}
 			card.inheritProperties();
 		}
 		if (card.omit || card.set.omit) return;
@@ -158,8 +165,8 @@ module.exports = class CardRegistry
 	{
 		if (card._enabled) return;
 		card._enabled = true;
-		card.set.cards.set(card.id, card);
-		this._enableSet(card.set);
-		this._enableSetAll(card.set);
+		card.$set.cards.set(card.id, card);
+		this._enableSet(card.$set);
+		this._enableSetAll(card.$set);
 	}
 }
