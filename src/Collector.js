@@ -12,6 +12,9 @@ module.exports = class Collector extends EventEmitter
 	{
 		super();
 
+		if (typeof options !== 'object') options = {};
+		if (typeof options.admins === 'undefined') options.admins = [];
+		if (typeof options.admins === 'string') options.admins = [options.admins];
 		if (typeof options.cardIDPrefix === 'undefined') options.cardIDPrefix = '#';
 		if (typeof options.cardIDLength === 'undefined') options.cardIDLength = 4;
 		if (typeof options.cardIDFiller === 'undefined') options.cardIDFiller = '0';
@@ -23,18 +26,17 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.collectMinCooldown === 'undefined') options.collectMinCooldown = (1000 * 60 * 60 * 3);
 		if (typeof options.collectMaxCooldown === 'undefined') options.collectMaxCooldown = (1000 * 60 * 60 * 6);
 		if (typeof options.levelXP === 'undefined') options.levelXP = 100;
-		if (typeof options.features === 'undefined') options.features = {};
+		if (typeof options.features !== 'object') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
-		if (typeof options.features.credits === 'undefined') options.features.credits = true;
 		if (typeof options.features.managment === 'undefined') options.features.managment = true;
-		if (typeof options.features.credits === 'undefined') options.features.credits = true;
 		if (typeof options.features.trading === 'undefined') options.features.trading = true;
 		if (typeof options.features.market === 'undefined') options.features.market = true;
-		if (typeof options.pricing === 'undefined') options.pricing = {};
+		if (typeof options.pricing !== 'object') options.pricing = {};
 		if (typeof options.pricing.boosterpack === 'undefined') options.pricing.boosterpack = 400;
 		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 600;
 		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
+
 		this.options = options;
 
 		if (!fs.existsSync(path.join(options.database, 'users'))) mkdirp.sync(path.join(options.database, 'users'));
@@ -65,12 +67,9 @@ module.exports = class Collector extends EventEmitter
 		client.registry.registerCommand(new (require('./commands/set/set'))(client, this));
 		client.registry.registerCommand(new (require('./commands/set/sets'))(client, this));
 
-		if (this.options.features.credits)
-		{
 			client.registry.registerGroup('collector_credits', 'Collector: Credit Basics');
 			client.registry.registerCommand(new (require('./commands/credit/balance'))(client, this));
 			client.registry.registerCommand(new (require('./commands/credit/transfer'))(client, this));
-		}
 
 		if (this.options.features.packs)
 		{
