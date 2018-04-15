@@ -241,4 +241,27 @@ module.exports = class Utils
 		}
 		return array;
 	}
+	shuffle(array)
+	{
+		return Utils.shuffle(array);
+	}
+
+	static formatTime(ms)
+	{
+		let date = new Date(ms);
+		let hours = date.getUTCHours();
+		let mins = date.getUTCMinutes();
+		let secs = date.getUTCSeconds();
+
+		let message = '';
+		if (hours) message += hours + 'h';
+		if (mins) message += mins + 'm';
+		if (secs) message += secs + 's';
+		if (message === '') return '0s';
+		else return message;
+	}
+	formatTime(ms)
+	{
+		return Utils.formatTime(ms);
+	}
 }
