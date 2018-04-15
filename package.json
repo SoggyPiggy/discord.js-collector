@@ -1,6 +1,6 @@
 {
   "name": "discord.js-collector",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "description": "A customizable card collecting framework for Discord.js-commando",
   "main": "./src/index",
   "repository": "https://github.com/SoggyPiggy/discord.js-collector.git",
@@ -14,10 +14,6 @@
     "mkdirp": "^0.5.1",
     "random-js": "^1.0.8",
     "require-all": "^2.2.0"
-  },
-  "peerDependencies": {
-    "discord.js": "hydrabolt/discord.js#master",
-    "discord.js-commando": "gawdl3y/discord.js-commando#master"
   },
   "devDependencies": {
     "discord.js": "hydrabolt/discord.js#master",
