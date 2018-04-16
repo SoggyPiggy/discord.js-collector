@@ -6,7 +6,7 @@ module.exports = class Set
 	{
 		if (typeof options					!== 'object')		throw new Error('Set data must be an object');
 		if (typeof options.id				=== 'undefined')	throw new Error('Set missing ID');
-		if (typeof options.series			=== 'undefined')	throw new Error('Set missing Series ID');
+		if (typeof options.series			=== 'undefined')	throw new Error(`Set ${options.id} missing Series ID`);
 		if (typeof options.title			=== 'undefined')	options.title			= 'undefined';
 		if (typeof options.author			=== 'undefined')	options.author			= null;
 		if (typeof options.description	=== 'undefined')	options.description	= null;

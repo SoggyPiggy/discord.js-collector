@@ -4,7 +4,7 @@ module.exports = class Card
 	{
 		if (typeof data					!== 'object')		throw new Error('Card data must be an object');
 		if (typeof data.id				=== 'undefined')	throw new Error('Card missing ID');
-		if (typeof data.set				=== 'undefined')	throw new Error('Card missing Set');
+		if (typeof data.set				=== 'undefined')	throw new Error(`Card ${data.id} missing Set`);
 		if (typeof data.$set				=== 'undefined')	data.$set			= data.set;
 		if (typeof data.title			=== 'undefined')	data.title			= 'undefined';
 		if (typeof data.rarity			=== 'undefined')	data.rarity			= 'undefined';

@@ -5,7 +5,7 @@ module.exports = class
 	constructor(data = {}, registry)
 	{
 		if (typeof data					!== 'object')		throw new Error('Series data must be an object');
-		if (typeof data.id				=== 'undefined')	throw new Error('Series missing ID');
+		if (typeof data.id				=== 'undefined')	throw new Error(`Series ${data.id} missing ID`);
 		if (typeof data.chance			=== 'undefined')	data.chance			= 100;
 		if (typeof data.collectable	=== 'undefined')	data.collectable	= true;
 		if (typeof data.packable		=== 'undefined')	data.packable		= true;
