@@ -14,9 +14,8 @@ module.exports = class Cooldown extends EventEmitter
 		this.min = options.min;
 		this.max = options.max;
 		this.cooldown = options.cooldown;
-		this.timeout = null;
-
-		if (this.ready) this.emit('ready');
+		this.timeout = setTimeout(function(){this.emit('ready')}.bind(this), this.remainder);
+		return this;
 	}
 
 	get ready()
@@ -28,7 +27,7 @@ module.exports = class Cooldown extends EventEmitter
 	{
 		return (this.cooldown - (new Date().getTime()))
 	}
-	
+	lol
 	trigger(override = false)
 	{
 		if (this.ready || override)
@@ -36,9 +35,9 @@ module.exports = class Cooldown extends EventEmitter
 			this.cooldown = (new Date().getTime()) + (Random.integer(this.min, this.max));
 			this.timeout = clearTimeout(this.timeout);
 			this.timeout = setTimeout(function(){this.emit('ready')}.bind(this), this.remainder);
-			return true;
+			this.emit('triggered');
 		}
-		return false;
+		return this;
 	}
 	
 	reset(emit = true)
@@ -46,6 +45,7 @@ module.exports = class Cooldown extends EventEmitter
 		this.timeout = clearTimeout(this.timeout);
 		this.cooldown = 0;
 		if (emit) this.emit('ready');
+		return this;
 	}
 	
 	compress()
