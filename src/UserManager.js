@@ -63,7 +63,6 @@ module.exports = class UserManager extends Map
 			let updated = this.db.users.update({id, id}, {id, id}, {upsert: true});
 			if (updated.inserted > 0) this.userDB.loadCollections([id]);
 			this.userDB[id].update({id: id}, user.compress(), {upsert: true});
-			this.collector.emit('debug', `User ${id} saved.`);
 			this.collector.emit('userSaved', user)
 		}
 	}
