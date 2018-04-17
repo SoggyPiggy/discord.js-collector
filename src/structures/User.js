@@ -26,7 +26,7 @@ module.exports = class User
 
 	get level()
 	{
-		return (this.xp / this.collector.options.levelXP)
+		return Math.floor(this.xp / this.collector.options.levelXP)
 	}
 
 	giveXP(xp = 0)

@@ -122,20 +122,7 @@ module.exports = class Utils
 
 	formatCredits(credits)
 	{
-		credits = String(credits);
-		let count = 0;
-		let number = '';
-		for (let i = credits.length - 1; i >= 0; i--)
-		{
-			if (count > 2)
-			{
-				number = ',' + number;
-				count = 0;
-			}
-			number = credits[i] + number;
-			count++;
-		}
-		return this.options.creditPrefix + number;
+		return Number(credits).toLocaleString('en', {maximumFractionDigits: 20});
 	}
 
 	cardList(cards, user = false, options = {})
