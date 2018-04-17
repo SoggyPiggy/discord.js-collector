@@ -29,6 +29,13 @@ module.exports = class User
 		return (this.xp / this.collector.options.levelXP)
 	}
 
+	giveXP(xp = 0)
+	{
+		let level = this.level;
+		this.xp += xp;
+		this.credits += this.collector.options.levelCredits * (this.level - level);
+	}
+
 	compress()
 	{
 		let data = {};

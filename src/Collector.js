@@ -26,6 +26,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.collectMinCooldown === 'undefined') options.collectMinCooldown = (1000 * 60 * 60 * 3);
 		if (typeof options.collectMaxCooldown === 'undefined') options.collectMaxCooldown = (1000 * 60 * 60 * 6);
 		if (typeof options.levelXP === 'undefined') options.levelXP = 100;
+		if (typeof options.levelCredits === 'undefined') options.levelCredits = 200;
 		if (typeof options.features !== 'object') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
 		if (typeof options.features.managment === 'undefined') options.features.managment = true;
