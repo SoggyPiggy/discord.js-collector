@@ -27,7 +27,7 @@ module.exports = class Cooldown extends EventEmitter
 	{
 		return (this.cooldown - (new Date().getTime()))
 	}
-	lol
+	
 	trigger(override = false)
 	{
 		if (this.ready || override)
