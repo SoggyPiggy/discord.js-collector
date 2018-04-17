@@ -36,6 +36,11 @@ module.exports = class User
 		this.credits += this.collector.options.levelCredits * (this.level - level);
 	}
 
+	save()
+	{
+		this.collector.users.save(this);
+	}
+
 	compress()
 	{
 		let data = {};
