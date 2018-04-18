@@ -9,11 +9,15 @@ module.exports = class _Command extends Commando.Command
 				name: 'balance',
 				group: 'collector_credits',
 				memberName: 'balance',
-				description: 'balance'
+				description: 'Get your credit balance.'
 			});
 		this.collector = Collector;
 	}
 
 	async run(message, args)
-	{ }
+	{
+		let user = this.collector.users.get(message.author);
+		let credits = this.collector.utils.formatCredits(user.credits);
+		message.reply(`**${this.collector.options.creditPrefix}${credits}**`);
+	}
 }
