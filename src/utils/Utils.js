@@ -1,6 +1,12 @@
 const Random = require('./random');
 const Searcher = require('./Searcher');
 
+let parseID = function(id)
+{
+	if (typeof id === 'string') return id;
+	if (typeof id.id === string) return id.id;
+}
+
 module.exports = class Utils
 {
 	constructor(collector)
@@ -91,11 +97,13 @@ module.exports = class Utils
 	
 	formatSeriesID(id)
 	{
+		id = parseID(id);
 		return id.replace(/\W/g, '').toLowerCase();
 	}
 
 	formatSetID(id)
 	{
+		id = parseID(id);
 		id = id.replace(/\W/g, '').toUpperCase();
 		let options;
 		if (typeof this.options !== 'undefined') options = this.options;
@@ -109,6 +117,7 @@ module.exports = class Utils
 
 	formatCardID(id)
 	{
+		id = parseID(id);
 		id = id.replace(/\W/g, '').toUpperCase();
 		let options;
 		if (typeof this.options !== 'undefined') options = this.options;
@@ -123,6 +132,32 @@ module.exports = class Utils
 	formatCredits(credits)
 	{
 		return Number(credits).toLocaleString('en', {maximumFractionDigits: 20});
+	}
+
+	setList(sets, options = {})
+	{
+		if (typeof options !== 'object') options = {};
+		if (typeof options.splitter === 'undefined') options.spliter = '\n';
+		sets = this.convertSets(sets);
+		let list = '';
+		for (let set of sets)
+		{
+			let line = '';
+			if (typeof set === 'string')
+			{
+				line += set;
+			}
+			else
+			{
+				line += `\`${set.id}\``;
+				line += ` **${set.title}**`;
+			}
+			line += options.spliter;
+			line = line.replace(/^ /g, '');
+			list += line;
+		}
+		let regexEnd = new RegExp( options.spliter + '$', 'g');
+		return list.replace(regexEnd, '');
 	}
 
 	cardList(cards, user = false, options = {})
@@ -212,6 +247,17 @@ module.exports = class Utils
 		{
 			if (this.collector.cards.has(card)) data.push(this.collector.cards.get(card));
 			else data.push(card);
+		}
+		return data;
+	}
+
+	convertSets(sets)
+	{
+		let data = [];
+		for (let set of sets)
+		{
+			if (this.collector.sets.has(set)) data.push(this.collector.sets.get(set));
+			else data.push(set);
 		}
 		return data;
 	}

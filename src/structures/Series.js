@@ -43,4 +43,15 @@ module.exports = class
 		if (total === 0) return 0;
 		else return (total / count);
 	}
+
+	compress()
+	{
+		let data = {};
+		data.id = this.id;
+		data.chance = this.chance;
+		data.collectable = this.collectable;
+		data.packable = this.packable;
+		data.mutatable = this.mutatable;
+		return data;
+	}
 }

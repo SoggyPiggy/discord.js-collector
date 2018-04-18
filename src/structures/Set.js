@@ -49,4 +49,23 @@ module.exports = class Set
 		}
 		return owned;
 	}
+
+	compress()
+	{
+		let data = {};
+		data.id = this.id;
+		data.series = this.series.compress();
+		data.title = this.title;
+		data.chance = this.chance;
+		data.author = this.author;
+		data.description = this.description;
+		data.tags = this.tags;
+		data.visibility = this.visibility;
+		data.purchasable = this.purchasable;
+		data.obtainable = this.obtainable;
+		data.guarded = this.guarded;
+		data.untradable = this.untradable;
+		data.omit = this.omit;
+		return data;
+	}
 }

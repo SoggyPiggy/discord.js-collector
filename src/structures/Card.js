@@ -67,6 +67,7 @@ module.exports = class Card
 	{
 		let data = {};
 		data.id = this.id;
+		data.set = this.set.compress();
 		data.title = this.title;
 		data.rarity = this.rarity;
 		data.source = this.source;
