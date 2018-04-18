@@ -24,7 +24,7 @@ module.exports = class _Command extends Commando.Command
 		let filter = '';
 		if (typeof args.page === 'number') page = args.page;
 		else if (typeof args.page === 'string') filter = args.page + ' ';
-		if (args.filters) filter = filter + args.filters;
+		if (args.filters) filter += args.filters;
 		let user = this.collector.users.get(message.author);
 		let searcher = new this.collector.utils.Searcher(this.collector, user);
 		let cards = searcher.searchCards(filter);
