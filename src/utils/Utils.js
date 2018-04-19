@@ -1,6 +1,3 @@
-const Random = require('./random');
-const Searcher = require('./Searcher');
-
 let parseID = function(id)
 {
 	if (typeof id === 'string') return id;
@@ -13,67 +10,9 @@ module.exports = class Utils
 	{
 		this.collector = collector;
 		this.options = collector.options;
-		this.Searcher = Searcher;
-
-		this.args = 
-		{
-			cardID:
-			{
-				key: 'cardID',
-				label: 'Card ID',
-				prompt: 'What is the ID of the Card?',
-				type: 'string',
-				// parse: this.formatCardID
-			},
-			setID:
-			{
-				key: 'setID',
-				label: 'Set ID',
-				prompt: 'What is the ID of the Set?',
-				type: 'string',
-				// parse: this.formatSetID
-			},
-			page:
-			{
-				key: 'page',
-				label: 'Page Number',
-				prompt: 'Which page would you like to view?',
-				type: 'integer',
-				default: 1
-			},
-			search:
-			{
-				key: 'filters',
-				label: 'Filter(s)',
-				prompt: 'What filters would you like to apply?',
-				type: 'string',
-				default: false
-			},
-			user:
-			{
-				key: 'member',
-				label: 'User',
-				prompt: 'Who?',
-				type: 'user',
-				default: false
-			},
-			pageSearch:
-			{
-				key: 'page',
-				label: 'Page Number / Filter',
-				prompt: 'Which page would you like to view? or what filters would you like to apply?',
-				type: 'integer|string',
-				default: 1
-			},
-			pageUser:
-			{
-				key: 'page',
-				label: 'Page Number / User',
-				prompt: 'Which page would you like to view? or who?',
-				type: 'integer|user', 
-				default: 1
-			}
-		}
+		this.Searcher = require('./Searcher');
+		this.args = require('./Args');
+		this.random = require('./random');
 	}
 
 	pagify(page, items)
@@ -97,14 +36,12 @@ module.exports = class Utils
 	
 	formatSeriesID(id)
 	{
-		id = parseID(id);
-		return id.replace(/\W/g, '').toLowerCase();
+		return parseID(id).replace(/\W/g, '').toLowerCase();
 	}
 
 	formatSetID(id)
 	{
-		id = parseID(id);
-		id = id.replace(/\W/g, '').toUpperCase();
+		id = parseID(id).replace(/\W/g, '').toUpperCase();
 		let options;
 		if (typeof this.options !== 'undefined') options = this.options;
 		else if (typeof this.command.collector.options !== 'undefined') options = this.command.collector.options;
@@ -117,8 +54,7 @@ module.exports = class Utils
 
 	formatCardID(id)
 	{
-		id = parseID(id);
-		id = id.replace(/\W/g, '').toUpperCase();
+		id = parseID(id).replace(/\W/g, '').toUpperCase();
 		let options;
 		if (typeof this.options !== 'undefined') options = this.options;
 		else if (typeof this.command.collector.options !== 'undefined') options = this.command.collector.options;
@@ -137,6 +73,8 @@ module.exports = class Utils
 	setList(sets, options = {})
 	{
 		if (typeof options !== 'object') options = {};
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.title === 'undefined') options.title = true;
 		if (typeof options.splitter === 'undefined') options.spliter = '\n';
 		sets = this.convertSets(sets);
 		let list = '';
@@ -149,8 +87,8 @@ module.exports = class Utils
 			}
 			else
 			{
-				line += `\`${set.id}\``;
-				line += ` **${set.title}**`;
+				if (options.id) line += `\`${set.id}\``;
+				if (options.title) line += ` **${set.title}**`;
 			}
 			line += options.spliter;
 			line = line.replace(/^ /g, '');
@@ -160,22 +98,24 @@ module.exports = class Utils
 		return list.replace(regexEnd, '');
 	}
 
-	cardList(cards, user = false, options = {})
+	cardList(cards, options = {})
 	{
 		if (typeof options !== 'object') options = {};
+		if (typeof options.user === 'undefined') options.user = null;
 		if (typeof options.collected === 'undefined') options.collected = true;
 		if (typeof options.count === 'undefined') options.count = true;
 		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.set === 'undefined') options.set = true;
 		if (typeof options.title === 'undefined') options.title = true;
 		if (typeof options.rarity === 'undefined') options.rarity = true;
 		if (typeof options.spliter === 'undefined') options.spliter = '\n';
 		cards = this.convertCards(cards);
 		let highest = 0;
-		if (user)
+		if (options.user)
 		{
 			for (let card of cards)
 			{
-				let count = user.cards.get(card);
+				let count = options.user.cards.get(card);
 				if (count)
 				{
 					if (count > highest) highest = count;
@@ -193,30 +133,30 @@ module.exports = class Utils
 			let line = '';
 			if (typeof card === 'string')
 			{
-				if (user && (options.collected || options.count)) line += '`';
-				if (options.collected && user) line += `⛔`
-				if (options.count && user)
+				if (options.user && (options.collected || options.count)) line += '`';
+				if (options.collected && options.user) line += `⛔`
+				if (options.count && options.user)
 				{
 					let owned = false;
-					if (user) owned = user.cards.get(card);
+					if (options.user) owned = options.user.cards.get(card);
 					owned = String(owned);
 					while (owned.length < highest.length) { owned = '0' + owned; }
 					line += owned;
 				}
-				if (user && (options.collected || options.count)) line += '`';
+				if (options.user && (options.collected || options.count)) line += '`';
 				line += ` \`${card}\` __Card Unavailable__`;
 			}
 			else
 			{
 				let owned = false;
-				if (user) owned = user.cards.get(card);
-				if (user && (options.collected || options.count)) line += '`';
-				if (options.collected && user)
+				if (options.user) owned = options.user.cards.get(card);
+				if (options.user && (options.collected || options.count)) line += '`';
+				if (options.collected && options.user)
 				{
 					if (owned) line += `✔️`;
 					else line += `❌`;
 				} 
-				if (options.count && user)
+				if (options.count && options.user)
 				{
 					if (owned)
 					{
@@ -226,9 +166,10 @@ module.exports = class Utils
 					}
 					else line += highest;
 				}
-				if (user && (options.collected || options.count)) line += '`';
+				if (options.user && (options.collected || options.count)) line += '`';
 				if (options.id) line += ` \`${card.id}\``;
-				if (options.title && ((user && owned) || !user)) line += ` **${card.title}**`;
+				if (options.set) line += ` \`${card.set.id}\``;
+				if (options.title && ((options.user && owned) || !options.user)) line += ` **${card.title}**`;
 				else line += ` **~~?????~~**`;
 				if (options.rarity) line += ` *${card.rarity}*`;
 			}
@@ -267,7 +208,7 @@ module.exports = class Utils
 		var m = array.length, t, i;
 		while(m)
 		{
-			i = Random.integer(0, m--);
+			i = this.random.integer(0, m--);
 			t = array[m];
 			array[m] = array[i];
 			array[i] = t;
