@@ -101,10 +101,8 @@ module.exports = class Searcher
 	{
 		if (filter.length > 0)
 		{
-			let regexDiscordTag = /(?:<@)(\d+)(?=>)/gi;
-			let matches = regexDiscordTag.exec(filter);
-			if (matches[1] != null) return this.collector.users.get(matches[1], false);
-			else return false;
+			filter = filter.replace(/^<@|>$/g, '');
+			return this.collector.users.get(filter, false);
 		}
 		else return this.user;
 	}
