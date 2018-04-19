@@ -40,7 +40,7 @@ module.exports = class Set
 		return (((this.series.all._total / this.series.all.size) / this.chance) * this.series.value);
 	}
 
-	ownedCards(user)
+	owned(user)
 	{
 		let owned = [];
 		for (let [key, card] of this.cards)

@@ -36,7 +36,7 @@ module.exports = class _Command extends Commando.Command
 		let cards = Array.from(set.cards.values());
 		if (set.visibility > 1)
 		{
-			cards = set.ownedCards(user);
+			cards = set.owned(user);
 			if (cards.length <= 0)
 			{
 				message.reply(`Unable to find Set: \`${setID}\``);
