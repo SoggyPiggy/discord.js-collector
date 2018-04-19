@@ -2,19 +2,31 @@ const Fuse = require('fuse.js');
 
 let splitFilters = function(filterString)
 {
-	let regex = /[^\s"]+|"([^"]*)"/gi;
+	let regex = /".+?"|[.\S]+".+?"|[.\S]+/gi;
 	let filters = [];
 	let match = true;
 	while (match)
 	{
 		match = regex.exec(filterString);
-		if (match != null)
-		{
-			if (match[1]) filters.push(match[1])
-			else filters.push(match[0]);
-		}
+		if (match) filters.push(match[0].replace(/"/g, ''));
 	}
 	return filters;
+}
+
+let mergeArray = function(array1, array2)
+		{
+	let a1 = array1;
+	let a2 = array2;
+	if (a2.length < a1.length)
+	{
+		a1 = array2;
+		a2 = array1;
+		}
+	for (let v in a1)
+	{
+		if (!a2.includes(v)) a2.push(v);
+	}
+	return a2;
 }
 
 module.exports = class Searcher
@@ -25,7 +37,7 @@ module.exports = class Searcher
 		this.utils = Collector.utils;
 		this.options = Collector.options;
 		this.cards = Collector.registry.cards;
-		this.set = Collector.registry.sets;
+		this.sets = Collector.registry.sets;
 		this.user = User;
 	}
 
@@ -99,73 +111,82 @@ module.exports = class Searcher
 
 	filterCards(filter, cards)
 	{
-		let options = { id: 'id', threshold: .5, location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1};
-		if (cards.has(this.utils.formatCardID(filter)))
+		let results = [];
+		if (cards.has(this.utils.formatCardID(filter))) return [this.utils.formatCardID(filter)];
+		else if (filter.match(/^owned:?/gi))
 		{
-			return [this.utils.formatCardID(filter)];
-		}
-		else if (filter.search(/^((owned)(:|))/gi) >= 0)
-		{
-			let user = filter.replace(/^((owned)(:|))/gi, '');
+			let user = filter.replace(/^owned:?/gi, '');
 			user = this.filterUser(user);
 			if (!user) return [];
-			let results = [];
 			for (let [key, card] of cards)
 			{
 				if (user.cards.has(key)) results.push(key);
 			}
-			return results;
 		}
-		else if (filter.search(/^(author(:|))/gi) >= 0)
+		else if (filter.match(/^author:?/gi))
 		{
-			let author = filter.replace(/^(author(:|))/gi, '');
+			let author = filter.replace(/^author:?/gi, '');
 			author = this.filterUser(author);
 			if (!author) return [];
-			let results = [];
 			for (let [key, card] of cards)
 			{
 				if (card.author == author.id) results.push(key);
 			}
-			return results;
 		}
 		else
 		{
+			let options = { id: 'id', location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1};
+			let fuses = [];
 			let fuseCards = [];
-			for (let [key, value] of cards)
+			for (let [key, card] of cards)
 			{
-				fuseCards.push(value.compress());
+				fuseCards.push(card.compress());
 			}
-
-			if (filter.search(/^(rarity(:|))/gi) >= 0)
+			if (filter.match(/^rarity:?/gi))
 			{
-				filter = filter.replace(/^(rarity(:|))/gi, '');
+				filter = filter.replace(/^rarity:?/gi, '');
 				options.keys = ['rarity'];
 				options.threshold = 0;
+				fuses.push(new Fuse(fuseCards, options));
 			}
-			else if (filter.search(/^(tag(:|))/gi) >= 0)
+			else if (filter.match(/^tag:?/gi))
 			{
-				filter = filter.replace(/^(tag(:|))/gi, '');
+				filter = filter.replace(/^tag:?/gi, '');
 				options.keys = ['tags'];
+				options.threshold = 0;
+				fuses.push(new Fuse(fuseCards, options));
 			}
-			else if (filter.search(/^(title(:|))/gi) >= 0)
+			else if (filter.match(/^title:?/gi))
 			{
-				filter = filter.replace(/^(title(:|))/gi, '');
+				filter = filter.replace(/^title:?/gi, '');
 				options.keys = ['title'];
+				options.threshold = .3;
+				fuses.push(new Fuse(fuseCards, options));
 			}
-			else if (filter.search(/^(description(:|))/gi) >= 0)
+			else if (filter.match(/^description:?/gi))
 			{
-				filter = filter.replace(/^(description(:|))/gi, '');
+				filter = filter.replace(/^description:?/gi, '');
 				options.keys = ['description'];
+				options.threshold = .5;
+				fuses.push(new Fuse(fuseCards, options));
 			}
 			else
 			{
-				options.keys = ['tags', 'title'];
+				let fuse;
+				options.keys = ['tags'];
+				options.threshold = 0;
+				fuses.push(new Fuse(fuseCards, options));
+				options.keys = ['title'];
+				options.threshold = .3;
+				fuses.push(new Fuse(fuseCards, options));
 			}
 			if (!filter) return [];
-			let fuse = new Fuse(fuseCards, options);
-			return fuse.search(filter);
+			for (let fuse of fuses)
+			{
+				results = mergeArray(results, fuse.search(filter));
+			}
 		}
-		return [];
+		return results;
 	}
 
 	searchSets(filterString = '')
