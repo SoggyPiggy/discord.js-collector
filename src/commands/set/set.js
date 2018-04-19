@@ -46,7 +46,7 @@ module.exports = class _Command extends Commando.Command
 
 		let description = `**Set:** ${set.title} \`${set.id}\``;
 		cards = this.collector.utils.pagify(args.page, cards);
-		description += `\n**Cards:**\n` + this.collector.utils.cardList(cards.results, user);
+		description += `\n**Cards:**\n` + this.collector.utils.cardList(cards.results, {user: user, set: false});
 		description += `\n`;
 		if (set.author) description += `\n**Author:** <@${set.author}>`
 		if (set.tags > 0)

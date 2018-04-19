@@ -39,7 +39,7 @@ module.exports = class _Command extends Commando.Command
 			description = description.replace(/, $/g, '');
 		}
 		description += `\n~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;
-		description += this.collector.utils.cardList(page.results, user);
+		description += this.collector.utils.cardList(page.results, {user: user});
 
 		let embed = new Discord.MessageEmbed();
 		embed.setDescription(description);

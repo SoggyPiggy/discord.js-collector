@@ -60,7 +60,7 @@ module.exports = class _Command extends Commando.Command
 
 		let description = `<@${user.id}>'s Collection.`;
 		description += `\n~~\`----------------\`~~\` (Page ${cards.page} of ${cards.max}) \`~~\`----------------\`~~\n`;
-		description += this.collector.utils.cardList(cards.results, user, {collected: false});
+		description += this.collector.utils.cardList(cards.results, {user: user, collected: false});
 
 		let embed = new Discord.MessageEmbed();
 		embed.setDescription(description);
