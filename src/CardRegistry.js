@@ -62,7 +62,7 @@ module.exports = class CardRegistry
 		if (!(card.set instanceof Set))
 		{
 			card.set = this.collector.utils.formatSetID(card.set);
-			card.$set = this.collector.utils.formatCardID(card.$set);
+			card.$set = this.collector.utils.formatSetID(card.$set);
 			if (!this.sets.has(card.set)) throw new Error(`Set with id ${card.set} has not been registered yet`);
 			card.set = this.sets.get(card.set);
 			if (card.$set == card.set.id) card.$set = card.set;

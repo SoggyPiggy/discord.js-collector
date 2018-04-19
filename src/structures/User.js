@@ -21,7 +21,7 @@ module.exports = class User
 		this.xp = data.xp;
 		this.cooldowns = new Map();
 		this.cooldowns.set('collect', new Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
-		this.cards = new CardCollection(data.cards);
+		this.cards = new CardCollection(collector, data.cards);
 	}
 
 	get level()

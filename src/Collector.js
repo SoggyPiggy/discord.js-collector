@@ -42,9 +42,9 @@ module.exports = class Collector extends EventEmitter
 
 		if (!fs.existsSync(path.join(options.database, 'users'))) mkdirp.sync(path.join(options.database, 'users'));
 
+		this.utils = new Utils(this);
 		this.users = new UserManager(this);
 		this.registry = new CardRegistry(this);
-		this.utils = new Utils(this);
 		
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;

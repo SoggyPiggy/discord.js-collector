@@ -1,7 +1,11 @@
 module.exports = class CardCollection extends Map
 {
-	constructor(cards)
+	constructor(collector, cards)
 	{
+		for (let card of cards)
+		{
+			card[0] = collector.utils.formatCardID(card[0]);
+		}
 		super(cards);
 	}
 
