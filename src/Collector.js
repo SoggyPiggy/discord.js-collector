@@ -37,6 +37,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 600;
 		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
+		if (typeof options.authorGratuity === 'undefined') options.authorGratuity = .2;
 
 		this.options = options;
 

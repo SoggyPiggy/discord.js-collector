@@ -36,6 +36,15 @@ module.exports = class _Command extends Commando.Command
 		user.cards.add(card);
 		user.giveXP(card.xp);
 		user.save();
+		if (card.author && this.collector.options.authorGratuity > 0)
+		{
+			let author = this.collector.users.get(card.author, false);
+			if (author)
+			{
+				author.giveXP(card.xp * this.collector.options.authorGratuity);
+				author.save();
+			}
+		}
 		reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
 		this.collector.emit('collect', card, user, message);
 	}
