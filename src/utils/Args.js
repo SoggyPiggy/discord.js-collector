@@ -60,5 +60,12 @@ module.exports =
 		label: 'Credits',
 		prompt: 'How many credits?',
 		type: 'integer'
+	},
+	userRequired:
+	{
+		key: 'member',
+		label: 'User',
+		prompt: 'Who?',
+		type: 'user'
 	}
 }
