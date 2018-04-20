@@ -14,7 +14,7 @@ module.exports = class Card
 		if (typeof data.author			=== 'undefined')	data.author			= null;
 		if (typeof data.xp				=== 'undefined')	data.xp				= 100;
 		if (typeof data.chance			=== 'undefined')	data.chance			= 100;
-		if (typeof data.visibility		=== 'undefined')	data.visibility	= 1;
+		if (typeof data.visibility		=== 'undefined')	data.visibility	= -Infinity;
 		if (typeof data.image			=== 'undefined')	data.image			= null;
 		if (typeof data.fullart			=== 'undefined')	data.fullart		= false;
 		if (typeof data.guarded			=== 'undefined')	data.guarded		= false;

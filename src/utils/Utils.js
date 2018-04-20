@@ -169,7 +169,7 @@ module.exports = class Utils
 				if (options.user && (options.collected || options.count)) line += '`';
 				if (options.id) line += ` \`${card.id}\``;
 				if (options.set) line += ` \`${card.set.id}\``;
-				if (options.title && ((options.user && owned) || !options.user)) line += ` **${card.title}**`;
+				if (options.title && ((options.user && owned) || !options.user || card.visibility <= 0)) line += ` **${card.title}**`;
 				else line += ` **~~?????~~**`;
 				if (options.rarity) line += ` *${card.rarity}*`;
 			}
