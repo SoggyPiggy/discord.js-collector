@@ -55,7 +55,8 @@ module.exports = class _Command extends Commando.Command
 			else message.reply(`<@${user.id}> does not own any cards.`);
 			return;
 		}
-		cards.sort();
+		cards = this.collector.utils.convertCards(cards);
+		this.collector.utils.smartsort.cards(cards);
 		cards = this.collector.utils.pagify(args.page, cards);
 
 		let description = `<@${user.id}>'s Collection.`;

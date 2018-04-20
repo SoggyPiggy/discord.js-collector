@@ -27,15 +27,17 @@ module.exports = class _Command extends Commando.Command
 		if (args.filters) filter += args.filters;
 		let user = this.collector.users.get(message.author);
 		let searcher = new this.collector.utils.Searcher(this.collector, user);
-		let cards = searcher.searchCards(filter);
+		let search = searcher.searchCards(filter);
+		let cards = Array.from(search.results.values());
+		this.collector.utils.smartsort.cards(cards);
 		
-		page = this.collector.utils.pagify(page, Array.from(cards.results.values()));
+		page = this.collector.utils.pagify(page, cards);
 		let description = ``;
-		if ((cards.used.length + cards.ignored.length) > 0)
+		if ((search.used.length + search.ignored.length) > 0)
 		{
 			description += `**Filters:** `;
-			for (let filter of cards.used) { description += `${filter}, `; }
-			for (let filter of cards.ignored) { description += `~~${filter}~~, `; }
+			for (let filter of search.used) { description += `${filter}, `; }
+			for (let filter of search.ignored) { description += `~~${filter}~~, `; }
 			description = description.replace(/, $/g, '');
 		}
 		description += `\n~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;

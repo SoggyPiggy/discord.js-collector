@@ -13,6 +13,7 @@ module.exports = class Utils
 		this.Searcher = require('./Searcher');
 		this.args = require('./Args');
 		this.random = require('./random');
+		this.smartsort = require('./SmartSort');
 	}
 
 	pagify(page, items)
