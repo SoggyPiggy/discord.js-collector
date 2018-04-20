@@ -18,6 +18,6 @@ module.exports = class _Command extends Commando.Command
 	{
 		let user = this.collector.users.get(message.author);
 		let credits = this.collector.utils.formatCredits(user.credits);
-		message.reply(`**${this.collector.options.creditPrefix}${credits}**`);
+		message.reply(`**${credits}**`);
 	}
 }

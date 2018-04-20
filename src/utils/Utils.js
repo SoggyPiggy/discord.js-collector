@@ -68,7 +68,8 @@ module.exports = class Utils
 
 	formatCredits(credits)
 	{
-		return Number(credits).toLocaleString('en', {maximumFractionDigits: 20});
+		credits = Number(credits).toLocaleString('en', { maximumFractionDigits: 20 });
+		return this.collector.options.creditPrefix + credits;
 	}
 
 	setList(sets, options = {})
