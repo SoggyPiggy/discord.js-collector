@@ -5,6 +5,7 @@ const mkdirp = require('mkdirp');
 const CardRegistry = require('./CardRegistry');
 const UserManager = require('./UserManager');
 const Utils = require('./utils/Utils');
+const CardStyles = require('./StyleRegistry');
 
 module.exports = class Collector extends EventEmitter
 {
@@ -38,6 +39,8 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		if (typeof options.authorGratuity === 'undefined') options.authorGratuity = .2;
+		if (typeof options.cardStyle === 'undefined') options.cardStyle = null;
+		if (typeof options.renderer === 'undefined') options.renderer = require('./utils/getRenderer')(this);
 
 		this.options = options;
 
@@ -46,10 +49,16 @@ module.exports = class Collector extends EventEmitter
 		this.utils = new Utils(this);
 		this.users = new UserManager(this);
 		this.registry = new CardRegistry(this);
+		this.cardstyles = new this.cardstyles(this);
 		
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
 		this.cards = this.registry.cards;
+	}
+
+	registerDefaults()
+	{
+		this.cardstyles.registerDefaultStyle();
 	}
 
 	registerCommando(client)
