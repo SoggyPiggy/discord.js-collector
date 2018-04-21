@@ -13,7 +13,8 @@
     "fuse.js": "^3.2.0",
     "mkdirp": "^0.5.1",
     "random-js": "^1.0.8",
-    "require-all": "^2.2.0"
+    "require-all": "^2.2.0",
+    "then-request": "^6.0.0"
   },
   "devDependencies": {
     "discord.js": "hydrabolt/discord.js#master",
