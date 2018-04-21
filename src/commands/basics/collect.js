@@ -27,7 +27,7 @@ module.exports = class _Command extends Commando.Command
 			this.collector.emit('collectFailed', user, message);
 			return;
 		}
-		let reply = await message.channel.send(`<@${user.id}> Collecting Card...`);
+		let reply = message.channel.send(`<@${user.id}> Collecting Card...`);
 		cooldown.trigger();
 		let series = this.collector.registry.collectable.random();
 		let set = series.sets.random();
@@ -45,6 +45,7 @@ module.exports = class _Command extends Commando.Command
 				author.save();
 			}
 		}
+		reply = await reply;
 		reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
 		this.collector.emit('collect', card, user, message);
 	}
