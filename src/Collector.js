@@ -49,7 +49,7 @@ module.exports = class Collector extends EventEmitter
 		this.utils = new Utils(this);
 		this.users = new UserManager(this);
 		this.registry = new CardRegistry(this);
-		this.cardstyles = new this.cardstyles(this);
+		this.cardstyles = new CardStyles(this);
 		
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
