@@ -28,6 +28,7 @@ module.exports = class CardStyle
 		if (typeof options.defaults.font === 'undefined') options.defaults.font = 'Arial';
 		if (typeof options.defaults.size === 'undefined') options.defaults.size = 12;
 		if (typeof options.defaults.color === 'undefined') options.defaults.color = '#000000';
+		if (typeof options.defaults.shrink === 'undefined') options.defaults.shrink = false;
 		this.id = options.id;
 		this.title = options.title;
 		this.width = options.width;
@@ -55,6 +56,7 @@ module.exports = class CardStyle
 		if (typeof options !== 'object') options = {};
 		if (typeof options.font === 'undefined') options.font = this.options.defaults.font;
 		if (typeof options.size === 'undefined') options.size = this.options.defaults.size;
+		if (typeof options.shrink === 'undefined') options.shrink = this.options.defaults.shrink;
 		options.content = text;
 		options.type = 'text';
 		this.addLayer(options);
@@ -71,8 +73,6 @@ module.exports = class CardStyle
 	addRectLayer(options = {})
 	{
 		if (typeof options !== 'object') options = {};
-		if (typeof options.width === 'undefined') options.width = this.width;
-		if (typeof options.height === 'undefined') options.height = this.height;
 		options.content = true;
 		options.type = 'rect';
 		this.addLayer(options);

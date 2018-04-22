@@ -15,9 +15,46 @@ catch (error)
 }
 const Request = require('then-request');
 
-function processImage(ctx, layer)
+function processRect(ctx, content, layer)
 {
-	return new Promise(resolve, reject)
+	return new Promise((resolve) =>
+	{
+		ctx.translate(layer.x, layer.y);
+		ctx.fillStyle = layer.color;
+		ctx.fillRect(0, 0, layer.width, layer.height);
+		resolve();
+	});
+}
+
+function processText(ctx, content, layer)
+{
+	return new Promise((resolve, reject) =>
+	{
+		ctx.translate(layer.x, layer.y);
+		ctx.fillStyle = layer.color;
+		ctx.font = `${layer.size}px '${layer.font}'`;
+		if (layer.width)
+		{
+			if (layer.shrink)
+			{
+				ctx.fillText(content, 0, 0, layer.width);
+				resolve();
+			}
+			let width = ctx.measureText(content).width;
+			while (width > layer.width)
+			{
+				content = content.slice(0, -1);
+				width = ctx.measureText(content).width;
+			}
+		}
+		ctx.fillText(content, 0, 0);
+		resolve();
+	})
+}
+
+function processImage(ctx, content, layer)
+{
+	return new Promise((resolve, reject) =>
 	{
 		let image;
 		try
@@ -47,16 +84,16 @@ function processImage(ctx, layer)
 		else width = layer.height;
 		ctx.drawImage(image, 0, 0, width, height);
 		resolve();
-	}
+	});
 }
 
-function processLayer(ctx, layer)
+function processLayer(ctx, content, layer)
 {
 	switch (layer.type)
 	{
-		case 'image': return processImage(ctx, layer);
-		case 'text': return processText(ctx, layer);
-		case 'rect': return processRectangle(ctx, layer);
+		case 'image': return processImage(ctx, content, layer);
+		case 'text': return processText(ctx, content, layer);
+		case 'rect': return processRectangle(ctx, content, layer);
 		default: return;
 	}
 }
@@ -78,9 +115,9 @@ module.exports = function (cardstyle, data)
 			let content;
 			if (typeof layer.content === 'function') content = layer.content(data);
 			else content = layer.content;
-			if (!data) continue;
+			if (!content && !layer.fallback) continue;
 			ctx.save();
-			await processLayer(layer, data);
+			await processLayer(ctx, content, layer);
 			ctx.restore();
 		}
 		try
