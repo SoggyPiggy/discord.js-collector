@@ -11,6 +11,7 @@ module.exports = class Utils
 		this.collector = collector;
 		this.options = collector.options;
 		this.Searcher = require('./Searcher');
+		this.Cooldown = require('./Cooldown');
 		this.args = require('./Args');
 		this.random = require('./random');
 		this.smartsort = require('./SmartSort');

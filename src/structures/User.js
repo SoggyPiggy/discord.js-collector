@@ -1,4 +1,3 @@
-const Cooldown = require('./../utils/Cooldown');
 const CardCollection = require('./CardCollection');
 
 module.exports = class User
@@ -20,7 +19,7 @@ module.exports = class User
 		this.credits = data.credits;
 		this.xp = data.xp;
 		this.cooldowns = new Map();
-		this.cooldowns.set('collect', new Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
+		this.cooldowns.set('collect', new collector.utils.Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
 		this.cards = new CardCollection(collector, data.cards);
 	}
 

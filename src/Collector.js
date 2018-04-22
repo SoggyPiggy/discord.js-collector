@@ -4,7 +4,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const CardRegistry = require('./CardRegistry');
 const UserManager = require('./UserManager');
-const Utils = require('./utils/Utils');
+const Utils = require('./Utils');
 const CardStyles = require('./StyleRegistry');
 
 module.exports = class Collector extends EventEmitter
