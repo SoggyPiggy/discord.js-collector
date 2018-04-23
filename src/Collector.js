@@ -78,9 +78,9 @@ module.exports = class Collector extends EventEmitter
 		client.registry.registerCommand(new (require('./commands/set/set'))(client, this));
 		client.registry.registerCommand(new (require('./commands/set/sets'))(client, this));
 
-			client.registry.registerGroup('collector_credits', 'Collector: Credit Basics');
-			client.registry.registerCommand(new (require('./commands/credit/balance'))(client, this));
-			client.registry.registerCommand(new (require('./commands/credit/transfer'))(client, this));
+		client.registry.registerGroup('collector_credits', 'Collector: Credit Basics');
+		client.registry.registerCommand(new (require('./commands/credit/balance'))(client, this));
+		client.registry.registerCommand(new (require('./commands/credit/transfer'))(client, this));
 
 		if (this.options.features.packs)
 		{

@@ -1,6 +1,6 @@
 module.exports = function(collector)
 {
-	return new Promise(resolve)
+	return new Promise(resolve =>
 	{
 		try
 		{
@@ -27,5 +27,5 @@ module.exports = function(collector)
 		collector.emit('debug', 'No renderer detected.\nCanvas or Canvas-Prebuilt is reccomended.');
 		collector.emit('warn', 'No renderer detected.\nCanvas or Canvas-Prebuilt is reccomended.');
 		resolve(null);
-	}
+	});
 }

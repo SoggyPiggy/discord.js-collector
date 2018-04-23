@@ -10,11 +10,11 @@ module.exports = class Utils
 	{
 		this.collector = collector;
 		this.options = collector.options;
-		this.Searcher = require('./Searcher');
-		this.Cooldown = require('./Cooldown');
-		this.args = require('./Args');
-		this.random = require('./random');
-		this.smartsort = require('./SmartSort');
+		this.Searcher = require('./utils/Searcher');
+		this.Cooldown = require('./utils/Cooldown');
+		this.args = require('./utils/Args');
+		this.random = require('./utils/random');
+		this.smartsort = require('./utils/SmartSort');
 	}
 
 	pagify(page, items)
