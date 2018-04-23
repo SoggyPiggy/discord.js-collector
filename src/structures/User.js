@@ -25,14 +25,19 @@ module.exports = class User
 
 	get level()
 	{
+		if (typeof this.collector.options.levelXP === 'function') return this.collector.options.levelXP(this.xp);
 		return Math.floor(this.xp / this.collector.options.levelXP)
 	}
 
 	giveXP(xp = 0)
 	{
-		let level = this.level;
+		let levelOld = this.level;
 		this.xp += xp;
-		this.credits += this.collector.options.levelCredits * (this.level - level);
+		let levelNew = this.level;
+		let credits;
+		if (typeof this.collector.options.levelCredits === 'function') credits = this.collector.options.levelCredits(levelNew - levelOld, levelNew, levelOld);
+		else credits = this.collector.options.levelCredits * (this.level - level);
+		this.credits += credits;
 	}
 
 	save()
