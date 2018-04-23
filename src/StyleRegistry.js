@@ -21,13 +21,13 @@ module.exports = class StyleRegistry extends Map
 		if (typeof style === 'undefined') return;
 		if (typeof style === 'function') style = style(this.collector);
 		if (!(style instanceof CardStyle)) return;
+		if (this.collector.options.cardstyle === null) this.collector.options.cardstyle = style.id;
 		this.set(style.id, style);
 	}
 
 	registerDefaultStyle()
 	{
 		this.registerStyle(require('./renderer/styles/collectorV1'));
-		if (this.collector.options.cardstyle === null) this.collector.options.cardstyle = 'collector';
 	}
 
 	render(card, options = {})
@@ -41,7 +41,7 @@ module.exports = class StyleRegistry extends Map
 			this.collector.emit('warn', 'Attempted to render card without a default card style set.');
 			return false;
 		}
-		return new Promise(resolve =>
+		return new Promise(async resolve =>
 		{
 			let data = {};
 			data.card = card;
