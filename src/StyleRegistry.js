@@ -23,11 +23,6 @@ module.exports = class StyleRegistry extends Map
 		this.set(style.id, style);
 	}
 
-	registerDefaultStyle()
-	{
-		this.registerStyle(require('./renderer/styles/collectorV1'));
-	}
-
 	get(id)
 	{
 		if (typeof id !== 'undefined') return super.get(id);
