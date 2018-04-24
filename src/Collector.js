@@ -40,7 +40,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		if (typeof options.authorGratuity === 'undefined') options.authorGratuity = .2;
 		if (typeof options.cardStyle === 'undefined') options.cardStyle = null;
-		if (typeof options.renderer === 'undefined') options.renderer = require('./utils/getRenderer')(this);
+		if (typeof options.renderer === 'undefined') options.renderer = require('./renderer/modules/canvas');
 
 		this.options = options;
 
