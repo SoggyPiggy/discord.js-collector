@@ -1,8 +1,5 @@
 const CardStyle = require('./structures/CardStyle');
 
-let getRenderer = function ()
-{ }
-
 module.exports = class StyleRegistry extends Map
 {
 	constructor(collector)
@@ -19,9 +16,10 @@ module.exports = class StyleRegistry extends Map
 	registerStyle(style)
 	{
 		if (typeof style === 'undefined') return;
-		if (typeof style === 'function') style = style(this.collector);
+		if (typeof style === 'function') style = new style();
 		if (!(style instanceof CardStyle)) return;
-		if (this.collector.options.cardstyle === null) this.collector.options.cardstyle = style.id;
+		style.collector = this.collector;
+		if (this.collector.options.cardStyle === null) this.collector.options.cardStyle = style.id;
 		this.set(style.id, style);
 	}
 
@@ -30,40 +28,9 @@ module.exports = class StyleRegistry extends Map
 		this.registerStyle(require('./renderer/styles/collectorV1'));
 	}
 
-	render(card, options = {})
-	{
-		if (typeof options !== 'object') options = {};
-		if (typeof options.new === 'undefined') options.new = false;
-		if (typeof options.user === 'undefined') options.user = null;
-		let style = this.get();
-		if (!style)
-		{
-			this.collector.emit('warn', 'Attempted to render card without a default card style set.');
-			return false;
-		}
-		return new Promise(async resolve =>
-		{
-			let data = {};
-			data.card = card;
-			data.set = card.set;
-			data.series = card.set.series;
-			data.$set = card.$set;
-			data.$series = card.$set.series;
-			data.new = options.new;
-			if (card.author)
-			{
-				data.author = {};
-				data.user = collector.users.get(card.author, false);
-				data.member = await client.fetchUser(card.author);
-			}
-			let renderer = this.renderers.get(this.renderer);
-			renderer = require(renderer);
-			resolve(renderer(style, data))
-		});
-	}
-
 	get(id)
 	{
-		return super.get(id) || super.get(this.collector.options.cardstyle);
+		if (typeof id !== 'undefined') return super.get(id);
+		return super.get(this.collector.options.cardStyle);
 	}
 }
