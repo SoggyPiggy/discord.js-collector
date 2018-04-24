@@ -1,3 +1,5 @@
+const random = require('./utils/random');
+
 let parseID = function(id)
 {
 	if (typeof id === 'string') return id;
@@ -13,7 +15,6 @@ module.exports = class Utils
 		this.Searcher = require('./utils/Searcher');
 		this.Cooldown = require('./utils/Cooldown');
 		this.args = require('./utils/Args');
-		this.random = require('./utils/random');
 		this.smartsort = require('./utils/SmartSort');
 	}
 
@@ -211,7 +212,7 @@ module.exports = class Utils
 		var m = array.length, t, i;
 		while(m)
 		{
-			i = this.random.integer(0, m--);
+			i = random.integer(0, m--);
 			t = array[m];
 			array[m] = array[i];
 			array[i] = t;
