@@ -13,77 +13,92 @@ catch (error)
 	}
 	catch (error2) {}
 }
-const Request = require('then-request');
 
 function processRect(ctx, content, layer)
 {
-	return new Promise((resolve) =>
+	return new Promise(async (resolve) =>
 	{
-		ctx.translate(layer.x, layer.y);
-		ctx.fillStyle = layer.color;
-		ctx.fillRect(0, 0, layer.width, layer.height);
-		resolve();
+		try
+		{
+			ctx.translate(layer.x, layer.y);
+			ctx.fillStyle = layer.color;
+			ctx.globalAlpha = layer.alpha;
+			ctx.fillRect(0, 0, layer.width, layer.height);
+			resolve();
+		}
+		catch(error){reject(error)}
 	});
 }
 
 function processText(ctx, content, layer)
 {
-	return new Promise((resolve, reject) =>
+	return new Promise(async (resolve, reject) =>
 	{
-		ctx.translate(layer.x, layer.y);
-		ctx.fillStyle = layer.color;
-		ctx.font = `${layer.size}px '${layer.font}'`;
-		if (layer.width)
+		try
 		{
-			if (layer.shrink)
+			ctx.translate(layer.x, layer.y);
+			ctx.fillStyle = layer.color;
+			ctx.globalAlpha = layer.alpha;
+			ctx.font = `${layer.size}px '${layer.font}'`;
+			if (layer.width)
 			{
-				ctx.fillText(content, 0, 0, layer.width);
-				resolve();
+				if (layer.shrink)
+				{
+					ctx.fillText(content, 0, 0, layer.width);
+					resolve();
+				}
+				let width = ctx.measureText(content).width;
+				while (width > layer.width)
+				{
+					content = content.slice(0, -1);
+					width = ctx.measureText(content).width;
+				}
 			}
-			let width = ctx.measureText(content).width;
-			while (width > layer.width)
-			{
-				content = content.slice(0, -1);
-				width = ctx.measureText(content).width;
-			}
+			ctx.fillText(content, 0, 0);
+			resolve();
 		}
-		ctx.fillText(content, 0, 0);
-		resolve();
+		catch(error){reject(error)}
 	})
 }
 
 function processImage(ctx, content, layer)
 {
-	return new Promise((resolve, reject) =>
+	return new Promise(async (resolve, reject) =>
 	{
-		let image;
 		try
 		{
-			if (layer.content.match(/^https?:/))
+			let image;
+			try
 			{
-				let request = await Request('GET', layer.content);
-				image = new Canvas.Image();
-				image.src = request.body;
+				if (content.match(/^https?:/))
+				{
+					let request = await (require('then-request'))('GET', content);
+					image = new Canvas.Image();
+					image.src = request.body;
+				}
+				else
+				{
+					return resolve();
+					image = await Canvas.loadImage(content);
+				}
 			}
-			else
+			catch(error)
 			{
-				image = await Canvas.loadImage(layer.content);
+				if (!layer.fallback) reject(error);
+				image = await Canvas.loadImage(layer.fallback);
 			}
+			let width;
+			let height;
+			if (layer.width === null) width = image.width;
+			else width = layer.width;
+			if (layer.height === null) width = image.height;
+			else width = layer.height;
+			ctx.globalAlpha = layer.alpha;
+			ctx.translate(layer.x, layer.y);
+			ctx.drawImage(image, 0, 0);
+			resolve();
 		}
-		catch(error)
-		{
-			if (!layer.fallback) reject(error);
-			image = await Canvas.loadImage(layer.fallback);
-		}
-		ctx.translate(layer.x, layer.y);
-		let width;
-		let height;
-		if (layer.width === null) width = image.width;
-		else width = layer.width;
-		if (layer.height === null) width = image.height;
-		else width = layer.height;
-		ctx.drawImage(image, 0, 0, width, height);
-		resolve();
+		catch(error){reject(error)}
 	});
 }
 
@@ -93,41 +108,47 @@ function processLayer(ctx, content, layer)
 	{
 		case 'image': return processImage(ctx, content, layer);
 		case 'text': return processText(ctx, content, layer);
-		case 'rect': return processRectangle(ctx, content, layer);
+		case 'rect': return processRect(ctx, content, layer);
 		default: return;
 	}
 }
 
 module.exports = function (cardstyle, data)
 {
-	return new Promise(function(resolve, reject)
+	return new Promise(async (resolve, reject) =>
 	{
-		let canvas = new Canvas(cardstyle.width, cardstyle.height);
-		let ctx = canvas.getContext('2d');
-		ctx.fillStyle = cardstyle.options.defaults.color;
-		ctx.font = `${cardstyle.options.defaults.size}px '${cardstyle.options.defaults.font}'`;
-		for (let layer of cardstyle.layers)
-		{
-			if (layer.validate)
-			{
-				if (!layer.validate(data)) continue;
-			}
-			let content;
-			if (typeof layer.content === 'function') content = layer.content(data);
-			else content = layer.content;
-			if (!content && !layer.fallback) continue;
-			ctx.save();
-			await processLayer(ctx, content, layer);
-			ctx.restore();
-		}
 		try
 		{
-			let buffer = canvas.toBuffer();
-			resolve(buffer);
+			let canvas = new Canvas.createCanvas(cardstyle.width, cardstyle.height);
+			let ctx = canvas.getContext('2d');
+			for (let layer of cardstyle.layers)
+			{
+				if (layer.validate)
+				{
+					if (!layer.validate(data)) continue;
+				}
+				let content;
+				if (typeof layer.content === 'function') content = layer.content(data);
+				else content = layer.content;
+				if (!content && !layer.fallback) continue;
+				ctx.save();
+				try
+				{
+					await processLayer(ctx, content, layer);
+				}
+				catch(error) {console.warn(error);}
+				ctx.restore();
+			}
+			try
+			{
+				let buffer = canvas.toBuffer();
+				resolve(buffer);
+			}
+			catch (error)
+			{
+				reject(error);
+			}
 		}
-		catch (error)
-		{
-			reject(error);
-		}
+		catch(error){reject(error)}
 	})
 }
