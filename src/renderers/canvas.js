@@ -78,7 +78,6 @@ function processImage(ctx, content, layer)
 				}
 				else
 				{
-					return resolve();
 					image = await Canvas.loadImage(content);
 				}
 			}
