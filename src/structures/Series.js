@@ -19,6 +19,11 @@ module.exports = class
 		this.sets			= new ChanceMap;
 		this.all				= new ChanceMap;
 		this.registry		= registry;
+
+		for (let p in data)
+		{
+			if (typeof this[p] === 'undefined') this[p] = data[p];
+		}
 	}
 
 	get value()

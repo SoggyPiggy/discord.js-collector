@@ -15,8 +15,6 @@ module.exports = class Card
 		if (typeof data.xp				=== 'undefined')	data.xp				= 100;
 		if (typeof data.chance			=== 'undefined')	data.chance			= 100;
 		if (typeof data.visibility		=== 'undefined')	data.visibility	= -Infinity;
-		if (typeof data.image			=== 'undefined')	data.image			= null;
-		if (typeof data.fullart			=== 'undefined')	data.fullart		= false;
 		if (typeof data.guarded			=== 'undefined')	data.guarded		= false;
 		if (typeof data.untradable		=== 'undefined')	data.untradable	= false;
 		if (typeof data.omit				=== 'undefined')	data.omit			= false;
@@ -33,11 +31,14 @@ module.exports = class Card
 		this.xp				= data.xp;
 		this.chance			= data.chance;
 		this.visibility	= data.visibility;
-		this.image			= data.image;
-		this.fullart		= data.fullart;
 		this.guarded		= data.guarded;
 		this.untradable	= data.untradable;
 		this.omit			= data.omit;
+
+		for (let p in data)
+		{
+			if (typeof this[p] === 'undefined') this[p] = data[p];
+		}
 	}
 
 	get value()
