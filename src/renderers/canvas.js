@@ -21,6 +21,7 @@ function processRect(ctx, content, layer)
 		try
 		{
 			ctx.translate(layer.x, layer.y);
+			ctx.globalCompositeOperation = layer.operation;
 			ctx.fillStyle = layer.color;
 			ctx.globalAlpha = layer.alpha;
 			ctx.fillRect(0, 0, layer.width, layer.height);
@@ -37,6 +38,7 @@ function processText(ctx, content, layer)
 		try
 		{
 			ctx.translate(layer.x, layer.y);
+			ctx.globalCompositeOperation = layer.operation;
 			ctx.fillStyle = layer.color;
 			ctx.globalAlpha = layer.alpha;
 			ctx.font = `${layer.size}px '${layer.font}'`;
@@ -94,6 +96,7 @@ function processImage(ctx, content, layer)
 			else width = layer.height;
 			ctx.globalAlpha = layer.alpha;
 			ctx.translate(layer.x, layer.y);
+			ctx.globalCompositeOperation = layer.operation;
 			ctx.drawImage(image, 0, 0);
 			resolve();
 		}

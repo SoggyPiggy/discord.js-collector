@@ -30,6 +30,7 @@ module.exports = class CardStyle
 		if (typeof options.defaults.color === 'undefined') options.defaults.color = '#000000';
 		if (typeof options.defaults.alpha === 'undefined') options.defaults.alpha = 1;
 		if (typeof options.defaults.shrink === 'undefined') options.defaults.shrink = false;
+		if (typeof options.defaults.operation === 'undefined') options.defaults.operation = 'source-over';
 		this.id = options.id;
 		this.title = options.title;
 		this.width = options.width;
@@ -45,6 +46,7 @@ module.exports = class CardStyle
 		if (typeof options.y === 'undefined') options.y = this.options.defaults.y;
 		if (typeof options.color === 'undefined') options.color = this.options.defaults.color;
 		if (typeof options.alpha === 'undefined') options.alpha = this.options.defaults.alpha;
+		if (typeof options.operation === 'undefined') options.operation = this.options.defaults.operation;
 		if (typeof options.width === 'undefined') options.width = null;
 		if (typeof options.height === 'undefined') options.height = null;
 		if (typeof options.validate === 'undefined') options.validate = null;
