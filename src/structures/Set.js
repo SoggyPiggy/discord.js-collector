@@ -42,7 +42,9 @@ module.exports = class Set
 
 	get value()
 	{
-		return (((this.series.all._total / this.series.all.size) / this.chance) * this.series.value);
+		let value = (((this.series.all._total / this.series.all.size) / this.chance) * this.series.value);
+		if (value === 0) return Infinity;
+		return value;
 	}
 
 	owned(user)

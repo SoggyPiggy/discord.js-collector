@@ -45,7 +45,7 @@ module.exports = class
 			total += ((this.registry.allPackable._total / this.registry.allPackable.size) / this.chance);
 			count ++;
 		}
-		if (total === 0) return 0;
+		if (total === 0) return Infinity;
 		else return (total / count);
 	}
 

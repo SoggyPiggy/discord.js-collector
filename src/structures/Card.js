@@ -43,7 +43,9 @@ module.exports = class Card
 
 	get value()
 	{
-		return (((this.$set.cards._total / this.$set.cards.size) / this.chance) * this.$set.value);
+		let value = (((this.$set.cards._total / this.$set.cards.size) / this.chance) * this.$set.value);
+		if (value === 0) return Infinity;
+		return value;
 	}
 
 	inheritProperties()
