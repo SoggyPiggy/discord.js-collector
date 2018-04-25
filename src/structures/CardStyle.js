@@ -101,37 +101,71 @@ module.exports = class CardStyle
 		this.addLayer(options);
 	}
 
-	render(card, options = {})
+	async createRenderData(options = {})
+	{
+		if (typeof options !== 'object') throw new Error('Options must be an object');
+		if (typeof options.card === 'undefined') throw new Error('Options must have card property set with card');
+		if (typeof options.new === 'undefined') options.new = false;
+		if (typeof options.user === 'undefined') options.user = null;
+		
+		let data = {};
+		data.card = options.card;
+		data.set = options.card.set;
+		data.series = options.card.set.series;
+		data.$set = options.card.$set;
+		data.$series = options.card.$set.series;
+		data.new = options.new;
+		if (options.card.author)
+		{
+			data.author = {};
+			data.author.user = this.collector.users.get(options.card.author, false);
+			data.author.member = await this.collector.Commando.users.fetch(options.card.author);
+		}
+		return data;
+	}
+
+	renderCard(options)
 	{
 		return new Promise(async (resolve, reject) =>
 		{
-			if (typeof options !== 'object') options = {};
-			if (typeof options.new === 'undefined') options.new = false;
-			if (typeof options.user === 'undefined') options.user = null;
-
-			let data = {};
-			data.card = card;
-			data.set = card.set;
-			data.series = card.set.series;
-			data.$set = card.$set;
-			data.$series = card.$set.series;
-			data.new = options.new;
-			if (card.author)
-			{
-				data.author = {};
-				data.author.user = this.collector.users.get(card.author, false);
-				data.author.member = await this.collector.Commando.users.fetch(card.author);
-			}
 			try
 			{
+				let data = await this.createRenderData(options);
 				let renderer = await this.collector.options.renderer;
-				let buffer = await renderer(this, data);
+				let buffer = await renderer.card(this, data);
 				resolve(buffer);
 			}
-			catch(error)
-			{
-				reject(error);
-			}
+			catch(error) {reject(error);}
 		})
+	}
+
+	renderPack(options)
+	{
+		return new Promise(async (resolve, reject) =>
+		{
+			try
+			{
+				let data = [];
+				for (let option of options)
+				{
+					data.push(await this.createRenderData(option));
+				}
+				let renderer = await this.collector.options.renderer;
+				let buffer = await renderer.pack(this, data);
+				resolve(buffer);
+			}
+			catch(error) {reject(error);}
+		})
+	}
+
+	render(options)
+	{
+		if (Array.isArray(options))
+		{
+			if (options.length <= 0) return;
+			if (options.length === 1) return this.renderCard(options[0]);
+			return this.renderPack(options);
+		}
+		if (typeof options === 'object') return this.renderCard(options);
 	}
 }
