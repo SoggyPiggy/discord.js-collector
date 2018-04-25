@@ -39,6 +39,25 @@ module.exports = class CardStyle
 		this.layers = [];
 	}
 
+	addFont(dir, options)
+	{
+		if (typeof dir === 'undefined') return;
+		if (typeof options !== 'object') options = {};
+		if (typeof options.family === 'undefined') options.family = 'sans-serif';
+		if (typeof this._fonts === 'undefined') this._fonts = [];
+		this._fonts.push([dir, options]);
+	}
+
+	async _registerFonts()
+	{
+		if (!this._fonts) return;
+		let renderer = await this.collector.options.renderer;
+		for (let font of this._fonts)
+		{
+			renderer.addFont(font[0], font[1]);
+		}
+	}
+
 	addLayer(options = {})
 	{
 		if (typeof options !== 'object') options = {};

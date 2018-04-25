@@ -19,6 +19,7 @@ module.exports = class StyleRegistry extends Map
 		if (typeof style === 'function') style = new style();
 		if (!(style instanceof CardStyle)) return;
 		style.collector = this.collector;
+		style._registerFonts();
 		if (this.collector.options.cardStyle === null) this.collector.options.cardStyle = style.id;
 		this.set(style.id, style);
 	}
