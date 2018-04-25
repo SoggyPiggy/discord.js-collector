@@ -115,7 +115,7 @@ function processLayer(ctx, content, layer)
 	}
 }
 
-module.exports = function (cardstyle, data)
+function renderCard(cardstyle, data)
 {
 	return new Promise(async (resolve, reject) =>
 	{
@@ -154,3 +154,43 @@ module.exports = function (cardstyle, data)
 		catch(error){reject(error)}
 	})
 }
+
+function renderPack(cardstyle, datas)
+{
+	return new Promise(async (resolve, reject) =>
+	{
+		let cards = [];
+		datas.sort((a, b) =>
+		{
+			return a.card.value - b.card.value;
+		})
+		for (let data of datas)
+		{
+			try
+			{
+				let image = new Canvas.Image();
+				image.src = await renderCard(cardstyle, data);
+				cards.push(image);
+			}
+			catch(error){}
+		}
+		if (cards.length <= 0) return resolve(null);
+		let gap = Math.ceil(cardstyle.width * .025);
+		let width = (cardstyle.width * cards.length) + (gap * (cards.length - 1));
+		try
+		{
+			let canvas = Canvas.createCanvas(width, cardstyle.height);
+			let ctx = canvas.getContext('2d');
+			ctx.drawImage(cards[0], 0, 0);
+			for (let i = 1; i < cards.length; i++)
+			{
+				ctx.drawImage(cards[i], ((cardstyle.width * i) + (gap * i)), 0);
+			}
+			let buffer = canvas.toBuffer();
+			resolve(buffer);
+		}
+		catch(error){reject(error)};
+	})
+}
+
+module.exports = {card: renderCard, pack: renderPack, addFont: Canvas.registerFont};
