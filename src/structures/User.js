@@ -36,7 +36,7 @@ module.exports = class User
 		let levelNew = this.level;
 		let credits;
 		if (typeof this.collector.options.levelCredits === 'function') credits = this.collector.options.levelCredits(levelNew - levelOld, levelNew, levelOld);
-		else credits = this.collector.options.levelCredits * (this.level - level);
+		else credits = this.collector.options.levelCredits * (levelNew - levelOld);
 		this.credits += credits;
 	}
 
