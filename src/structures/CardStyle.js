@@ -22,15 +22,7 @@ module.exports = class CardStyle
 		if (typeof options.width === 'undefined') throw new Error('Card Style missing Width.');
 		if (typeof options.height === 'undefined') throw new Error('Card Style missing Height.');
 		if (typeof options.description === 'undefined') options.description = null;
-		if (typeof options.defaults !== 'object') options.defaults = {};
-		if (typeof options.defaults.x === 'undefined') options.defaults.x = 0;
-		if (typeof options.defaults.y === 'undefined') options.defaults.y = 0;
-		if (typeof options.defaults.font === 'undefined') options.defaults.font = 'Arial';
-		if (typeof options.defaults.size === 'undefined') options.defaults.size = 12;
-		if (typeof options.defaults.color === 'undefined') options.defaults.color = '#000000';
-		if (typeof options.defaults.alpha === 'undefined') options.defaults.alpha = 1;
-		if (typeof options.defaults.shrink === 'undefined') options.defaults.shrink = false;
-		if (typeof options.defaults.operation === 'undefined') options.defaults.operation = 'source-over';
+		if (typeof options.color === 'undefined') options.color = '#000000';
 		this.id = options.id;
 		this.title = options.title;
 		this.width = options.width;
@@ -61,11 +53,11 @@ module.exports = class CardStyle
 	addLayer(options = {})
 	{
 		if (typeof options !== 'object') options = {};
-		if (typeof options.x === 'undefined') options.x = this.options.defaults.x;
-		if (typeof options.y === 'undefined') options.y = this.options.defaults.y;
-		if (typeof options.color === 'undefined') options.color = this.options.defaults.color;
-		if (typeof options.alpha === 'undefined') options.alpha = this.options.defaults.alpha;
-		if (typeof options.operation === 'undefined') options.operation = this.options.defaults.operation;
+		if (typeof options.x === 'undefined') options.x = 0;
+		if (typeof options.y === 'undefined') options.y = 0;
+		if (typeof options.color === 'undefined') options.color = this.options.color;
+		if (typeof options.alpha === 'undefined') options.alpha = 1;
+		if (typeof options.operation === 'undefined') options.operation = 'source-over';
 		if (typeof options.width === 'undefined') options.width = null;
 		if (typeof options.height === 'undefined') options.height = null;
 		if (typeof options.validate === 'undefined') options.validate = null;
@@ -77,9 +69,12 @@ module.exports = class CardStyle
 	addTextLayer(text, options = {})
 	{
 		if (typeof options !== 'object') options = {};
-		if (typeof options.font === 'undefined') options.font = this.options.defaults.font;
-		if (typeof options.size === 'undefined') options.size = this.options.defaults.size;
-		if (typeof options.shrink === 'undefined') options.shrink = this.options.defaults.shrink;
+		if (typeof options.font === 'undefined') options.font = 'Arial';
+		if (typeof options.size === 'undefined') options.size = 12;
+		if (typeof options.shrink === 'undefined') options.shrink = false;
+		if (typeof options.variant === 'undefined') options.variant = 'normal';
+		if (typeof options.style === 'undefined') options.style = 'normal';
+		if (typeof options.weight === 'undefined') options.weight = 'normal';
 		options.content = text;
 		options.type = 'text';
 		this.addLayer(options);
