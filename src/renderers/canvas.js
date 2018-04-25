@@ -41,7 +41,7 @@ function processText(ctx, content, layer)
 			ctx.globalCompositeOperation = layer.operation;
 			ctx.fillStyle = layer.color;
 			ctx.globalAlpha = layer.alpha;
-			ctx.font = `${layer.size}px '${layer.font}'`;
+			ctx.font = `${layer.variant} ${layer.style} ${layer.weight} ${layer.size}px '${layer.font}'`;
 			if (layer.width)
 			{
 				if (layer.shrink)
