@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 
 module.exports = class _Command extends Commando.Command
@@ -33,6 +34,7 @@ module.exports = class _Command extends Commando.Command
 		let set = series.sets.random();
 		let card = set.cards.random();
 		let isNew = !user.cards.has(card);
+		let renderData = {card: card, new: isNew};
 		user.cards.add(card);
 		user.giveXP(card.xp);
 		user.save();
@@ -45,8 +47,25 @@ module.exports = class _Command extends Commando.Command
 				author.save();
 			}
 		}
-		reply = await reply;
-		reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
+		try
+		{
+			let style = this.collector.cardstyles.get();
+			let buffer = await style.render(renderData);
+			if (!buffer) throw new Error('Unable to render');
+
+			let attachment = new Discord.MessageAttachment();
+			attachment.setFile(buffer);
+			attachment.setName('Card.png');
+			reply = await reply
+			await message.channel.send(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`, attachment);
+			reply.delete();
+		}
+		catch(error)
+		{
+			console.log(error);
+			reply = await reply;
+			reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
+		}
 		this.collector.emit('collect', card, user, message);
 	}
 }
