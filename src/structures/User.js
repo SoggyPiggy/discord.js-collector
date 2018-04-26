@@ -12,6 +12,7 @@ module.exports = class User
 		if (typeof data.cooldowns.collect === 'undefined') data.cooldowns.collect = {};
 		if (typeof data.cooldowns.collect.cooldown === 'undefined') data.cooldowns.collect.cooldown = 0;
 		if (typeof data.cards === 'undefined') data.cards = [];
+		if (typeof data.starterpack === 'undefined') data.starterpack = false;
 
 		this.collector = collector;
 		this.id = data.id;
@@ -21,6 +22,7 @@ module.exports = class User
 		this.cooldowns = new Map();
 		this.cooldowns.set('collect', new collector.utils.Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
 		this.cards = new CardCollection(collector, data.cards);
+		this.starterpack = data.starterpack;
 	}
 
 	get level()
