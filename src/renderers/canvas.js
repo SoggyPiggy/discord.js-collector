@@ -42,6 +42,7 @@ function processText(ctx, content, layer)
 			ctx.fillStyle = layer.color;
 			ctx.globalAlpha = layer.alpha;
 			ctx.font = `${layer.variant} ${layer.style} ${layer.weight} ${layer.size}px '${layer.font}'`;
+			let width = ctx.measureText(content).width;
 			if (layer.width)
 			{
 				if (layer.shrink)
@@ -49,13 +50,13 @@ function processText(ctx, content, layer)
 					ctx.fillText(content, 0, 0, layer.width);
 					resolve();
 				}
-				let width = ctx.measureText(content).width;
 				while (width > layer.width)
 				{
 					content = content.slice(0, -1);
 					width = ctx.measureText(content).width;
 				}
 			}
+			if (layer.anchor !== 0) ctx.translate(-Math.round(width * layer.anchor), 0);
 			ctx.fillText(content, 0, 0);
 			resolve();
 		}

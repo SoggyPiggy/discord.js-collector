@@ -75,6 +75,7 @@ module.exports = class CardStyle
 		if (typeof options.variant === 'undefined') options.variant = 'normal';
 		if (typeof options.style === 'undefined') options.style = 'normal';
 		if (typeof options.weight === 'undefined') options.weight = 'normal';
+		if (typeof options.anchor === 'undefined') options.anchor = 0;
 		options.content = text;
 		options.type = 'text';
 		this.addLayer(options);
