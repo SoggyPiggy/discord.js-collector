@@ -67,5 +67,16 @@ module.exports =
 		label: 'User',
 		prompt: 'Who?',
 		type: 'user'
+	},
+	creditConfirmation: credits =>
+	{
+		let data =
+		{
+			key: 'confirmation',
+			labal: 'Spending Confirmation',
+			prompt: `Confirm you'd like to spend ${credits}\n(Y)es or (N)o`,
+			type: 'boolean'
+		}
+		return data
 	}
 }
