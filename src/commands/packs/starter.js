@@ -24,7 +24,7 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 		let reply = message.channel.send(`<@${user.id}> Collecting Cards...`);
-		let response = `<@${user.id}> StarterPack`
+		let response = `<@${user.id}> Starterpack`
 		let cards = [];
 		let renderData = [];
 		while(cards.length < 8)
