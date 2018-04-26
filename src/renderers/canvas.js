@@ -93,12 +93,12 @@ function processImage(ctx, content, layer)
 			let height;
 			if (layer.width === null) width = image.width;
 			else width = layer.width;
-			if (layer.height === null) width = image.height;
-			else width = layer.height;
+			if (layer.height === null) height = image.height;
+			else height = layer.height;
 			ctx.globalAlpha = layer.alpha;
 			ctx.translate(layer.x, layer.y);
 			ctx.globalCompositeOperation = layer.operation;
-			ctx.drawImage(image, 0, 0);
+			ctx.drawImage(image, 0, 0, width, height);
 			resolve();
 		}
 		catch(error){reject(error)}

@@ -35,8 +35,7 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 
-		let response = `<@${user.id}> Fetching your card \`${card.id}\` **${card.title}** *${card.rarity}*`;
-		let reply = message.channel.send(response)
+		let reply = message.channel.send(`<@${user.id}> Fetching your card \`${card.id}\` **${card.title}** *${card.rarity}*`)
 		try
 		{
 			let style = this.collector.cardstyles.get();
@@ -47,13 +46,13 @@ module.exports = class _Command extends Commando.Command
 			attachment.setFile(buffer);
 			attachment.setName('Card.png');
 			reply = await reply
-			await message.channel.send(response, attachment);
+			await message.channel.send(`<@${user.id}> \`${card.id}\` **${card.title}** *${card.rarity}*`, attachment);
 			reply.delete();
 		}
 		catch(error)
 		{
 			reply = await reply;
-			reply.edit(`${response}\nUnable to render the card`);
+			reply.edit(`<@${user.id}> \`${card.id}\` **${card.title}** *${card.rarity}*\nUnable to render the card`);
 			this.collector.emit('warn', error.message);
 		}
 	}
