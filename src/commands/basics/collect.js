@@ -62,7 +62,7 @@ module.exports = class _Command extends Commando.Command
 		}
 		catch(error)
 		{
-			console.log(error);
+			console.error(error);
 			reply = await reply;
 			reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
 		}

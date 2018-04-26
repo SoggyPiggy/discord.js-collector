@@ -35,7 +35,7 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 
-		let response = `<@${user.id}> Rendering \`${card.id}\` **${card.title}** *${card.rarity}*`;
+		let response = `<@${user.id}> Fetching your card \`${card.id}\` **${card.title}** *${card.rarity}*`;
 		let reply = message.channel.send(response)
 		try
 		{

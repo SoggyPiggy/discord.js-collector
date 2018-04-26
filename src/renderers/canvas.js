@@ -160,10 +160,6 @@ function renderPack(cardstyle, datas)
 	return new Promise(async (resolve, reject) =>
 	{
 		let cards = [];
-		datas.sort((a, b) =>
-		{
-			return a.card.value - b.card.value;
-		})
 		for (let data of datas)
 		{
 			try
