@@ -185,6 +185,18 @@ module.exports = class Utils
 		return list.replace(regexEnd, '');
 	}
 
+	convertCardsMap(cards)
+	{
+		cards = this.convertCards(cards);
+		let map = new Map();
+		for (let card of cards)
+		{
+			if (typeof card === 'object') map.set(card.id, card);
+			else if (typeof card === 'string') map.set(card, card);
+		}
+		return map;
+	}
+
 	convertCards(cards)
 	{
 		let data = [];
@@ -194,6 +206,18 @@ module.exports = class Utils
 			else data.push(card);
 		}
 		return data;
+	}
+
+	convertSetsMap(sets)
+	{
+		sets = this.convertSets(sets);
+		let map = new Map();
+		for (let set of sets)
+		{
+			if (typeof set === 'object') map.set(set.id, set);
+			else if (typeof set === 'string') map.set(set, set);
+		}
+		return map;
 	}
 
 	convertSets(sets)

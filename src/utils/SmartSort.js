@@ -4,6 +4,8 @@ module.exports =
 	{
 		cards.sort(function (a, b)
 		{
+			if (Array.isArray(a)) a = a[1];
+			if (Array.isArray(b)) b = b[1];
 			if (typeof a === 'string' && typeof b === 'string')
 			{
 				if (a > b) return 1;
@@ -31,6 +33,8 @@ module.exports =
 	{
 		sets.sort(function (a, b)
 		{
+			if (Array.isArray(a)) a = a[1];
+			if (Array.isArray(b)) b = b[1];
 			if (a.series.id === b.series.id)
 			{
 				if (a.value === b.value)
