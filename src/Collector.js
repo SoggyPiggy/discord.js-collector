@@ -31,8 +31,8 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.features !== 'object') options.features = {};
 		if (typeof options.features.packs === 'undefined') options.features.packs = true;
 		if (typeof options.features.managment === 'undefined') options.features.managment = true;
-		if (typeof options.features.trading === 'undefined') options.features.trading = true;
-		if (typeof options.features.market === 'undefined') options.features.market = true;
+		if (typeof options.features.trading === 'undefined') options.features.trading = false;
+		if (typeof options.features.market === 'undefined') options.features.market = false;
 		if (typeof options.pricing !== 'object') options.pricing = {};
 		if (typeof options.pricing.boosterpack === 'undefined') options.pricing.boosterpack = 400;
 		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 600;
