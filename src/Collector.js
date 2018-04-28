@@ -41,6 +41,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.authorGratuity === 'undefined') options.authorGratuity = .2;
 		if (typeof options.cardStyle === 'undefined') options.cardStyle = null;
 		if (typeof options.renderer === 'undefined') options.renderer = require('./renderers/canvas');
+		if (typeof options.grindPercent === 'undefined') options.grindPercent = .5;
 
 		this.options = options;
 

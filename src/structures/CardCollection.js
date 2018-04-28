@@ -35,10 +35,13 @@ module.exports = class CardCollection extends Map
 		let id = this.parseID(card);
 		if (this.has(id))
 		{
+			if (this.get(id) < count) count = this.get(id);
 			let num = this.get(id) - count;
 			if (num > 0) this.set(id, num);
 			else this.delete(id);
+			return count;
 		}
+		return 0;
 	}
 
 	parseID(card)
