@@ -231,6 +231,14 @@ module.exports = class Utils
 		return data;
 	}
 
+	quickConfirm(items)
+	{
+		let end = items[items.length - 1];
+		if (end.toLowerCase() !== 'y') return null;
+		items.pop();
+		return true;
+	}
+
 	static shuffle(array)
 	{
 		var m = array.length, t, i;

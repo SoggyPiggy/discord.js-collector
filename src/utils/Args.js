@@ -68,6 +68,21 @@ module.exports =
 		prompt: 'Who?',
 		type: 'user'
 	},
+	grindCount:
+	{
+		key: 'count',
+		label: 'Grind Count',
+		prompt: 'How many times to grind a Card?',
+		type: 'integer'
+	},
+	quickConfirm:
+	{
+		key: 'confirm',
+		labal: 'Quick Confirmation',
+		prompt: 'You shouldn\'t see this',
+		type: 'boolean',
+		default: false
+	},
 	creditConfirmation: credits =>
 	{
 		let data =
