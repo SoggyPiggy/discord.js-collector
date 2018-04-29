@@ -12,6 +12,8 @@ module.exports = class Utils
 	{
 		this.collector = collector;
 		this.options = collector.options;
+		this.CardHandler = require('./utils/handlers/CardHandler');
+		this.SetHandler = require('./utils/handlers/SetHandler');
 		this.Searcher = require('./utils/Searcher');
 		this.Cooldown = require('./utils/Cooldown');
 		this.args = require('./utils/Args');
