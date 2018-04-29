@@ -102,7 +102,7 @@ module.exports = class SetHandler extends Handler
 				if (!filter) return [];
 				for (let fuse of fuses)
 				{
-					results.concat(fuse.search(filter))
+					results = results.concat(fuse.search(filter))
 				}
 				results = Array.from(new Set(results));
 			}
