@@ -40,7 +40,7 @@ module.exports = class UserManager extends Map
 		let user = super.get(id);
 		if (typeof user === 'undefined')
 		{
-			if (!create) return false;
+			if (!create) return;
 			user = new User(this.collector, {id: id});
 			this.set(user.id, user);
 		}

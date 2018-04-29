@@ -62,8 +62,8 @@ module.exports = class Card
 
 	owned(user)
 	{
-		if (user.cards.has(this.id)) return user.cards.get(this.id);
-		else return false;
+		if (user.cards.has(this.id)) return true;
+		return false;
 	}
 
 	compress()

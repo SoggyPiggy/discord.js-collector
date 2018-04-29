@@ -36,11 +36,16 @@ module.exports = class _Command extends Commando.Command
 		let cards = Array.from(set.cards.values());
 		if (set.visibility > 1)
 		{
-			cards = set.owned(user);
-			if (cards.length <= 0)
+			let owned = set.owned(user);
+			if (!owned)
 			{
 				message.reply(`Unable to find Set: \`${setID}\``);
 				return;
+			}
+			cards = [];
+			for (let card of set.cards.values())
+			{
+				if (card.owned(user)) cards.push(card);
 			}
 		}
 

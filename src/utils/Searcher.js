@@ -94,7 +94,7 @@ module.exports = class Searcher
 		if (typeof options.visiblityCheck === 'undefined') options.visiblityCheck = true;
 		if (typeof options.ownedOverride === 'undefined') options.ownedOverride = false;
 		if (typeof options.fallbackFilters === 'undefined') options.fallbackFilters = [{ keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3 }];
-		if (!options.cards instanceof Map) options.cards = this.utils.convertCardsMap(options.cards);
+		if (!(options.cards instanceof Map)) options.cards = this.utils.convertCardsMap(options.cards);
 		let appliedFilters = [];
 		let usedFilters = [];
 		let ignoredFilters = [];

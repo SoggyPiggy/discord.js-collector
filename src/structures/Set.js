@@ -49,12 +49,11 @@ module.exports = class Set
 
 	owned(user)
 	{
-		let owned = [];
 		for (let [key, card] of this.cards)
 		{
-			if (user.cards.has(key)) owned.push(card);
+			if (user.cards.has(key)) return true;
 		}
-		return owned;
+		return false;
 	}
 
 	compress()
