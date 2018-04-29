@@ -6,7 +6,7 @@ module.exports = class SetHandler extends Handler
 {
 	constructor(Collector, options)
 	{
-		if (typeof options.items === 'undefined') options.items = Collector.registry.sets;
+		if (typeof options.items === 'undefined') options.items = new Map(Collector.registry.sets);
 		super(Collector, options);
 		this.type = 'set';
 	}
@@ -16,8 +16,9 @@ module.exports = class SetHandler extends Handler
 		return this.items;
 	}
 	
-	filter(filter)
+	filter(filter, fallback)
 	{
+		if (!fallback.length) fallback = [{keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3}]
 		let results = [];
 		if (this.items.has(this.utils.formatSetID(filter))) return [this.utils.formatSetID(filter)];
 		else if (filter.toLowerCase() === 'purchasable')
@@ -81,10 +82,10 @@ module.exports = class SetHandler extends Handler
 			}
 			else
 			{
-				for (let fallback of options.fallbackFilters)
+				for (let fb of fallback)
 				{
-					fuseoptions.keys = fallback.keys;
-					fuseoptions.threshold = fallback.threshold;
+					fuseoptions.keys = fb.keys;
+					fuseoptions.threshold = fb.threshold;
 					fuses.push(new Fuse(fuseSets, fuseoptions));
 				}
 			}
@@ -95,5 +96,10 @@ module.exports = class SetHandler extends Handler
 			}
 		}
 		return results;
+	}
+
+	processItems()
+	{
+		super.processItems(Set, this.collector.registry.sets);
 	}
 }

@@ -6,7 +6,7 @@ module.exports = class CardHandler extends Handler
 {
 	constructor(Collector, options)
 	{
-		if (typeof options.items === 'undefined') options.items = Collector.registry.cards;
+		if (typeof options.items === 'undefined') options.items = new Map(Collector.registry.cards)
 		super(Collector, options);
 		this.type = 'card';
 	}
@@ -16,8 +16,9 @@ module.exports = class CardHandler extends Handler
 		return this.items;
 	}
 
-	filter(filter)
+	filter(filter, fallback)
 	{
+		if (!fallback.length) fallback = [{keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3}]
 		let results = [];
 		if (this.items.has(this.utils.formatCardID(filter))) return [this.utils.formatCardID(filter)];
 		else if (filter.match(/^own:?/gi))
@@ -79,10 +80,10 @@ module.exports = class CardHandler extends Handler
 			}
 			else
 			{
-				for (let fallback of this.fallbackFilters)
+				for (let fb of fallback)
 				{
-					fuseoptions.keys = fallback.keys;
-					fuseoptions.threshold = fallback.threshold;
+					fuseoptions.keys = fb.keys;
+					fuseoptions.threshold = fb.threshold;
 					fuses.push(new Fuse(fuseCards, fuseoptions));
 				}
 			}
@@ -93,5 +94,10 @@ module.exports = class CardHandler extends Handler
 			}
 		}
 		return results;
+	}
+
+	processItems()
+	{
+		super.processItems(Card, this.collector.registry.cards);
 	}
 }

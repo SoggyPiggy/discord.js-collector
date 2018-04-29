@@ -23,15 +23,13 @@ module.exports = class Handler
 		if (typeof options !== 'object') options = {};
 		if (typeof options.user === 'undefined') options.user = null;
 		if (typeof options.items === 'undefined') options.items = [];
-		if (typeof options.fallbackFilters === 'undefined') options.fallbackFilters = [{keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3}];
 		this.type = null;
 		this.collector = Collector;
 		this.utils = Collector.utils;
 		this.user = options.user;
-		this.items = new Map(options.items);
+		this.items = options.items;
 		this.unknowns = new Map();
 		this.filters = {applied: [], ignored: [], used: []};
-		this.fallbackFilters = options.fallbackFilters;
 	}
 
 	getUser(filter)
@@ -56,7 +54,7 @@ module.exports = class Handler
 		}
 	}
 
-	filter(filter)
+	filter(filter, fallback)
 	{
 		if (this.items.has(filter)) return [filter];
 		else return [];
@@ -68,21 +66,23 @@ module.exports = class Handler
 		return this.filters.applied.includes(filter);
 	}
 
-	applyFilter(filter)
+	applyFilter(filter, fallback)
 	{
 		let exclude = filter.startsWith('-');
 		filter = formatFilter(filter);
 		if (this.hasFilter(filter)) return false;
 		else this.filters.applied.push(filter);
-		let keys = this.filter(filter);
+		let keys = this.filter(filter, fallback);
 		if (keys.length <= 0) return false;
 		if (exclude) this.removeItems(keys);
 		else this.retainItems(keys);
 		return true;
 	}
 
-	applyFilters(filterString)
+	applyFilters(filterString, fallback)
 	{
+		if (typeof filterString !== 'string') return;
+		if (typeof fallback === 'undefined') fallback = [];
 		let filters = seperateFilters(filterString);
 		let used = [];
 		let ignored = [];
@@ -90,7 +90,7 @@ module.exports = class Handler
 		this.checkVisibility();
 		for (let filter of filters)
 		{
-			if (this.applyFilter(filter))
+			if (this.applyFilter(filter, fallback))
 			{
 				this.filters.used.push(filter);
 				used.push(filter);
@@ -161,5 +161,23 @@ module.exports = class Handler
 	{
 		this.checkUnknown();
 		this.checkVisibility(override);
+	}
+
+	processItems(type, registry)
+	{
+		if (this.items instanceof Map) return new Map(this.items);
+		let itemsMap = new Map();
+		for (let item of this.items)
+		{
+			if (item instanceof type) itemsMap.set(item.id, item);
+			else
+			{
+				itemsMap.set(item, item);
+				item = registry.get(item);
+				if (typeof item === 'undefined') continue;
+				itemsMap.set(item.id, item);
+			}
+		}
+		this.items = itemsMap;
 	}
 }
