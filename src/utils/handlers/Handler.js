@@ -36,11 +36,7 @@ module.exports = class Handler
 
 	getUser(filter)
 	{
-		if (filter.length > 0)
-		{
-			filter = filter.replace(/^<@|>$/g, '');
-			return this.collector.users.get(filter, false);
-		}
+		if (filter.length > 0) return this.collector.users.get(filter.replace(/^<@|>$/g, ''), false);
 		else return this.user;
 	}
 
@@ -48,7 +44,7 @@ module.exports = class Handler
 	{
 		for (let key of keys)
 		{
-			if (this.items.has(key)) this.items.delete(key);
+			this.items.delete(key);
 		}
 	}
 

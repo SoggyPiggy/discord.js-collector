@@ -1,10 +1,12 @@
 const Handler = require('./Handler');
 const Set = require('./../../structures/Set');
+const Fuse = require('fuse.js');
 
 module.exports = class SetHandler extends Handler
 {
 	constructor(Collector, options)
 	{
+		if (typeof options.items === 'undefined') options.items = Collector.registry.sets;
 		super(Collector, options);
 		this.type = 'set';
 	}

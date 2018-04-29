@@ -1,10 +1,12 @@
 const Handler = require('./Handler');
 const Card = require('./../../structures/Card');
+const Fuse = require('fuse.js');
 
 module.exports = class CardHandler extends Handler
 {
 	constructor(Collector, options)
 	{
+		if (typeof options.items === 'undefined') options.items = Collector.registry.cards;
 		super(Collector, options);
 		this.type = 'card';
 	}
