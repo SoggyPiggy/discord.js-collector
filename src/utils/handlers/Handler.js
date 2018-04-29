@@ -117,7 +117,37 @@ module.exports = class Handler
 		{
 			pageItems.push(items[i]);
 		}
-		return {page: page + 1, max: pageMax, results: new Map(pageItems)};
+		return {page: page + 1, max: pageMax, items: new Map(pageItems)};
+	}
+
+	listItems(items)
+	{
+		let list = [];
+		for (let item of items)
+		{
+			list.push(item.toString())
+		}
+		return list;
+	}
+	
+	list(page = 1, options = {})
+	{
+		if (typeof options !== 'object') options = {};
+		if (typeof options.header === 'undefined') options.header = true;
+		if (typeof options.spliter === 'undefined') options.spliter = '\n';
+		if (typeof options.processor === 'undefined') options.processor = this.listItems;
+		options.page = page;
+		if (options.page) page = this.pagify(options.page);
+		else page = {items: this.items};
+		let list = '';
+		if (options.header)
+		{
+			if (options.page) list += `~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;
+			else list += `~~\`------------------------------------------------\`~~\n`;
+		}
+		let listItems = options.processor(page.items);
+		list += listItems.join(options.spliter);
+		return list;
 	}
 
 	sort()

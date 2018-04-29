@@ -111,6 +111,86 @@ module.exports = class CardHandler extends Handler
 		return results;
 	}
 
+	listItems(items, options)
+	{
+		if (typeof options.collected === 'undefined') options.collected = true;
+		if (typeof options.count === 'undefined') options.count = true;
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.set === 'undefined') options.set = true;	
+		if (typeof options.title === 'undefined') options.title = true;
+		if (typeof options.rarity === 'undefined') options.rarity = true;
+		let listItems = [];
+		let highest = 0;
+		if (options.count && this.user)
+		{
+			for (let [key, item] of items)
+			{
+				let count = this.user.cards.get(item);
+				if (count)
+				{
+					if (count > highest) highest = count;
+				}
+			}
+			highest = String(highest).replace(/./g, '0');
+			while (highest.length < 2)
+			{
+				highest += '0';
+			}
+		}
+		for (let [key, item] of items)
+		{
+			let line = '';
+			if (typeof item === 'string')
+			{
+				if (this.user && (options.collected || options.count)) line += '`';
+				if (this.user && options.collected) line += '⛔';
+				if (this.user && options.count)
+				{
+					let owned = highest;
+					if (this.user) owned = this.user.cards.get(item);
+					owned = String(owned);
+					while (owned.length < highest.length) {owned = '0' + owned};
+					line += owned;
+				}
+				if (this.user && (options.collected || options.count)) line += '`';
+				line += ` \`${card}\` __Card Unavailable__`;				
+			}
+			else
+			{
+				let owned = false;
+				if (this.user)
+				{
+					owned = this.user.cards.get(item);
+					if (options.collected || options.count) line += '`';
+					if (options.collected)
+					{
+						if (owned) line += `✔️`;
+						else line += `❌`;
+					}
+					if (options.count)
+					{
+						if (owned)
+						{
+							owned = String(owned);
+							while (owned.length < highest.length) {owned = '0' + owned};
+							line += owned;
+						}
+						else line += highest;
+					}
+					if (options.collected || options.count) line += '`';					
+				}
+				if (options.id) line += ` \`${item.id}\``;
+				if (options.set) line += ` \`${item.set.id}\``;
+				if (options.title && ((options.user && owned) || !options.user || item.visibility <= 0)) line += ` **${item.title}**`;
+				else line += ` **~~?????~~**`;
+				if (options.rarity) line += ` *${item.rarity}*`;
+			}
+			line = line.replace(/^ /g, '');
+			listItems.push(line);
+		}
+		return listItems;
+	}
+	
 	processItems()
 	{
 		super.processItems(Card, this.collector.registry.cards);
