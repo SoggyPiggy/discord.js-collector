@@ -21,15 +21,18 @@ module.exports = class SetHandler extends Handler
 		if (!fallback.length) fallback = [{keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3}]
 		let results = [];
 		if (this.items.has(this.utils.formatSetID(filter))) return [this.utils.formatSetID(filter)];
-		else if (filter.toLowerCase() === 'purchasable')
+		let filterParts = filter.split(':');
+		switch(filterParts[0])
 		{
-			let results = [];
+			case 'purchasable':
+			{
 			for (let [key, set] of this.items)
 			{
 				if (set.purchasable) results.push(key);
 			}
+				break;
 		}
-		else if (filter.match(/^author:?/gi))
+			case 'author':
 		{
 			let author = filter.replace(/^author:?/gi, '');
 			author = this.getUser(author, options);
@@ -48,8 +51,9 @@ module.exports = class SetHandler extends Handler
 					break;
 				}
 			}
+				break;
 		}
-		else
+			default:
 		{
 			let fuseoptions = {id: 'id', location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1};
 			let fuses = [];
@@ -58,29 +62,33 @@ module.exports = class SetHandler extends Handler
 			{
 				fuseSets.push(set.compress());
 			}
-	
-			if (filter.match(/title:?/gi))
+				switch(filterParts[0])
+				{
+					case 'title':
 			{
 				filter = filter.replace(/title:?/gi, '');
 				fuseoptions.keys = ['title'];
 				fuseoptions.threshold = .3;
 				fuses.push(new Fuse(fuseSets, fuseoptions));
+						break;
 			}
-			else if (filter.match(/tag:?/gi))
+					case 'tag':
 			{
 				filter = filter.replace(/tag:?/gi, '');
 				fuseoptions.keys = ['tags', 'cards.tags'];
 				fuseoptions.threshold = 0;
 				fuses.push(new Fuse(fuseSets, fuseoptions));
+						break;
 			}
-			else if (filter.match(/^description:?/g))
+					case 'description':
 			{
 				filter = filter.replace(/^description:?/gi, '');
 				fuseoptions.keys = ['description'];
 				fuseoptions.threshold = .5;
 				fuses.push(new Fuse(fuseSets, fuseoptions));
+						break;
 			}
-			else
+					default:
 			{
 				for (let fb of fallback)
 				{
@@ -88,12 +96,16 @@ module.exports = class SetHandler extends Handler
 					fuseoptions.threshold = fb.threshold;
 					fuses.push(new Fuse(fuseSets, fuseoptions));
 				}
+						break;
+					}
 			}
 			if (!filter) return [];
 			for (let fuse of fuses)
 			{
-				results = mergeArray(results, fuse.search(filter));
+					results.concat(fuse.search(filter))
 			}
+				results = Array.from(new Set(results));
+		}
 		}
 		return results;
 	}
