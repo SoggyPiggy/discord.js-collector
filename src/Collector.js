@@ -120,8 +120,8 @@ module.exports = class Collector extends EventEmitter
 		}
 
 		client.registry.registerGroup('collector_informative', 'Collector: Help Center');
-		client.registry.registerCommand(new (require('./commands/informative/news'))(client, this));
 		client.registry.registerCommand(new (require('./commands/informative/startup'))(client, this));
 		client.registry.registerCommand(new (require('./commands/informative/search'))(client, this));
+		client.registry.registerCommand(new (require('./commands/informative/searchcs'))(client, this));
 	}
 }
