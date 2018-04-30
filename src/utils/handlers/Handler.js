@@ -139,6 +139,7 @@ module.exports = class Handler
 	list(page = 1, options = {})
 	{
 		if (typeof options !== 'object') options = {};
+		if (typeof options.filters === 'undefined') options.filters = true;
 		if (typeof options.header === 'undefined') options.header = true;
 		if (typeof options.spliter === 'undefined') options.spliter = '\n';
 		if (typeof options.processor === 'undefined') options.processor = this.listItems;
@@ -146,6 +147,13 @@ module.exports = class Handler
 		if (options.page) page = this.pagify(options.page);
 		else page = {items: this.items};
 		let list = '';
+		if (options.filters && (this.filters.used.length + this.filters.ignored.length > 0))
+		{
+			list += `**Filters:** `;
+			for (let filter of this.filters.used) {list += `${filter}, `;}
+			for (let filter of this.filters.ignored) {list += `~~${filter}~~, `;}
+			list = list.replace(/, $/g, '\n');
+		}
 		if (options.header)
 		{
 			if (options.page) list += `~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;
