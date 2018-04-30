@@ -60,6 +60,12 @@ module.exports = class Handler
 		else return [];
 	}
 
+	addFilter(filter)
+	{
+		filter = formatFilter(filter);
+		this.filters.applied.push(filter);
+	}
+
 	hasFilter(filter)
 	{
 		filter = formatFilter(filter);
@@ -87,7 +93,7 @@ module.exports = class Handler
 		let used = [];
 		let ignored = [];
 		if (filters.length <= 0) return {used, ignored};
-		this.checkVisibility();
+		this.checkUnknown();
 		for (let filter of filters)
 		{
 			if (this.applyFilter(filter, fallback))

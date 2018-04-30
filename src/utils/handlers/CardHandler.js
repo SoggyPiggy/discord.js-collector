@@ -46,6 +46,22 @@ module.exports = class CardHandler extends Handler
 				}
 				break;
 			}
+			case 'guarded':
+			{
+				for (let [key, card] of this.items)
+				{
+					if (card.guarded) results.push(key);
+				}
+				break;
+			}
+			case 'tradable':
+			{
+				for (let [key, card] of this.items)
+				{
+					if (!card.untradable) results.push(key);
+				}
+				break;
+			}
 			default:
 			{
 				let fuseoptions = {id: 'id', location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1};
@@ -210,6 +226,13 @@ module.exports = class CardHandler extends Handler
 			rarities[item.rarity] += grind;
 		}
 		let list = '';
+		if ((this.filters.used.length + this.filters.ignored.length) > 0)
+		{
+			list += `**Filters:** `;
+			for (let filter of this.filters.used) {list += `${filter}, `;}
+			for (let filter of this.filters.ignored) {list += `~~${filter}~~, `;}
+			list = list.replace(/, $/g, '\n');
+		}
 		list += `**Total Cards:** ${total}\n`;
 		list += `**Unique Cards:** ${unique}\n`;
 		list += `~~\`--------\`~~\` (Rarities) \`~~\`--------\`~~\n`
