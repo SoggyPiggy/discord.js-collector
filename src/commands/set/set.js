@@ -66,8 +66,8 @@ module.exports = class _Command extends Commando.Command
 		if (set.description) description += `\n${set.description}`;
 
 		let footer = '';
-		if (set.series.collectable) footer += 'Collectable ';
-		if (set.series.packable) footer += 'Purchasable ';
+		if (set.obtainable && set.series.collectable) footer += 'Collectable ';
+		if (set.purchasable) footer += 'Purchasable ';
 		footer = footer.replace(/ $/g, '');		
 
 		let embed = new Discord.MessageEmbed();
