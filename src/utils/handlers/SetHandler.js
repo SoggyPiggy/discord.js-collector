@@ -1,5 +1,4 @@
 const Handler = require('./Handler');
-const Set = require('./../../structures/Set');
 const Fuse = require('fuse.js');
 
 module.exports = class SetHandler extends Handler
@@ -130,10 +129,11 @@ module.exports = class SetHandler extends Handler
 			line = line.replace(/^ /g, '');
 			listItems.push(line);
 		}
+		return listItems;
 	}
 
 	processItems()
 	{
-		super.processItems(Set, this.collector.registry.sets);
+		super.processItems(require('./../../structures/Set'), this.collector.registry.sets);
 	}
 }

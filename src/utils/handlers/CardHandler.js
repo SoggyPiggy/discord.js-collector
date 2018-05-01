@@ -1,5 +1,4 @@
 const Handler = require('./Handler');
-const Card = require('./../../structures/Card');
 const Fuse = require('fuse.js');
 
 module.exports = class CardHandler extends Handler
@@ -158,26 +157,27 @@ module.exports = class CardHandler extends Handler
 			let line = '';
 			if (typeof item === 'string')
 			{
-				if (this.user && (options.collected || options.count)) line += '`';
-				if (this.user && options.collected) line += '⛔';
-				if (this.user && options.count)
+				if (this.user && (options.collected || options.count))
 				{
-					let owned = highest;
-					if (this.user) owned = this.user.cards.get(item);
-					owned = String(owned);
-					while (owned.length < highest.length) {owned = '0' + owned};
-					line += owned;
+					line += '`';
+					if (options.collected) line += '⛔';
+					if (options.count)
+					{
+						let owned = String(this.user.cards.get(item));
+						while (owned.length < highest.length) {owned = '0' + owned};
+						line += owned;
+					}
+					line += '`';
 				}
-				if (this.user && (options.collected || options.count)) line += '`';
 				line += ` \`${card}\` __Card Unavailable__`;				
 			}
 			else
 			{
 				let owned = false;
-				if (this.user)
+				if (this.user && (options.collected || options.count))
 				{
 					owned = this.user.cards.get(item);
-					if (options.collected || options.count) line += '`';
+					line += '`';
 					if (options.collected)
 					{
 						if (owned) line += `✔️`;
@@ -193,7 +193,7 @@ module.exports = class CardHandler extends Handler
 						}
 						else line += highest;
 					}
-					if (options.collected || options.count) line += '`';					
+					line += '`';					
 				}
 				if (options.id) line += ` \`${item.id}\``;
 				if (options.set) line += ` \`${item.set.id}\``;
@@ -247,6 +247,6 @@ module.exports = class CardHandler extends Handler
 	
 	processItems()
 	{
-		super.processItems(Card, this.collector.registry.cards);
+		super.processItems(require('./../../structures/Card'), this.collector.registry.cards);
 	}
 }

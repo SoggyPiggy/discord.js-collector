@@ -26,7 +26,7 @@ module.exports = class _Command extends Commando.Command
 		else if (typeof args.page === 'string') filter = args.page + ' ';
 		if (args.filters) filter += args.filters;
 		let user = this.collector.users.get(message.author);
-		let handler = new this.collector.utils.utils.SetHandler(this.collector, {user: user});
+		let handler = new this.collector.utils.SetHandler(this.collector, {user: user});
 		handler.applyFilters(filter);
 		handler.sort();
 		let description = handler.list(page);
