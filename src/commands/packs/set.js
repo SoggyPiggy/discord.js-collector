@@ -10,7 +10,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'setpack',
 				group: 'collector_packs',
 				memberName: 'setpack',
-				description: `Buy # cards from a certain set for ${Collector.utils.formatCredits(Collector.options.pricing.setpack)}`,
+				description: `Buy ${Collector.options.packs.set} cards from a certain set for ${Collector.utils.formatCredits(Collector.options.pricing.setpack)}`,
 				args: [Collector.utils.args.setID, Collector.utils.args.creditConfirmation(Collector.utils.formatCredits(Collector.options.pricing.setpack))]				
 			});
 		this.collector = Collector;
@@ -43,7 +43,7 @@ module.exports = class _Command extends Commando.Command
 		let response = `<@${user.id}> Setpack`
 		let cards = [];
 		let renderData = [];
-		while(cards.length < 3)
+		while(cards.length < this.collector.options.packs.set)
 		{
 			let card = set.cards.random();
 			let isNew = !user.cards.has(card);

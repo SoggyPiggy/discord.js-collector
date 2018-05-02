@@ -10,7 +10,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'starterpack',
 				group: 'collector_packs',
 				memberName: 'starterpack',
-				description: 'Get # cards for free once'
+				description: `Get ${Collector.options.packs.starter} cards for free once`
 			});
 		this.collector = Collector;
 	}
@@ -27,7 +27,7 @@ module.exports = class _Command extends Commando.Command
 		let response = `<@${user.id}> Starterpack`
 		let cards = [];
 		let renderData = [];
-		while(cards.length < 8)
+		while(cards.length < this.collector.options.packs.starter)
 		{
 			let series = this.collector.registry.packable.random();
 			let set = series.sets.random();

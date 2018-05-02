@@ -10,7 +10,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'boosterpack',
 				group: 'collector_packs',
 				memberName: 'boosterpack',
-				description: `Buy # cards for ${Collector.utils.formatCredits(Collector.options.pricing.boosterpack)}`,
+				description: `Buy ${Collector.options.packs.booster} cards for ${Collector.utils.formatCredits(Collector.options.pricing.boosterpack)}`,
 				args: [Collector.utils.args.creditConfirmation(Collector.utils.formatCredits(Collector.options.pricing.boosterpack))]
 			});
 		this.collector = Collector;
@@ -26,7 +26,7 @@ module.exports = class _Command extends Commando.Command
 		let response = `<@${user.id}> Boosterpack`
 		let cards = [];
 		let renderData = [];
-		while(cards.length < 3)
+		while(cards.length < this.collector.options.packs.booster)
 		{
 			let series = this.collector.registry.packable.random();
 			let set = series.sets.random();
