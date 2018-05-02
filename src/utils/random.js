@@ -1,3 +1,2 @@
-const RandomJS = require('random-js');
-const random = new RandomJS(RandomJS.engines.browserCrypto);
-module.exports = random;
+const Random = require('random-js');
+module.exports = new Random(Random.engines.browserCrypto);
