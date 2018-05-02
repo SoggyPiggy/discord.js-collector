@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['grind-d', 'g-d'],
 				group: 'collector_managment',
 				memberName: 'grind-dupe',
-				description: 'Grind the matching Cards duplicates',
+				description: 'Grind the matching cards duplicates',
 				details: 'Use filters and searching to select the cards you want to grind. If no search filters are given the filter \'-guarded\' is used.\nTo quick confirm you can just put a \'y\' at the end',
 				args: [Collector.utils.args.search]
 			});
