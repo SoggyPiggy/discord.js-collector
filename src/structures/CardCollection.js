@@ -9,6 +9,21 @@ module.exports = class CardCollection extends Map
 		super(cards);
 	}
 
+	get total()
+	{
+		let total = 0;
+		for (let [key, value] of this)
+		{
+			total += value;
+		}
+		return total;
+	}
+
+	get unique()
+	{
+		return this.length;
+	}
+
 	has(card)
 	{
 		let id = this.parseID(card);
