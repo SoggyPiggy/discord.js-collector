@@ -2,9 +2,11 @@ const EventEmitter = require('events');
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const diskdb = require('diskdb');
 const CardRegistry = require('./CardRegistry');
 const UserManager = require('./UserManager');
 const Utils = require('./Utils');
+const TradeManager = require('./TradeManager');
 const CardStyles = require('./StyleRegistry');
 
 module.exports = class Collector extends EventEmitter
@@ -49,12 +51,14 @@ module.exports = class Collector extends EventEmitter
 
 		this.options = options;
 
-		if (!fs.existsSync(path.join(options.database, 'users'))) mkdirp.sync(path.join(options.database, 'users'));
+		if (!fs.existsSync(path.join(options.database))) mkdirp.sync(path.join(options.database));
+		this.db = diskdb.connect(path.join(options.database));
 
 		this.utils = new Utils(this);
 		this.users = new UserManager(this);
 		this.registry = new CardRegistry(this);
 		this.cardstyles = new CardStyles(this);
+		this.trades = new TradeManager(this);
 		
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;

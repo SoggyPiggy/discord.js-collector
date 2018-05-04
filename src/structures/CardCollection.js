@@ -24,10 +24,15 @@ module.exports = class CardCollection extends Map
 		return this.length;
 	}
 
-	has(card)
+	has(card, count = 1)
 	{
 		let id = this.parseID(card);
-		return super.has(id);
+		if (count === 1) return super.has(id);
+		if (super.has(id) && count > 1)
+		{
+			return 
+		}
+		return false;
 	}
 
 	get(card)
@@ -39,10 +44,8 @@ module.exports = class CardCollection extends Map
 	add(card, count = 1)
 	{
 		let id = this.parseID(card);
-		let num;
-		if (this.has(id)) num = this.get(id) + count;
-		else num = count;
-		this.set(id, num);
+		if (super.has(id)) this.set(id, super.get(id) + count);
+		else this.set(id, count);
 	}
 
 	remove(card, count = 1)
@@ -50,8 +53,8 @@ module.exports = class CardCollection extends Map
 		let id = this.parseID(card);
 		if (this.has(id))
 		{
-			if (this.get(id) < count) count = this.get(id);
-			let num = this.get(id) - count;
+			if (super.get(id) < count) count = super.get(id);
+			let num = super.get(id) - count;
 			if (num > 0) this.set(id, num);
 			else this.delete(id);
 			return count;
@@ -68,9 +71,9 @@ module.exports = class CardCollection extends Map
 	compress()
 	{
 		let data = [];
-		for (let key of this.keys())
+		for (let [card, count] of this)
 		{
-			data.push([String(key), Number(this.get(key))]);
+			data.push([String(card), Number(count)]);
 		}
 		return data;
 	}

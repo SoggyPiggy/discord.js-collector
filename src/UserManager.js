@@ -1,5 +1,7 @@
 const diskdb = require('diskdb');
 const path = require('path');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 const User = require('./structures/User');
 
 module.exports = class UserManager extends Map
@@ -8,10 +10,11 @@ module.exports = class UserManager extends Map
 	{
 		super();
 		this.collector = collector;
-		this.db = diskdb.connect(path.join(collector.options.database), ['users']);
+		this.collector.db.loadCollections(['users']);
+		if (!fs.existsSync(path.join(collector.options.database, 'users'))) mkdirp.sync(path.join(collector.options.database, 'users'));
 		this.userDB = diskdb.connect(path.join(collector.options.database, 'users'))
 
-		let users = this.db.users.find();
+		let users = this.collector.db.users.find();
 		
 		for (let v of users)
 		{
@@ -60,7 +63,7 @@ module.exports = class UserManager extends Map
 		let user = this.get(id, false);
 		if (user)
 		{
-			let updated = this.db.users.update({id, id}, {id, id}, {upsert: true});
+			let updated = this.collector.db.users.update({id, id}, {id, id}, {upsert: true});
 			if (updated.inserted > 0) this.userDB.loadCollections([id]);
 			this.userDB[id].update({id: id}, user.compress(), {upsert: true});
 			this.collector.emit('userSaved', user)
