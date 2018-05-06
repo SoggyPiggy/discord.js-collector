@@ -30,7 +30,7 @@ module.exports = class CardCollection extends Map
 		if (count === 1) return super.has(id);
 		if (super.has(id) && count > 1)
 		{
-			return 
+			return this.get(id) >= count;
 		}
 		return false;
 	}
