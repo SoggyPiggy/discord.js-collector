@@ -13,7 +13,22 @@ module.exports = class _Command extends Commando.Command
 				memberName: 'grind-x',
 				description: 'Grind the matching cards X times.',
 				details: 'Use filters and searching to select the cards you want to grind. If no search filters are given the filter \'-guarded\' is used.\nTo quick confirm you can just put a \'y\' at the end',
-				args: [Collector.utils.args.grindCount, Collector.utils.args.search]
+				args:
+				[
+					{
+						key: 'count',
+						label: 'Grind Count',
+						prompt: 'How many of the matching cards would you like to grind?',
+						type: 'integer'
+					},
+					{
+						key: 'filters',
+						label: 'Filter(s)',
+						prompt: 'What filters would you like to apply?',
+						type: 'string',
+						default: false
+					}
+				]
 			});
 		this.collector = Collector;
 	}
@@ -21,13 +36,10 @@ module.exports = class _Command extends Commando.Command
 	async run(message, args)
 	{
 		if (args.count <= 0) return;
-		if (args.filters === false) args.filters = '';
 		args.filters = args.filters.split(' ');
 		let confirmation = null;
 		if (args.filters.length > 0) confirmation = this.collector.utils.quickConfirm(args.filters);
-		let quickConfirm = confirmation;
 		args.filters = args.filters.join(' ');
-		if (args.filters === '') args.filters = '-guarded';
 		let user = this.collector.users.get(message.author, false);
 		if (!user) return message.reply('You do not have any cards.');
 		let handler = new this.collector.utils.CardHandler(this.collector, {user: user, items: user.cards.keys()});

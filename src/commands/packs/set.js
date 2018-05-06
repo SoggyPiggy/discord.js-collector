@@ -11,7 +11,21 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_packs',
 				memberName: 'setpack',
 				description: `Buy ${Collector.options.packs.set} cards from a certain set for ${Collector.utils.formatCredits(Collector.options.pricing.setpack)}`,
-				args: [Collector.utils.args.setID, Collector.utils.args.creditConfirmation(Collector.utils.formatCredits(Collector.options.pricing.setpack))]				
+				args:
+				[
+					{
+						key: 'setID',
+						label: 'Set ID',
+						prompt: 'What is the ID of the Set?',
+						type: 'string',
+					},
+					{
+						key: 'confirmation',
+						labal: 'Spending Confirmation',
+						prompt: `Confirm you'd like to spend ${Collector.utils.formatCredits(Collector.options.pricing.setpack)}\n(Y)es or (N)o`,
+						type: 'boolean'
+					}
+				]
 			});
 		this.collector = Collector;
 	}

@@ -13,7 +13,23 @@ module.exports = class _Command extends Commando.Command
 				memberName: 'cards',
 				description: 'View/Search through the list of cards',
 				details: 'View the list of all the cards. With extra arguments you can search through all the cards and selet which page you would like to view.\nYou can use the help command to read more about searching.',
-				args: [Collector.utils.args.pageSearch, Collector.utils.args.search]
+				args:
+				[
+					{
+						key: 'page',
+						label: 'Page Number / Filter',
+						prompt: 'Which page would you like to view? or what filters would you like to apply?',
+						type: 'integer|string',
+						default: 1
+					},
+					{
+						key: 'filters',
+						label: 'Filter(s)',
+						prompt: 'What filters would you like to apply?',
+						type: 'string',
+						default: false
+					}
+				]
 			});
 		this.collector = Collector;
 	}

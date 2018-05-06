@@ -10,7 +10,21 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_credits',
 				memberName: 'transfer',
 				description: 'Give someone credits',
-				args: [Collector.utils.args.credits, Collector.utils.args.userRequired]
+				args:
+				[
+					{
+						key: 'credits',
+						label: 'Credits',
+						prompt: 'How many credits would you like to transfer?',
+						type: 'integer'
+					},
+					{
+						key: 'member',
+						label: 'User',
+						prompt: 'Who would you like to transfer to?',
+						type: 'user'
+					}
+				]
 			});
 		this.collector = Collector;
 	}

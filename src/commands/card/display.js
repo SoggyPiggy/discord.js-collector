@@ -12,7 +12,15 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_card',
 				memberName: 'display',
 				description: 'View a render of a card.',
-				args: [Collector.utils.args.cardID]
+				args:
+				[
+					{
+						key: 'cardID',
+						label: 'Card ID',
+						prompt: 'What is the ID of the card?',
+						type: 'string'
+					}
+				]
 			});
 		this.collector = Collector;
 	}

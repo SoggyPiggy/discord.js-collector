@@ -12,8 +12,22 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_sets',
 				memberName: 'set-info',
 				description: 'View information about a set.',
-				// details: 'Bah',
-				args: [Collector.utils.args.setID, Collector.utils.args.page]
+				args:
+				[
+					{
+						key: 'setID',
+						label: 'Set ID',
+						prompt: 'What is the ID of the Set?',
+						type: 'string',
+					},
+					{
+						key: 'page',
+						label: 'Page Number',
+						prompt: 'Which page would you like to view?',
+						type: 'integer',
+						default: 1
+					}
+				]
 			});
 		this.collector = Collector;
 	}

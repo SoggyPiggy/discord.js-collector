@@ -11,7 +11,23 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_basic',
 				memberName: 'collection',
 				description: 'View your collected cards.',
-				args:[Collector.utils.args.pageUser, Collector.utils.args.user]
+				args:
+				[
+					{
+						key: 'page',
+						label: 'Page Number / Filter',
+						prompt: 'Which page would you like to view? or whos collection would you like to see?',
+						type: 'integer|user',
+						default: 1
+					},
+					{
+						key: 'member',
+						label: 'User',
+						prompt: 'Whos collection would you like to see?',
+						type: 'user',
+						default: false
+					}
+				],
 			});
 		this.collector = Collector;
 	}

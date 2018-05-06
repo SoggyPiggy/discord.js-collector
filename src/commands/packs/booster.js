@@ -11,7 +11,15 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_packs',
 				memberName: 'boosterpack',
 				description: `Buy ${Collector.options.packs.booster} cards for ${Collector.utils.formatCredits(Collector.options.pricing.boosterpack)}`,
-				args: [Collector.utils.args.creditConfirmation(Collector.utils.formatCredits(Collector.options.pricing.boosterpack))]
+				args:
+				[
+					{
+						key: 'confirmation',
+						labal: 'Spending Confirmation',
+						prompt: `Confirm you'd like to spend ${Collector.utils.formatCredits(Collector.options.pricing.boosterpack)}\n(Y)es or (N)o`,
+						type: 'boolean'
+					}
+				]
 			});
 		this.collector = Collector;
 	}

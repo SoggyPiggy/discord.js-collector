@@ -16,7 +16,6 @@ module.exports = class Utils
 		this.SetHandler = require('./utils/handlers/SetHandler');
 		this.Searcher = require('./utils/Searcher');
 		this.Cooldown = require('./utils/Cooldown');
-		this.args = require('./utils/Args');
 		this.smartsort = require('./utils/SmartSort');
 	}
 
