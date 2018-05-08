@@ -7,6 +7,7 @@ module.exports = class CardCollection extends Map
 			card[0] = collector.utils.formatCardID(card[0]);
 		}
 		super(cards);
+		this.collector = collector;
 	}
 
 	get total()
@@ -21,7 +22,23 @@ module.exports = class CardCollection extends Map
 
 	get unique()
 	{
-		return this.length;
+		return this.size;
+	}
+
+	quality(infinityCheck = true)
+	{
+		if (this.size === 0) return 0;
+		let quality = 0;
+		let total = 0;
+		for (let [id, count] of this)
+		{
+			let card = this.collector.cards.get(id);
+			if (!card) continue;
+			if (infinityCheck && card.value === Infinity) continue;
+			quality += (count * card.value);
+			total += count;
+		}
+		return quality / total;
 	}
 
 	has(card, count = 1)
