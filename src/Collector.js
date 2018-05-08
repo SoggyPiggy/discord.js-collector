@@ -63,6 +63,7 @@ module.exports = class Collector extends EventEmitter
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
 		this.cards = this.registry.cards;
+		this.structures = require('./Structures');
 	}
 
 	registerDefaults()
