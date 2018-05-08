@@ -197,7 +197,11 @@ module.exports = class CardHandler extends Handler
 				}
 				if (options.id) line += ` \`${item.id}\``;
 				if (options.set) line += ` \`${item.set.id}\``;
-				if (options.title && ((options.user && owned) || !options.user || item.visibility <= 0)) line += ` **${item.title}**`;
+				if (options.title)
+				{
+					if ((this.user && owned) || !this.user || item.visibility <= 0) line += ` **${item.title}**`;
+					else line += ` **~~?????~~**`;
+				}
 				else line += ` **~~?????~~**`;
 				if (options.rarity) line += ` *${item.rarity}*`;
 			}
