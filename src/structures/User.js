@@ -62,4 +62,9 @@ module.exports = class User
 		data.cards = this.cards.compress();
 		return data;
 	}
+
+	toString()
+	{
+		return `<@${this.id}>`;
+	}
 }
