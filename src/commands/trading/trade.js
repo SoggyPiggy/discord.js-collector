@@ -1,6 +1,6 @@
+const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
-const CardCollection = require('./../structures/CardCollection');
-const Trade = require('./../structures/Trade');
+const Trade = require('./../../structures/Trade');
 
 module.exports = class _Command extends Commando.Command
 {
@@ -15,9 +15,9 @@ module.exports = class _Command extends Commando.Command
 				args:
 				[
 					{
-						key: 'cardIDsO',
-						label: 'Card IDs (Offers)',
-						prompt: 'What are the IDs of the cards you\'re offering?\nIf there are multiple seperate with spaces.\nType \'skip\' to add nothing.',
+						key: 'cardIDsI',
+						label: 'Card ID (Offer)',
+						prompt: 'What are the IDs of the cards you\'re offering?\nIf there are multiple seperate with spaces.\nType \'!\' to add nothing.',
 						type: 'string',
 					},
 					{
@@ -28,12 +28,12 @@ module.exports = class _Command extends Commando.Command
 					},
 					{
 						key: 'cardIDsR',
-						label: 'Card IDs (Requests)',
-						prompt: 'What are the IDs of the cards you\'re requesting?\nIf there are multiple seperate with spaces.\nType \'skip\' to add nothing.',
+						label: 'Card ID (Request)',
+						prompt: 'What are the IDs of the cards you\'re requesting?\nIf there are multiple seperate with spaces.\nType \'!\' to add nothing.',
 						type: 'string',
 					},
 					{
-						key: 'confirm',
+						key: 'quickconfirm',
 						label: 'Quick Confirmation',
 						prompt: 'To quickly confirm the trade on the same line.',
 						type: 'boolean',
@@ -50,38 +50,35 @@ module.exports = class _Command extends Commando.Command
 		if (!initiator) return message.reply('You do not have any cards.');
 		let recipient = this.collector.users.get(args.member, false);
 		if (!recipient) return message.reply(`${args.member} does not have any cards.`);
+		if (initiator.id === recipient.id) return message.reply('You can not trade yourself');
+		let confirmation = args.quickconfirm;
+		
+		args.cardIDsI = args.cardIDsI.split(' ').filter(item => item !== '!');
+		args.cardIDsR = args.cardIDsR.split(' ').filter(item => item !== '!');
+		let trade = new this.collector.structures.Trade(this.collector, {initiator, recipient});
+		trade.addOffers('initiator', args.cardIDsI);
+		trade.addOffers('recipient', args.cardIDsR);
+		if (trade.count <= 0) return message.reply('You have to specify cards either of you own to trade.');
 
-		args.cardIDsO = args.cardIDsO.split(' ');
-		args.cardIDsR = args.cardIDsR.split(' ');
-		let offers = new CardCollection(this.collector);
-		let requests = new CardCollection(this.collector);
-		for (let id of args.cardIDsO)
+		let embed = new Discord.MessageEmbed();
+		embed.setTitle('Trade Details');
+		embed.setDescription(`${trade}`);
+		message.channel.send(embed);
+
+		if (!confirmation) confirmation = await this.collector.utils.addConfirmation(message, args, 'Confirm Trade');
+		if (!confirmation) return message.reply('Trade Canceled');
+		let id = trade.id;
+		while (this.collector.trades.has(trade.id))
 		{
-			if (id.toLowerCase() === 'skip') continue;
-			id = this.collector.utils.formatCardID(id);
-			if (!this.collector.registry.cards.has(id)) continue;
-			offers.add(id);
+			trade.id = trade.newID();
 		}
-		for (let id of args.cardIDsR)
-		{
-			if (id.toLowerCase() === 'skip') continue;
-			id = this.collector.utils.formatCardID(id);
-			if (!this.collector.registry.cards.has(id)) continue;
-			requests.add(id);
-		}
-		for (let [card, count] of offers)
-		{
-			if (initiator.cards.has(card, count)) continue;
-			let removal = count - initiator.cards.get(card);
-			offers.remove(card, removal);
-		}
-		for (let [card, count] of requests)
-		{
-			if (recipient.cards.has(card, count)) continue;
-			let removal = count - recipient.cards.get(card);
-			offers.remove(card, removal);
-		}
-		if (requests.length <= 0 && offers.length <= 0) return message.reply('You have to specify cards either of you own to trade.');
-		let trade = new Trade(this.collector, {})
+		this.collector.trades.set(trade.id, trade);
+		initiator.trades.set(trade.id, trade);
+		recipient.trades.set(trade.id, trade);
+		trade.save();
+		if (id !== trade.id) message.reply(`**Trade ID conflict!**\nTrade ID is now: \`${trade.id}\`\nTrade request completed.`);
+		else message.reply('Trade request completed.');
+		args.member.send(`${initiator} has made a trade offer.\nYou can use the \`accept\` or \`decline\` command to respond to the offer.`, embed);
+		this.collector.emit('tradeRequested', trade, initiator, recipient);
 	}
 }
