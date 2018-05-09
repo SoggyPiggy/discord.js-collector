@@ -87,4 +87,52 @@ module.exports = class Card
 		data.omit = this.omit;
 		return data;
 	}
+
+	details(options = {})
+	{
+	}
+	
+	line(options = {})
+	{
+		if (typeof options.user === 'undefined') options.user = null;
+		if (typeof options.collected === 'undefined') options.collected = true;
+		if (typeof options.count === 'undefined') options.count = '00';
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.set === 'undefined') options.set = true;
+		if (typeof options.$set === 'undefined') options.$set = false;
+		if (typeof options.title === 'undefined') options.title = true;
+		if (typeof options.rarity === 'undefined') options.rarity = true;
+		if (typeof options.splitter === 'undefined') options.splitter = ' ';
+		let items = [];
+		let owned = false;
+		if (options.user && options.user.cards.has(this)) owned = options.user.cards.get(this);
+		if (options.user && (options.collected || options.count))
+		{
+			let item = '`';
+			if (options.collected)
+			{
+				if (owned) item += `✔️`;
+				else item += `❌`;
+			}
+			if (options.count)
+			{
+				options.count = String(options.count)
+				options.count = options.count.replace(/./g, '0');
+				if (owned)
+				{
+					let count = String(owned);
+					while (count.length < options.count) {count = '0' + count;}
+					item += count;
+				}
+				else item += options.count;
+			}
+			item += '`';
+			items.push(item);
+		}
+	}
+
+	toString()
+	{
+		return `\`${this.id}\` **${this.title}** *${this.rarity}*`;
+	}
 }
