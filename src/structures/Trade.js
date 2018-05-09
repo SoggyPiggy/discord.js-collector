@@ -36,10 +36,12 @@ module.exports = class Trade
 		if (typeof data.initiator === 'undefined') throw new Error('Offer Initiator must be difened');
 		if (typeof data.recipient === 'undefined') throw new Error('Offer Recipient must be difened');
 		if (typeof data.id === 'undefined') data.id = this.newID();
+		if (typeof data.created === 'undefined') data.created = new Date();
 		this.collector = Collector;
 		this.id = data.id;
 		this.initiator = new TradeUser(Collector, data.initiator);
 		this.recipient = new TradeUser(Collector, data.recipient);
+		this.created = new Date(data.created);
 	}
 
 	newID()
@@ -107,6 +109,7 @@ module.exports = class Trade
 		data.id = this.id;
 		data.initiator = this.initiator.compress();
 		data.recipient = this.recipient.compress();
+		data.created = this.created.getTime();
 		return data;
 	}
 

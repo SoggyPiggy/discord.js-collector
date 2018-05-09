@@ -1,8 +1,8 @@
 module.exports =
 {
-	cards: function(cards)
+	cards: cards =>
 	{
-		cards.sort(function (a, b)
+		cards.sort((a, b) =>
 		{
 			if (Array.isArray(a)) a = a[1];
 			if (Array.isArray(b)) b = b[1];
@@ -29,9 +29,10 @@ module.exports =
 			return a.set.series.value - b.set.series.value;
 		})
 	},
-	sets: function(sets)
+	card: this.cards,
+	sets: sets =>
 	{
-		sets.sort(function (a, b)
+		sets.sort((a, b) =>
 		{
 			if (Array.isArray(a)) a = a[1];
 			if (Array.isArray(b)) b = b[1];
@@ -51,5 +52,16 @@ module.exports =
 			if (a.series.value !== 0 && b.series.value === 0) return -1;
 			return a.series.value - b.series.value;
 		})
-	}
+	},
+	set: this.sets,
+	offers: offers =>
+	{
+		offers.sort((a, b) =>
+		{
+			if (Array.isArray(a)) a = a[1];
+			if (Array.isArray(b)) b = b[1];
+			return (a.created > b.created) - (a.created < b.created);
+		})
+	},
+	offer: this.offers,
 }

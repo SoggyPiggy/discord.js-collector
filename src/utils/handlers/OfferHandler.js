@@ -7,10 +7,10 @@ module.exports = class SetHandler extends Handler
 	{
 		if (typeof options.items === 'undefined') options.items = new Map(Collector.registry.sets);
 		super(Collector, options);
-		this.type = 'set';
+		this.type = 'offer';
 	}
 
-	get sets()
+	get offers()
 	{
 		return this.items;
 	}
@@ -23,32 +23,25 @@ module.exports = class SetHandler extends Handler
 		let filterParts = filter.split(':');
 		switch(filterParts[0])
 		{
-			case 'purchasable':
+			case 'initiator':
 			{
-				for (let [key, set] of this.items)
+				let initiator = filter.replace(/^initiator:?/gi, '');
+				initiator = this.getUser(initiator);
+				if (!initiator) return [];
+				for (let [key, trade] of this.items)
 				{
-					if (set.purchasable) results.push(key);
+					if (trade.initiator.user.id === initiator.id) results.push(key);
 				}
 				break;
 			}
-			case 'author':
+			case 'recipient':
 			{
-				let author = filter.replace(/^author:?/gi, '');
-				author = this.getUser(author);
-				if (!author) return [];
-				for (let [key, set] of this.items)
+				let recipient = filter.replace(/^recipient:?/gi, '');
+				recipient = this.getUser(recipient);
+				if (!recipient) return [];
+				for (let [key, trade] of this.items)
 				{
-					if (set.author == author.id)
-					{
-						results.push(key);
-						continue;
-					}
-					for (let card of set.cards)
-					{
-						if (card.author != author.id) continue;
-						results.push(key);
-						break;
-					}
+					if (trade.recipient.user.id === recipient.id) results.push(key);
 				}
 				break;
 			}

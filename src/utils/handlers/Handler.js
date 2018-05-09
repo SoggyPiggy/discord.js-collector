@@ -166,12 +166,8 @@ module.exports = class Handler
 	sort()
 	{
 		let itemArray = Array.from(this.items.entries());
-		switch(this.type)
-		{
-			case 'card': this.utils.smartsort.cards(itemArray); break;
-			case 'set': this.utils.smartsort.sets(itemArray); break;
-			default: itemArray.sort();
-		}
+		if (this.utils.smartsort[this.type]) this.utils.smartsort[this.type](itemArray);
+		else itemArray.sort();
 		this.items = new Map(itemArray);
 	}
 
