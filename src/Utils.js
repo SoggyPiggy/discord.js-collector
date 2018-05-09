@@ -242,9 +242,9 @@ module.exports = class Utils
 		return true;
 	}
 
-	async addConfirmation(Command, message, args, prompt = 'Confirm')
+	async addConfirmation(message, args, prompt = 'Confirm')
 	{
-		let oldArgs = Command.argsCollector.args;
+		let oldArgs = message.command.argsCollector.args;
 		let newArgs = [];
 		let completedValues = [];
 		for (let value of oldArgs)
@@ -255,7 +255,7 @@ module.exports = class Utils
 		let arg = { key: 'addConfirmation', label: 'Confirmation', type: 'boolean' };
 		arg.prompt = `${prompt}\n(Y)es or (N)o`;
 		newArgs.push(arg);
-		let argumentcollector = new Commando.ArgumentCollector(Command.client, newArgs);
+		let argumentcollector = new Commando.ArgumentCollector(message.command.client, newArgs);
 		let awaited = await argumentcollector.obtain(message, completedValues);
 		if (awaited.cancelled) return false;
 		else return awaited.values.addConfirmation;

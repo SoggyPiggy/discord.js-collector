@@ -52,15 +52,7 @@ module.exports = class _Command extends Commando.Command
 		grindInfo.setTitle('Grind Details')
 		grindInfo.setDescription(handler.grindList(args.count));
 		message.channel.send(`<@${user.id}>`, grindInfo);
-		if (!confirmation)
-		{
-			let arg = {key: 'confirmation', labal: 'Confirmation', type: 'boolean'};
-			arg.prompt = `Confirm grind\n(Y)es or (N)o`;
-			let argumentcollector = new Commando.ArgumentCollector(this.client, [this.collector.utils.args.grindCount, this.collector.utils.args.search, arg]);
-			let awaited = await argumentcollector.obtain(message, [args.count, args.filters]);
-			if (awaited.cancelled) confirmation = false;
-			else confirmation = awaited.values.confirmation;
-		}
+		if (!confirmation) confirmation = await this.collector.utils.addConfirmation(message, args, 'Confirm Grind');
 		if (!confirmation) return message.reply('Grind Canceled');
 		let groundCount = 0;
 		let groundUnique = 0;
