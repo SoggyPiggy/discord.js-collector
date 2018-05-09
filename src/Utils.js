@@ -1,3 +1,4 @@
+const Commando = require('discord.js-commando');
 const random = require('./utils/random');
 
 let parseID = function(id)
@@ -17,6 +18,7 @@ module.exports = class Utils
 		this.Searcher = require('./utils/Searcher');
 		this.Cooldown = require('./utils/Cooldown');
 		this.smartsort = require('./utils/SmartSort');
+		this.IDMap = require('./utils/IDMap');
 	}
 
 	pagify(page, items)
@@ -238,6 +240,25 @@ module.exports = class Utils
 		if (end.toLowerCase() !== 'y') return null;
 		items.pop();
 		return true;
+	}
+
+	async addConfirmation(Command, message, args, prompt = 'Confirm')
+	{
+		let oldArgs = Command.argsCollector.args;
+		let newArgs = [];
+		let completedValues = [];
+		for (let value of oldArgs)
+		{
+			completedValues.push(String(args[value.key]));
+			newArgs.push({key: value.key, prompt: value.prompt, type: value.type.id, default: true});
+		}
+		let arg = { key: 'addConfirmation', label: 'Confirmation', type: 'boolean' };
+		arg.prompt = `${prompt}\n(Y)es or (N)o`;
+		newArgs.push(arg);
+		let argumentcollector = new Commando.ArgumentCollector(Command.client, newArgs);
+		let awaited = await argumentcollector.obtain(message, completedValues);
+		if (awaited.cancelled) return false;
+		else return awaited.values.addConfirmation;
 	}
 
 	static shuffle(array)
