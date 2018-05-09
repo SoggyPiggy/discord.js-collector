@@ -73,6 +73,18 @@ module.exports = class _Command extends Commando.Command
 		${example('description:"A set dedicated to all the Wumpuses"')}
 
 		__Fallback filters are Title and Tag__
+
+		${spltter('Offer Searching')}
+		${header('Initiator')} Search offers for the Initiator.
+		${example(`initiator\` or \`initiator:@${this.client.user.username}`)}
+
+		${header('Recipient')} Search offers for the Recipient.
+		${example(`recipient\` or \`recipient:@${this.client.user.username}`)}
+
+		${header('Card')} Search the offers and requests for the card id.
+		${example('card:0001')}
+
+		__Fallback filter is Card__
 		`;
 		information = information.replace(/^\t+/gm, '');
 		let embed = new Discord.MessageEmbed();
