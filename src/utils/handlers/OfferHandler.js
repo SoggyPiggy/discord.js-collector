@@ -19,7 +19,7 @@ module.exports = class SetHandler extends Handler
 	{
 		if (!fallback.length) fallback = [{keys: ['tags'], threshold: 0 }, { keys: ['title'], threshold: .3}]
 		let results = [];
-		if (this.items.has(this.utils.formatSetID(filter))) return [this.utils.formatSetID(filter)];
+		if (this.items.has(this.utils.formatCardID(filter))) return [this.utils.formatCardID(filter)];
 		let filterParts = filter.split(':');
 		switch(filterParts[0])
 		{
@@ -45,58 +45,16 @@ module.exports = class SetHandler extends Handler
 				}
 				break;
 			}
+			case 'card':
 			default:
 			{
-				let fuseoptions = {id: 'id', location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1};
-				let fuses = [];
-				let fuseSets = [];
-				for (let [key, set] of this.items)
+				let id = filter.replace(/^card:?/gi, '');
+				id = this.utils.formatCardID(id);
+				for (let [key, trade] of this.items)
 				{
-					fuseSets.push(set.compress());
+					if (trade.initiator.offers.has(id) || trade.recipient.offers.has(id)) results.push(key);
 				}
-				switch(filterParts[0])
-				{
-					case 'title':
-					{
-						filter = filter.replace(/title:?/gi, '');
-						fuseoptions.keys = ['title'];
-						fuseoptions.threshold = .3;
-						fuses.push(new Fuse(fuseSets, fuseoptions));
-						break;
-					}
-					case 'tag':
-					{
-						filter = filter.replace(/tag:?/gi, '');
-						fuseoptions.keys = ['tags', 'cards.tags'];
-						fuseoptions.threshold = 0;
-						fuses.push(new Fuse(fuseSets, fuseoptions));
-						break;
-					}
-					case 'description':
-					{
-						filter = filter.replace(/^description:?/gi, '');
-						fuseoptions.keys = ['description'];
-						fuseoptions.threshold = .5;
-						fuses.push(new Fuse(fuseSets, fuseoptions));
-						break;
-					}
-					default:
-					{
-						for (let fb of fallback)
-						{
-							fuseoptions.keys = fb.keys;
-							fuseoptions.threshold = fb.threshold;
-							fuses.push(new Fuse(fuseSets, fuseoptions));
-						}
-						break;
-					}
-				}
-				if (!filter) return [];
-				for (let fuse of fuses)
-				{
-					results = results.concat(fuse.search(filter))
-				}
-				results = Array.from(new Set(results));
+				break;
 			}
 		}
 		return results;
