@@ -1,7 +1,3 @@
-const diskdb = require('diskdb');
-const path = require('path');
-const fs = require('fs');
-const mkdirp = require('mkdirp');
 const User = require('./structures/User');
 
 module.exports = class UserManager extends Map
@@ -11,28 +7,10 @@ module.exports = class UserManager extends Map
 		super();
 		this.collector = collector;
 		this.collector.db.loadCollections(['users']);
-		if (!fs.existsSync(path.join(collector.options.database, 'users'))) mkdirp.sync(path.join(collector.options.database, 'users'));
-		this.userDB = diskdb.connect(path.join(collector.options.database, 'users'))
-
 		let users = this.collector.db.users.find();
-		
-		for (let v of users)
+		for (let user of users)
 		{
-			let id = this.parseID(v);
-			this.userDB.loadCollections([id]);
-			let data = this.userDB[id].find();
-			if (data.length <= 0)
-			{
-				this.userDB[id].update({id: id}, (this.get(id).compress()), {upsert: true});
-				data = this.userDB[id].find();
-			}
-			data = data[0];
-			if (typeof data.id === 'undefined')
-			{
-				this.collector.emit('warn', `Attempting to register a User without ID: ${id}; skipping`);
-				continue;
-			}
-			let user = new User(collector, data);
+			user = new User(collector, user);
 			this.set(user.id, user);
 		}
 	}
@@ -61,13 +39,9 @@ module.exports = class UserManager extends Map
 	{
 		let id = this.parseID(member);
 		let user = this.get(id, false);
-		if (user)
-		{
-			let updated = this.collector.db.users.update({id, id}, {id, id}, {upsert: true});
-			if (updated.inserted > 0) this.userDB.loadCollections([id]);
-			this.userDB[id].update({id: id}, user.compress(), {upsert: true});
-			this.collector.emit('userSaved', user)
-		}
+		if (!user) return;
+		this.collector.db.users.update({id}, user.compress(), {upsert: true});
+		this.collector.emit('userSaved', user)
 	}
 
 	parseID(member)
