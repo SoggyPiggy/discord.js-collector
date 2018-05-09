@@ -22,6 +22,7 @@ module.exports = class User
 		this.cooldowns = new Map();
 		this.cooldowns.set('collect', new collector.utils.Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
 		this.cards = new CardCollection(collector, data.cards);
+		this.trades = new Map();
 		this.starterpack = data.starterpack;
 	}
 

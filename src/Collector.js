@@ -50,6 +50,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.grindPercent === 'undefined') options.grindPercent = .5;
 
 		this.options = options;
+		this.structures = require('./Structures');
 
 		if (!fs.existsSync(path.join(options.database))) mkdirp.sync(path.join(options.database));
 		this.db = diskdb.connect(path.join(options.database));
@@ -63,7 +64,6 @@ module.exports = class Collector extends EventEmitter
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
 		this.cards = this.registry.cards;
-		this.structures = require('./Structures');
 	}
 
 	registerDefaults()

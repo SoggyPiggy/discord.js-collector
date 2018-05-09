@@ -15,6 +15,25 @@ module.exports = class TradeManager extends Map
 		{
 			trade = new Trade(Collector, trade);
 			this.set(trade.id, trade);
+			trade.initiator.user.trades.set(trade.id, trade);
+			trade.recipient.user.trades.set(trade.id, trade);
 		}
+	}
+
+	save(trade)
+	{
+		let id = this.parseID(trade);
+		trade = this.get(id);
+		if (trade)
+		{
+			let updated = this.collector.db.trades.update({id: id}, trade.compress(), {upsert: true});
+			this.collector.emit('tradeSaved', trade);
+		}
+	}
+
+	parseID(trade)
+	{
+		if (typeof trade === 'string') return trade;
+		else if (typeof trade.id !== 'undefined') return String(trade.id);
 	}
 }
