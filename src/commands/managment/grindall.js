@@ -38,8 +38,8 @@ module.exports = class _Command extends Commando.Command
 		let handler = new this.collector.utils.CardHandler(this.collector, {user: user, items: user.cards.keys()});
 		handler.processItems();
 		handler.addFilter('own');
-		handler.sort();
 		handler.applyFilters(args.filters, [{keys: ['rarity'], threshold: 0}]);
+		handler.sort();
 		let cards = handler.cards;
 		let grindInfo = new Discord.MessageEmbed();
 		grindInfo.setTitle('Grind Details')
