@@ -5,7 +5,7 @@ module.exports = class SetHandler extends Handler
 {
 	constructor(Collector, options)
 	{
-		if (typeof options.items === 'undefined') options.items = new Map(Collector.registry.sets);
+		if (typeof options.items === 'undefined') options.items = new Map(Collector.trades);
 		super(Collector, options);
 		this.type = 'offer';
 	}
@@ -63,28 +63,31 @@ module.exports = class SetHandler extends Handler
 	listItems(items, options)
 	{
 		if (typeof options.id === 'undefined') options.id = true;
-		if (typeof options.title === 'undefined') options.title = true;
+		if (typeof options.initiator === 'undefined') options.initiator = true;
+		if (typeof options.recipient === 'undefined') options.recipient = true;
 		let listItems = [];
-		for (let [key, item] of items)
+		for (let [key, trade] of items)
 		{
-			let line = '';
-			if (typeof item === 'string')
-			{
-				line += item;
-			}
+			let line = [];
+			if (typeof trade === 'string') line.push(trade);
 			else
 			{
-				if (options.id) line += `\`${item.id}\``;
-				if (options.title) line += ` **${item.title}**`;
+				if (options.id) line.push(`\`${trade.id}\``);
+				if (options.initiator) line.push(`${trade.initiator}`);
+				if (options.recipient) line.push(`${trade.recipient}`);
 			}
-			line = line.replace(/^ /g, '');
-			listItems.push(line);
+			listItems.push(line.join(' '));
 		}
 		return listItems;
 	}
 
 	processItems()
 	{
-		super.processItems(require('./../../structures/Set'), this.collector.registry.sets);
+		super.processItems(require('./../../structures/Trade'), this.collector.trades);
+	}
+
+	sort()
+	{
+		super.sort({user: this.user});
 	}
 }

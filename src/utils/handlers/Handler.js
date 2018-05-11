@@ -163,10 +163,10 @@ module.exports = class Handler
 		return list;
 	}
 
-	sort()
+	sort(options)
 	{
 		let itemArray = Array.from(this.items.entries());
-		if (this.utils.smartsort[this.type]) this.utils.smartsort[this.type](itemArray);
+		if (this.utils.smartsort[this.type]) this.utils.smartsort[this.type](itemArray, options);
 		else itemArray.sort();
 		this.items = new Map(itemArray);
 	}
@@ -177,6 +177,7 @@ module.exports = class Handler
 		this._visibilityChecked = true;
 		for (let [key, item] of this.items)
 		{
+			if (typeof item.visibility === 'undefined') continue;
 			let owned = false;
 			if (this.user) item.owned(this.user);
 			if ((item.visibility > 2) && !(owned && override)) this.items.delete(key);
