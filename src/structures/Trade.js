@@ -59,7 +59,8 @@ module.exports = class Trade
 		for (let id of ids)
 		{
 			id = this.collector.utils.formatCardID(id);
-			if (!this.collector.registry.cards.has(id)) continue;
+			let card = this.collector.cards.get(id);
+			if (!card || card.untradable) continue;
 			this[who].offers.add(id);
 		}
 		for (let [card, count] of this[who].offers)
