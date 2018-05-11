@@ -39,46 +39,24 @@ module.exports = class _Command extends Commando.Command
 		if (args.page instanceof Discord.User)
 		{
 			user = this.collector.users.get(args.page, false);
-			if (!user)
-			{
-				message.reply(`<@${args.page.id}> does not own any cards.`);
-				return;
-			}
+			if (!user) return message.reply(`<@${args.page.id}> does not own any cards.`);
 			args.page = 1;
 		}
 		else if (args.member instanceof Discord.User)
 		{
 			user = this.collector.users.get(args.member, false);
-			if (!user)
-			{
-				message.reply(`<@${args.member.id}> does not own any cards.`);
-				return;
-			}
+			if (!user) return message.reply(`<@${args.member.id}> does not own any cards.`);
 		}
 		else
 		{
 			user = author;
-			if (!user)
-			{
-				message.reply('You have yet to collect and do not have Cards.\nUse the help command to learn more.');
-				return;
-			}
+			if (!user) return message.reply('You have yet to collect and do not have Cards.\nUse the help command to learn more.');
 		}
-		let cards = Array.from(user.cards.keys());
-		if (cards.length <= 0)
-		{
-			if (user == author) message.reply('You do not own any cards.');
-			else message.reply(`<@${user.id}> does not own any cards.`);
-			return;
-		}
-		cards = this.collector.utils.convertCards(cards);
-		this.collector.utils.smartsort.cards(cards);
-		cards = this.collector.utils.pagify(args.page, cards);
-
-		let description = `<@${user.id}>'s Collection.`;
-		description += `\n~~\`----------------\`~~\` (Page ${cards.page} of ${cards.max}) \`~~\`----------------\`~~\n`;
-		description += this.collector.utils.cardList(cards.results, {user: user, collected: false});
-
+		if (user.cards.size <= 0) return message.reply('You have yet to collect and do not have Cards.\nUse the help command to learn more.');
+		let handler = new this.collector.utils.CardHandler(this.collector, {user, items: user.cards.keys()});
+		handler.processItems();
+		handler.sort();
+		let description = `${user}'s Collection.\n${handler.list(args.page, {collected: false})}`;
 		let embed = new Discord.MessageEmbed();
 		embed.setDescription(description);
 		message.channel.send(embed);
