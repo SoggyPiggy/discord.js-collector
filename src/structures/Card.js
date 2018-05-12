@@ -88,8 +88,34 @@ module.exports = class Card
 		return data;
 	}
 
-	details(options = {})
+	details(owned = true, splitter = `\n`)
 	{
+		let items = [];
+		if (this.visibility <= 0 || owned) items.push(`\`${this.id}\` **${this.title}**`);
+		else items.push(`\`${this.id}\` ~~?????~~`);
+		items.push(`\`${this.set.id}\` ${this.set.title}`);
+		items.push(`**~~-----------------------------------------------~~**`)
+		items.push(`**Rarity:** ${this.rarity}`);
+		if (typeof owned === 'number')
+		{
+			if (owned) items.push(`**Collected:** \`✔️${owned}\``);
+			else items.push('**Collected:** `❌`');
+		}
+		if (this.author) items.push(`**Author:** <@${this.author}>`);
+		if (this.visibility <= 0 || owned)
+		{
+			if (this.tags.length > 0) items.push(`**Tags:** __${this.tags.join('__, __')}__`);
+			if (this.source) items.push(`**Source:** ${this.source}`);
+			if (this.description) items.push(`${this.description}`);
+		}
+		if (this.guarded || this.untradable)
+		{
+			let footers = [];
+			if (this.guarded) footers.push(`Guarded`);
+			if (this.untradable) footers.push('Untradable');
+			items.push(`\`${footers.join('\` \`')}\``);
+		}
+		return items.join(splitter);
 	}
 	
 	line(options = {})
@@ -119,7 +145,7 @@ module.exports = class Card
 				options.count = String(options.count)
 				options.count = options.count.replace(/./g, '0');
 				if (owned)
-				{
+		{
 					let count = String(owned);
 					while (count.length < options.count) {count = '0' + count;}
 					item += count;
