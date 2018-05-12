@@ -132,29 +132,17 @@ module.exports = class Card
 		let items = [];
 		let owned = false;
 		if (options.user && options.user.cards.has(this)) owned = options.user.cards.get(this);
-		if (options.user && (options.collected || options.count))
+		if (options.user && (options.collected || options.count)) items.push(`\`${options.collected?`${owned?'✔️':'❌'}`:''}${options.count?`${`${owned?`${String(owned).padStart(options.count.length, '0')}`:`${options.count.replace(/./g, '0')}`}`}`:''}\``);
+		if (options.id) items.push(`\`${this.id}\``);
+		if (options.set) items.push(`\`${this.set.id}\``);
+		if (options.$set) items.push(`\`${this.$set.id}\``);
+		if (options.title)
 		{
-			let item = '`';
-			if (options.collected)
-			{
-				if (owned) item += `✔️`;
-				else item += `❌`;
-			}
-			if (options.count)
-			{
-				options.count = String(options.count)
-				options.count = options.count.replace(/./g, '0');
-				if (owned)
-		{
-					let count = String(owned);
-					while (count.length < options.count) {count = '0' + count;}
-					item += count;
-				}
-				else item += options.count;
-			}
-			item += '`';
-			items.push(item);
+			if (owned || this.visibility <= 0) items.push(`**${this.title}**`);
+			else items.push(`~~**?????**~~`);
 		}
+		if (options.rarity) items.push(`*${this.rarity}*`);
+		return items.join(options.splitter);
 	}
 
 	toString()
