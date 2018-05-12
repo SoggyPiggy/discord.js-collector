@@ -239,7 +239,7 @@ module.exports = class CardHandler extends Handler
 		}
 		list += `**Total Cards:** ${total}\n`;
 		list += `**Unique Cards:** ${unique}\n`;
-		list += `~~\`--------\`~~\` (Rarities) \`~~\`--------\`~~\n`
+		list += `**~~--------~~[ Rarities ]~~--------~~**\n`
 		let listItems = [];
 		for (let p in rarities)
 		{

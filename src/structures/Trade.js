@@ -188,11 +188,11 @@ module.exports = class Trade
 		**Benefits:** ${better}
 
 		**Initiator:** ${this.initiator}
-		~~\`----------------\`~~\` (Offers) \`~~\`----------------\`~~
+		**~~----------------~~[ Offers ]~~----------------~~**
 		${offers}
 
 		**Recipient:** ${this.recipient}
-		~~\`----------------\`~~\` (Requests) \`~~\`----------------\`~~
+		-**~~----------------~~[ Requests ]~~----------------~~**
 		${requests}
 		`
 		return info.replace(/^\t+/gm, '');

@@ -155,8 +155,8 @@ module.exports = class Handler
 		}
 		if (options.header)
 		{
-			if (options.page) list += `~~\`----------------\`~~\` (Page ${page.page} of ${page.max}) \`~~\`----------------\`~~\n`;
-			else list += `~~\`------------------------------------------------\`~~\n`;
+			if (options.page) list += `**~~----------------~~[ Page ${page.page} of ${page.max} ]~~----------------~~**\n`;
+			else list += `**~~------------------------------------------------~~**\n`;
 		}
 		let listItems = this.listItems(page.items, options);
 		list += listItems.join(options.spliter);
