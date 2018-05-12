@@ -36,47 +36,15 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 		let user = this.collector.users.get(message.author);
-		let owned = user.cards.has(card.id);
-		let visible = card.visibility <= 0;
-		if (card.visibility > 1 && !(owned || visible))
+		let owned = user.cards.get(card.id);
+		if (card.visibility > 1 && !owned)
 		{
 			message.reply(`Unable to find Card: \`${cardID}\``);
 			return;
 		}
-
-		let description = '**Card:** ';
-		if (visible || owned) description += `${card.title} \`${card.id}\``;
-		else description += `????? \`${card.id}\``;
-		description += `\n**Set:** ${card.set.title} \`${card.set.id}\``;
-		description += '\n';
-		description += `\n**Rarity:** ${card.rarity}`;
-		description += '\n**Collected:** ';
-		if (owned) description += '`✔️`' + user.cards.get(card.id);
-		else description += '`❌`';
-		if (card.author) description += `\n**Author:** <@${card.author}>`;
-		if (visible || owned)
-		{
-			if (card.tags.length > 0)
-			{
-				description += '\n**Tags:** '
-				for (let tag of card.tags)
-				{
-					description += `\`${tag}\`, `;
-				}
-				description = description.replace(/, $/g, '');
-			}
-			if (card.source) description += `\n**Source:** ${card.source}`;
-			if (card.description) description += `\n${card.description}`;
-		}
-
-		let footer = '';
-		if (card.guarded) footer += 'Guarded ';
-		if (card.untradable) footer += 'Untradable ';
-		footer = footer.replace(/ $/g, '');
-
 		let embed = new Discord.MessageEmbed();
-		embed.setDescription(description);
-		embed.setFooter(footer);
+		embed.setTitle('Card Details')
+		embed.setDescription(card.details(owned));
 		message.channel.send(embed);
 	}
 }
