@@ -130,7 +130,7 @@ module.exports = class Card
 		if (typeof options.rarity === 'undefined') options.rarity = true;
 		if (typeof options.splitter === 'undefined') options.splitter = ' ';
 		let items = [];
-		let owned = false;
+		let owned = true;
 		if (options.user && options.user.cards.has(this)) owned = options.user.cards.get(this);
 		if (options.user && (options.collected || options.count)) items.push(`\`${options.collected?`${owned?'✔️':'❌'}`:''}${options.count?`${`${owned?`${String(owned).padStart(options.count.length, '0')}`:`${options.count.replace(/./g, '0')}`}`}`:''}\``);
 		if (options.id) items.push(`\`${this.id}\``);
@@ -147,6 +147,6 @@ module.exports = class Card
 
 	toString()
 	{
-		return `\`${this.id}\` **${this.title}** *${this.rarity}*`;
+		return this.line({set: false});
 	}
 }
