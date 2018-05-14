@@ -113,23 +113,12 @@ module.exports = class SetHandler extends Handler
 	{
 		if (typeof options.id === 'undefined') options.id = true;
 		if (typeof options.title === 'undefined') options.title = true;
-		let listItems = [];
+		let list = [];
 		for (let [key, item] of items)
 		{
-			let line = '';
-			if (typeof item === 'string')
-			{
-				line += item;
-			}
-			else
-			{
-				if (options.id) line += `\`${item.id}\``;
-				if (options.title) line += ` **${item.title}**`;
-			}
-			line = line.replace(/^ /g, '');
-			listItems.push(line);
+			list.push(discordJSCollector.Set.line(item));
 		}
-		return listItems;
+		return list;
 	}
 
 	processItems()
