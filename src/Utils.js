@@ -46,6 +46,11 @@ module.exports = class Utils
 		return parseID(id).replace(/\W/g, '').toLowerCase();
 	}
 
+	formatTradeID(id)
+	{
+		return parseID(id).replace(/\W/g, '').toLowerCase();
+	}
+
 	formatSetID(id)
 	{
 		id = parseID(id).replace(/\W/g, '').toUpperCase();
