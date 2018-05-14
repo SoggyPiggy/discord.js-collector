@@ -54,6 +54,15 @@ module.exports = class Trade
 		return this.initiator.offers.size + this.recipient.offers.size;
 	}
 
+	get benefits()
+	{
+		let betterCollection = this.initiator.offers.qualityCompare(this.recipient.offers);
+		if (betterCollection === null) return null;
+		if (betterCollection === this.initiator.offers) return this.initiator.user;
+		if (betterCollection === this.recipient.offers) return this.recipient.user;
+		return null;
+	}
+
 	addOffers(who, ids)
 	{
 		for (let id of ids)
@@ -118,84 +127,27 @@ module.exports = class Trade
 	{
 		return JSON.stringify(this.compress());
 	}
+
+	details()
+	{
+		let benefits = this.benefits;
+		let lines = [];
+		lines.push(`**Trade ID:** ${this.id}`);
+		lines.push(`**Initiator:** ${this.initiator}`);
+		lines.push(`**Recipient:** ${this.recipient}`);
+		if (benefits) lines.push(`__*Trade benefits ${benefits}*__`);
+		lines.push('');
+		lines.push('**~~----------------~~[ Offers ]~~----------------~~**');
+		lines.push(`${this.initiator.offers}`);
+		lines.push('');
+		lines.push('**~~----------------~~[ Requests ]~~----------------~~**');
+		lines.push(`${this.recipient.offers}`);
+		return lines.join('\n');
+	}
 	
 	toString()
 	{
-		let offers = '__*Nothing*__';
-		if (this.initiator.offers.size > 0)
-		{
-			let highest = 0;
-			for (let [id, count] of this.initiator.offers)
-			{
-				if (count > highest) highest = count;
-			}
-			highest = String(highest);
-			while (highest.length < 2)
-			{
-				highest = '0' + highest;
-			}
-			let items = [];
-			for (let [id, count] of this.initiator.offers)
-			{
-				let data = '';
-				count = String(count);
-				while (count.length < highest.length)
-				{
-					count = '0' + count;
-				}
-				let card = this.collector.cards.get(id);
-				data = `\`${count}\` \`${card.id}\` \`${card.set.id}\` **${card.title}** *${card.rarity}*`;
-				items.push(data);
-			}
-			offers = items.join(`\n`);
-		}
-		let requests = '__*Nothing*__';
-		if (this.recipient.offers.size > 0)
-		{
-			let highest = 0;
-			for (let [id, count] of this.recipient.offers)
-			{
-				if (count > highest) highest = count;
-			}
-			highest = String(highest);
-			while (highest.length < 2)
-			{
-				highest = '0' + highest;
-			}
-			let items = [];
-			for (let [id, count] of this.recipient.offers)
-			{
-				let data = '';
-				count = String(count);
-				while (count.length < highest.length)
-				{
-					count = '0' + count;
-				}
-				let card = this.collector.cards.get(id);
-				data = `\`${count}\` \`${card.id}\` \`${card.set.id}\` **${card.title}** *${card.rarity}*`;
-				items.push(data);
-			}
-			requests = items.join(`\n`);
-		}
-		let better = 'Equal Trade'
-		let initiatorQuality = this.initiator.offers.quality();
-		let recipientQuality = this.recipient.offers.quality();
-		if (initiatorQuality > recipientQuality) better = this.recipient;
-		if (recipientQuality > initiatorQuality) better = this.initiator;
-		let info =
-		`
-		**Trade ID:** \`${this.id}\`
-		**Benefits:** ${better}
-
-		**Initiator:** ${this.initiator}
-		**~~----------------~~[ Offers ]~~----------------~~**
-		${offers}
-
-		**Recipient:** ${this.recipient}
-		-**~~----------------~~[ Requests ]~~----------------~~**
-		${requests}
-		`
-		return info.replace(/^\t+/gm, '');
+		return this.details();
 	}
 
 	save()

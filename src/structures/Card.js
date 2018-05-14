@@ -118,9 +118,21 @@ module.exports = class Card
 		return items.join(splitter);
 	}
 	
-	line(options = {})
+	line(options = {}, owned = true)
 	{
-		if (typeof options.user === 'undefined') options.user = null;
+		return Card.line(this, options, owned);
+	}
+	
+	static line(card, options = {}, owned = true)
+	{
+		if (typeof card === 'string')
+		{
+			options = Object.assign({}, options);
+			options.set = false;
+			options.$set = false;
+			options.rarity = false;
+			return Card.line({id: card, title: '__Unavailable__'}, options, owned);
+		}
 		if (typeof options.collected === 'undefined') options.collected = true;
 		if (typeof options.count === 'undefined') options.count = '00';
 		if (typeof options.id === 'undefined') options.id = true;
@@ -128,21 +140,27 @@ module.exports = class Card
 		if (typeof options.$set === 'undefined') options.$set = false;
 		if (typeof options.title === 'undefined') options.title = true;
 		if (typeof options.rarity === 'undefined') options.rarity = true;
-		if (typeof options.splitter === 'undefined') options.splitter = ' ';
-		let items = [];
-		let owned = true;
-		if (options.user && options.user.cards.has(this)) owned = options.user.cards.get(this);
-		if (options.user && (options.collected || options.count)) items.push(`\`${options.collected?`${owned?'✔️':'❌'}`:''}${options.count?`${`${owned?`${String(owned).padStart(options.count.length, '0')}`:`${options.count.replace(/./g, '0')}`}`}`:''}\``);
-		if (options.id) items.push(`\`${this.id}\``);
-		if (options.set) items.push(`\`${this.set.id}\``);
-		if (options.$set) items.push(`\`${this.$set.id}\``);
+		if (typeof options.user !== 'undefined' && typeof owned !== 'number') owned = options.user.cards.get(card.id) || 0;
+		let lines = [];
+		if (typeof owned === 'number' && (options.collected || options.count))
+		{
+			if (owned) lines.push(`\`${options.collected?'✔️':''}${options.count?`${String(owned).padStart(options.count.length, '0')}`:''}\``) 
+			else lines.push(`\`${options.collected?'❌':''}${options.count?`${options.count}`:''}\``)
+		}
+		if (options.id) lines.push(`\`${card.id}\``);
+		if (options.set) lines.push(`\`${card.set.id}\``);
+		if (options.$set) lines.push(`\`${card.$set.id}\``);
 		if (options.title)
 		{
-			if (owned || this.visibility <= 0) items.push(`**${this.title}**`);
-			else items.push(`~~**?????**~~`);
+			if (owned || card.visibility <= 0) lines.push(`**${card.title}**`);
+			else lines.push(`~~**?????**~~`);
 		}
-		if (options.rarity) items.push(`*${this.rarity}*`);
-		return items.join(options.splitter);
+		if (options.rarity)
+		{
+			if (owned || card.visibility <= 0) lines.push(`*${card.rarity}*`);
+			else lines.push(`~~*?????*~~`);
+		}
+		return lines.join(' ');
 	}
 
 	toString()

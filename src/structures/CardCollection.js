@@ -25,6 +25,36 @@ module.exports = class CardCollection extends Map
 		return this.size;
 	}
 
+	qualityCompare(collection)
+	{
+		if (this.size === 0 && collection.size === 0) return null;
+		if (this.size !== 0 && collection.size === 0) return this;
+		if (this.size === 0 && collection.size !== 0) return collection;
+		let infinites = {this: 0, collection: 0};
+		let totals = {this: 0, collection: 0};
+		for (let [id, count] of this)
+		{
+			let card = this.collector.cards.get(id);
+			if (!card) continue;
+			let value = card.value;
+			if (value === Infinity) infinites.this++;
+			else totals.this += value;
+		}
+		for (let [id, count] of collection)
+		{
+			let card = collection.collector.cards.get(id);
+			if (!card) continue;
+			let value = card.value;
+			if (value === Infinity) infinites.collection++;
+			else totals.collection += value;
+		}
+		if (infinites.this > infinites.collection) return this;
+		if (infinites.this < infinites.collection) return collection;
+		if (totals.this > totals.collection) return this;
+		if (totals.this < totals.collection) return collection;
+		return null;
+	}
+
 	quality(infinityCheck = true)
 	{
 		if (this.size === 0) return 0;
@@ -93,5 +123,34 @@ module.exports = class CardCollection extends Map
 			data.push([String(card), Number(count)]);
 		}
 		return data;
+	}
+
+	header(options = {})
+	{
+		if (typeof options.total === 'undefined') options.total = this.total;
+		if (typeof options.unique === 'undefined') options.unique = this.unique;
+		let lines = [];
+		lines.push(`**Total Cards: ${options.total}`);
+		lines.push(`**Unique Cards: ${options.unique}`);
+		return lines.join('\n');
+	}
+
+	details(options = {})
+	{
+		if (typeof options !== 'object') options = {};
+		if (typeof options.count === 'undefined') options.count = String(Math.max(Array.from(this.values()))).replace(/./g, '0').padStart(2, '0');
+		let lines = [];
+		for (let [id, value] of this)
+		{
+			let card = this.collector.lines.get(id) || id;
+			lines.push(discordJSCollector.Card.line(card, options, value));
+		}
+		if (lines.length) return lines.join('\n');
+		return '__*Nothing*__';
+	}
+
+	toString()
+	{
+		return this.details();
 	}
 }

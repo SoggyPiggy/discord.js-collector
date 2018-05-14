@@ -126,89 +126,26 @@ module.exports = class CardHandler extends Handler
 		return results;
 	}
 	
-	listItems(items, options)
+	listItems(items, options = {})
 	{
-		if (typeof options.collected === 'undefined') options.collected = true;
-		if (typeof options.count === 'undefined') options.count = true;
-		if (typeof options.id === 'undefined') options.id = true;
-		if (typeof options.set === 'undefined') options.set = true;	
-		if (typeof options.title === 'undefined') options.title = true;
-		if (typeof options.rarity === 'undefined') options.rarity = true;
 		let listItems = [];
 		let highest = 0;
-		if (options.count && this.user)
+		if (this.user)
 		{
+			options.user = this.user;
 			for (let [key, item] of items)
 			{
-				let count = this.user.cards.get(item);
-				if (count)
-				{
-					if (count > highest) highest = count;
-				}
-			}
-			highest = String(highest).replace(/./g, '0');
-			while (highest.length < 2)
-			{
-				highest += '0';
+				let count = this.user.cards.get(key) || 0;
+				if (count > highest) highest = count;
 			}
 		}
+		highest = String(highest).replace(/./g, '0').padStart(2, '0');
+		let lines = [];
 		for (let [key, item] of items)
 		{
-			let line = '';
-			if (typeof item === 'string')
-			{
-				if (this.user && (options.collected || options.count))
-				{
-					line += '`';
-					if (options.collected) line += '⛔';
-					if (options.count)
-					{
-						let owned = String(this.user.cards.get(item));
-						while (owned.length < highest.length) {owned = '0' + owned};
-						line += owned;
-					}
-					line += '`';
-				}
-				line += ` \`${card}\` __Card Unavailable__`;				
-			}
-			else
-			{
-				let owned = false;
-				if (this.user && (options.collected || options.count))
-				{
-					owned = this.user.cards.get(item);
-					line += '`';
-					if (options.collected)
-					{
-						if (owned) line += `✔️`;
-						else line += `❌`;
-					}
-					if (options.count)
-					{
-						if (owned)
-						{
-							owned = String(owned);
-							while (owned.length < highest.length) {owned = '0' + owned};
-							line += owned;
-						}
-						else line += highest;
-					}
-					line += '`';					
-				}
-				if (options.id) line += ` \`${item.id}\``;
-				if (options.set) line += ` \`${item.set.id}\``;
-				if (options.title)
-				{
-					if ((this.user && owned) || !this.user || item.visibility <= 0) line += ` **${item.title}**`;
-					else line += ` **~~?????~~**`;
-				}
-				else line += ` **~~?????~~**`;
-				if (options.rarity) line += ` *${item.rarity}*`;
-			}
-			line = line.replace(/^ /g, '');
-			listItems.push(line);
+			lines.push(discordJSCollector.Card.line(item, options))
 		}
-		return listItems;
+		return lines.join('\n');
 	}
 	
 	grindList(count)
