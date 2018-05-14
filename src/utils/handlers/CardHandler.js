@@ -145,7 +145,7 @@ module.exports = class CardHandler extends Handler
 		{
 			lines.push(discordJSCollector.Card.line(item, options))
 		}
-		return lines.join('\n');
+		return lines;
 	}
 	
 	grindList(count)
