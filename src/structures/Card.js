@@ -123,7 +123,7 @@ module.exports = class Card
 		return Card.line(this, options, owned);
 	}
 	
-	static line(card, options = {}, owned = true)
+	static line(card, options = {}, count = true)
 	{
 		if (typeof card === 'string')
 		{
@@ -131,7 +131,7 @@ module.exports = class Card
 			options.set = false;
 			options.$set = false;
 			options.rarity = false;
-			return Card.line({id: card, title: '__Unavailable__'}, options, owned);
+			return Card.line({id: card, title: '__Unavailable__'}, options, count);
 		}
 		if (typeof options.collected === 'undefined') options.collected = true;
 		if (typeof options.count === 'undefined') options.count = '00';
@@ -140,12 +140,17 @@ module.exports = class Card
 		if (typeof options.$set === 'undefined') options.$set = false;
 		if (typeof options.title === 'undefined') options.title = true;
 		if (typeof options.rarity === 'undefined') options.rarity = true;
-		if (typeof options.user !== 'undefined' && typeof owned !== 'number') owned = options.user.cards.get(card.id) || 0;
+		if (typeof options.user !== 'undefined' && typeof count !== 'number') count = options.user.cards.get(card.id) || 0;
+		let owned;
+		if (options.user) owned = options.user.cards.has(card.id);
+		else owned = Boolean(count);
 		let lines = [];
-		if (typeof owned === 'number' && (options.collected || options.count))
+		if (typeof count === 'number' && (options.collected || options.count))
 		{
-			if (owned) lines.push(`\`${options.collected?'✔️':''}${options.count?`${String(owned).padStart(options.count.length, '0')}`:''}\``) 
-			else lines.push(`\`${options.collected?'❌':''}${options.count?`${options.count}`:''}\``)
+			let item = '`';
+			if (options.collected) item += `${owned?'✔️':'❌'}`;
+			if (options.count) item += `${count?`${String(count).padStart(options.count.length, '0')}`:`${options.count}`}`
+			lines.push(item + '`');
 		}
 		if (options.id) lines.push(`\`${card.id}\``);
 		if (options.set) lines.push(`\`${card.set.id}\``);
