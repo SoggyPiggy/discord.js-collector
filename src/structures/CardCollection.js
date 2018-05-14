@@ -138,15 +138,27 @@ module.exports = class CardCollection extends Map
 	details(options = {})
 	{
 		if (typeof options !== 'object') options = {};
-		if (typeof options.count === 'undefined') options.count = String(Math.max(Array.from(this.values()))).replace(/./g, '0').padStart(2, '0');
+		if (typeof options.count === 'undefined') options.count = String(Math.max(...Array.from(this.values()))).replace(/./g, '0').padStart(2, '0');
 		let lines = [];
 		for (let [id, value] of this)
 		{
-			let card = this.collector.lines.get(id) || id;
+			let card = this.collector.cards.get(id) || id;
 			lines.push(discordJSCollector.Card.line(card, options, value));
 		}
 		if (lines.length) return lines.join('\n');
 		return '__*Nothing*__';
+	}
+
+	line(count = 3)
+	{
+		let items = [];
+		let keys = Array.from(this.keys());
+		for (let i = 0; (i < count && i < keys.length); i++)
+		{
+			items.push(`\`${this.get(keys[i])}\`x\`${keys[i]}\``);
+		}
+		if (keys.length > count) items.push('...');
+		return items.join(' ')
 	}
 
 	toString()

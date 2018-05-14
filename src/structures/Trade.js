@@ -128,23 +128,46 @@ module.exports = class Trade
 		return JSON.stringify(this.compress());
 	}
 
-	details()
+	details(options = {})
 	{
 		let benefits = this.benefits;
 		let lines = [];
 		lines.push(`**Trade ID:** ${this.id}`);
 		lines.push(`**Initiator:** ${this.initiator}`);
 		lines.push(`**Recipient:** ${this.recipient}`);
-		if (benefits) lines.push(`__*Trade benefits ${benefits}*__`);
+		if (benefits) lines.push(`__*Trade favors ${benefits}*__`);
 		lines.push('');
 		lines.push('**~~----------------~~[ Offers ]~~----------------~~**');
-		lines.push(`${this.initiator.offers}`);
+		lines.push(`${this.initiator.offers.details(options)}`);
 		lines.push('');
 		lines.push('**~~----------------~~[ Requests ]~~----------------~~**');
-		lines.push(`${this.recipient.offers}`);
+		lines.push(`${this.recipient.offers.details(options)}`);
 		return lines.join('\n');
 	}
-	
+
+	line(options = {})
+	{
+		return Trade.line(this, options);
+	}
+
+	static line(trade, options = {})
+	{
+		if (typeof trade === 'string') return `\`${trade}\` __Unavailable__`;
+		if (typeof options === 'object') options = {};
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.initiator === 'undefined') options.initiator = true;
+		if (typeof options.offers === 'undefined') options.offers = true;
+		if (typeof options.recipient === 'undefined') options.recipient = true;
+		if (typeof options.requests === 'undefined') options.requests = true;
+		let items = [];
+		if (options.id) items.push(`\`${trade.id}\``);
+		if (options.initiator) items.push(`${trade.initiator.user}`);
+		if (options.offers) items.push(trade.initiator.offers.line(1));
+		if (options.recipient) items.push(`${trade.recipient.user}`);
+		if (options.requests) items.push(trade.recipient.offers.line(1));
+		return items.join(' ');
+	}
+
 	toString()
 	{
 		return this.details();

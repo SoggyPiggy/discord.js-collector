@@ -62,23 +62,12 @@ module.exports = class SetHandler extends Handler
 
 	listItems(items, options)
 	{
-		if (typeof options.id === 'undefined') options.id = true;
-		if (typeof options.initiator === 'undefined') options.initiator = true;
-		if (typeof options.recipient === 'undefined') options.recipient = true;
-		let listItems = [];
+		let list = [];
 		for (let [key, trade] of items)
 		{
-			let line = [];
-			if (typeof trade === 'string') line.push(trade);
-			else
-			{
-				if (options.id) line.push(`\`${trade.id}\``);
-				if (options.initiator) line.push(`${trade.initiator}`);
-				if (options.recipient) line.push(`${trade.recipient}`);
-			}
-			listItems.push(line.join(' '));
+			list.push(trade.line(options));
 		}
-		return listItems;
+		return list;
 	}
 
 	processItems()
