@@ -1,4 +1,4 @@
-module.exports =
+structures =
 {
 	Card: require('./structures/Card'),
 	CardCollection: require('./structures/CardCollection'),
@@ -8,3 +8,5 @@ module.exports =
 	Trade: require('./structures/Trade'),
 	User: require('./structures/User')
 }
+module.exports = structures;
+global.discordJSCollector = structures;
