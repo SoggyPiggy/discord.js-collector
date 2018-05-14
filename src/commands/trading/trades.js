@@ -7,10 +7,11 @@ module.exports = class _Command extends Commando.Command
 	{
 		super(Client,
 			{
-				name: 'offers',
+				name: 'trades',
+				aliases: ['trade-search', 't-search'],
 				group: 'collector_trading',
-				memberName: 'offers',
-				description: 'offers',
+				memberName: 'trades',
+				description: 'Look at the list of trades you are apart of',
 				args:
 				[
 					{

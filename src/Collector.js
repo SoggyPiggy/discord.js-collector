@@ -110,11 +110,11 @@ module.exports = class Collector extends EventEmitter
 		if (this.options.features.trading)
 		{
 			client.registry.registerGroup('collector_trading', 'Collector: Trading');
-			client.registry.registerCommand(new (require('./commands/trading/trade'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/offer'))(client, this));
 			client.registry.registerCommand(new (require('./commands/trading/accept'))(client, this));
 			client.registry.registerCommand(new (require('./commands/trading/decline'))(client, this));
-			client.registry.registerCommand(new (require('./commands/trading/offer'))(client, this));
-			client.registry.registerCommand(new (require('./commands/trading/offers'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/trade'))(client, this));
+			client.registry.registerCommand(new (require('./commands/trading/trades'))(client, this));
 		}
 
 		if (this.options.features.market)
