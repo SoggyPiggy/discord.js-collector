@@ -58,8 +58,8 @@ module.exports = class Trade
 	{
 		let betterCollection = this.initiator.offers.qualityCompare(this.recipient.offers);
 		if (betterCollection === null) return null;
-		if (betterCollection === this.initiator.offers) return this.initiator.user;
-		if (betterCollection === this.recipient.offers) return this.recipient.user;
+		if (betterCollection === this.initiator.offers) return this.recipient.user;
+		if (betterCollection === this.recipient.offers) return this.initiator.user;
 		return null;
 	}
 
