@@ -55,7 +55,7 @@ module.exports = class Set
 		}
 		return false;
 	}
-
+	
 	compress()
 	{
 		let data = {};
@@ -73,5 +73,64 @@ module.exports = class Set
 		data.untradable = this.untradable;
 		data.omit = this.omit;
 		return data;
+	}
+	
+	details(options = {})
+	{
+		if (typeof options !== 'object') options = {};
+		if (typeof options.user === 'undefined') options.user = null;
+		let lines = [];
+		lines.push(`\`${this.id}\` ${this.title}`);
+		if (this.author) lines.push(`**Author:** <@${this.author}>`);
+		if (this.tags.length > 0) lines.push(`**Tags:** __${this.tags.join('__, __')}__`);
+		if (this.description) lines.push(`${this.description}`);
+		lines.push('**~~----------------~~[ Cards ]~~----------------~~**');
+		for (let [key, card] of this.cards)
+		{
+			if (options.user)
+			{
+				if (card.visibility > 1)
+				{
+					if (card.visibility > 2) continue;
+					let owned = options.user.cards.has(key);
+					if (!owned) continue;
+				}
+				lines.push(card.line({set: false, user: options.user}));
+			}
+			else lines.push(card.line({set: false}));
+		}
+		if (this.purchasable || (this.obtainable && this.series.collectable))
+		{
+			let footers = [];
+			if (this.obtainable && this.series.collectable) footers.push('Collectable');
+			if (this.purchasable) footers.push('Purchasable');
+			lines.push(`\`${footers.join('\` \`')}\``);
+		}
+		return lines.join('\n');
+	}
+
+	line(options = {})
+	{
+		return Set.line(this, options);
+	}
+
+	static line(set, options = {})
+	{
+		if (typeof set === 'string')
+		{
+			return Card.line({id: set, title: '__Unavailable__'}, options);
+		}
+		if (typeof options !== 'object') options = {};
+		if (typeof options.id === 'undefined') options.id = true;
+		if (typeof options.title === 'undefined') options.title = true;
+		let lines = [];
+		if (options.id) lines.push(`\`${set.id}\``);
+		if (options.title) lines.push(`${set.title}`);
+		return lines.join(' ');
+	}
+
+	toString()
+	{
+		return this.line();
 	}
 }

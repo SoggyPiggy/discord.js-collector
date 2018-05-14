@@ -24,7 +24,7 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 		let reply = message.channel.send(`<@${user.id}> Collecting Cards...`);
-		let response = `<@${user.id}> Starterpack`
+		let response = [`${user} Starterpack`];
 		let cards = [];
 		let renderData = [];
 		while(cards.length < this.collector.options.packs.starter)
@@ -53,12 +53,12 @@ module.exports = class _Command extends Commando.Command
 			if (b.new && !a.new) return 1;
 			return b.card.value - a.card.value;
 		})
-		for(let data of renderData)
-		{
-			response += `\n\`${data.card.id}\` **${data.card.title}** *${data.card.rarity}*`;
-		}
+		for (let data of renderData) {response.push(data.card)};
 		user.starterpack = true;
 		user.save();
+		let embed = new Discord.MessageEmbed();
+		embed.setTitle('Boosterpack Details');
+		embed.setDescription(response.join('\n'));
 		try
 		{
 			let style = this.collector.cardstyles.get();
@@ -69,14 +69,14 @@ module.exports = class _Command extends Commando.Command
 			attachment.setFile(buffer);
 			attachment.setName('Pack.png');
 			reply = await reply;
-			await message.channel.send(response, attachment);
-			reply.delete();
+			reply.edit(`${user}`, embed);
+			message.channel.send(attachment);
 		}
 		catch(error)
 		{
 			console.error(error);
 			reply = await reply;
-			reply.edit(response);
+			reply.edit(`${user}`, embed);
 		}
 		this.collector.emit('starterpack', user, cards, renderData);
 	}

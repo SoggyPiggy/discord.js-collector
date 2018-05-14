@@ -42,7 +42,7 @@ module.exports = class _Command extends Commando.Command
 		if (typeof args.page === 'number') page = args.page;
 		else if (typeof args.page === 'string') filter = args.page + ' ';
 		if (args.filters) filter += args.filters;
-		let handler = new this.collector.utils.OfferHandler(this.collector, {user});
+		let handler = new this.collector.utils.OfferHandler(this.collector, {user, items: user.trades});
 		handler.applyFilters(filter);
 		handler.sort();
 		let description = handler.list(page);

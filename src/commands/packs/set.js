@@ -54,7 +54,7 @@ module.exports = class _Command extends Commando.Command
 		let cost = this.collector.options.pricing.setpack;
 		if (user.credits < cost) return message.reply(`You do not have ${this.collector.utils.formatCredits(cost)} to spend.`);
 		let reply = message.channel.send(`<@${user.id}> Collecting Cards...`);
-		let response = `<@${user.id}> Setpack`
+		let response = [`${user} Setpack`]
 		let cards = [];
 		let renderData = [];
 		while(cards.length < this.collector.options.packs.set)
@@ -81,12 +81,12 @@ module.exports = class _Command extends Commando.Command
 			if (b.new && !a.new) return 1;
 			return b.card.value - a.card.value;
 		})
-		for(let data of renderData)
-		{
-			response += `\n\`${data.card.id}\` **${data.card.title}** *${data.card.rarity}*`;
-		}
+		for (let data of renderData) {response.push(data.card)};
 		user.credits -= cost;
 		user.save();
+		let embed = new Discord.MessageEmbed();
+		embed.setTitle('Boosterpack Details');
+		embed.setDescription(response.join('\n'));
 		try
 		{
 			let style = this.collector.cardstyles.get();
@@ -97,14 +97,14 @@ module.exports = class _Command extends Commando.Command
 			attachment.setFile(buffer);
 			attachment.setName('Pack.png');
 			reply = await reply;
-			await message.channel.send(response, attachment);
-			reply.delete();
+			reply.edit(`${user}`, embed);
+			message.channel.send(attachment);
 		}
 		catch(error)
 		{
 			this.collector.emit('error', error);
 			reply = await reply;
-			reply.edit(response);
+			reply.edit(`${user}`, embed);
 		}
 		this.collector.emit('setpack', user, cards, renderData);
 	}

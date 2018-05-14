@@ -36,57 +36,13 @@ module.exports = class _Command extends Commando.Command
 	{
 		let setID = this.collector.utils.formatSetID(args.setID);
 		let set = this.collector.registry.sets.get(setID);
-		if (typeof set === 'undefined')
-		{
-			message.reply(`Unable to find Set: \`${setID}\``);
-			return
-		}
-		if (set.visibility > 2)
-		{
-			message.reply(`Unable to find Set: \`${setID}\``);
-			return
-		}
+		if (typeof set === 'undefined') return message.reply(`Unable to find Set: \`${setID}\``);
+		if (set.visibility > 2) return message.reply(`Unable to find Set: \`${setID}\``);
 		let user = this.collector.users.get(message.author);
-		let cards = Array.from(set.cards.values());
-		if (set.visibility > 1)
-		{
-			let owned = set.owned(user);
-			if (!owned)
-			{
-				message.reply(`Unable to find Set: \`${setID}\``);
-				return;
-			}
-			cards = [];
-			for (let card of set.cards.values())
-			{
-				if (card.owned(user)) cards.push(card);
-			}
-		}
-
-		let description = `**Set:** ${set.title} \`${set.id}\``;
-		cards = this.collector.utils.pagify(args.page, cards);
-		description += `\n**Cards:**\n` + this.collector.utils.cardList(cards.results, {user: user, set: false});
-		description += `\n`;
-		if (set.author) description += `\n**Author:** <@${set.author}>`
-		if (set.tags > 0)
-		{
-			description += '\n**Tags:** '
-			for (let tag of set.tags)
-			{
-				description += `\`${tag}\`, `;
-			}
-			description = description.replace(/, $/g, '');
-		}
-		if (set.description) description += `\n${set.description}`;
-
-		let footer = '';
-		if (set.obtainable && set.series.collectable) footer += 'Collectable ';
-		if (set.purchasable) footer += 'Purchasable ';
-		footer = footer.replace(/ $/g, '');		
-
+		if (set.visibility > 1 && !set.owned(user)) return message.reply(`Unable to find Set: \`${setID}\``);
 		let embed = new Discord.MessageEmbed();
-		embed.setDescription(description);
-		embed.setFooter(footer);
+		embed.setTitle('Set Details');
+		embed.setDescription(set.details({user}));
 		message.channel.send(embed);
 	}
 }
