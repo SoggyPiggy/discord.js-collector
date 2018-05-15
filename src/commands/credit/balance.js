@@ -7,6 +7,7 @@ module.exports = class _Command extends Commando.Command
 		super(Client,
 			{
 				name: 'balance',
+				aliases: ['bal'],
 				group: 'collector_credits',
 				memberName: 'balance',
 				description: 'Get your credit balance.'

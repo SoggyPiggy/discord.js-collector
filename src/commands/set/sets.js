@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['set-search', 's-search'],
 				group: 'collector_sets',
 				memberName: 'sets',
-				description: 'View/Search through the list of cards.',
+				description: 'View/Search through the list of sets.',
 				details: 'View the list of all the sets. With extra arguments you can search through all the sets and selet which page you would like to view.\nYou can use the help command to read more about searching.',
 				args:
 				[
