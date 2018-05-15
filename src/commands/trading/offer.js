@@ -62,7 +62,7 @@ module.exports = class _Command extends Commando.Command
 
 		let embed = new Discord.MessageEmbed();
 		embed.setTitle('Trade Details');
-		embed.setDescription(`${trade}`);
+		embed.setDescription(trade.details({user: initiator, collected: false}));
 		message.channel.send(embed);
 
 		if (!confirmation) confirmation = await this.collector.utils.addConfirmation(message, args, 'Confirm Trade');
@@ -78,6 +78,7 @@ module.exports = class _Command extends Commando.Command
 		trade.save();
 		if (id !== trade.id) message.reply(`**Trade ID conflict!**\nTrade ID is now: \`${trade.id}\`\nTrade request completed.`);
 		else message.reply('Trade request completed.');
+		embed.setDescription(trade.details({user: recipient, collected: false}));
 		args.member.send(`${initiator} has made a trade offer.\nYou can use the \`accept\` or \`decline\` command to respond to the offer.`, embed);
 		this.collector.emit('tradeRequested', trade, initiator, recipient);
 	}
