@@ -13,7 +13,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'collect',
 				group: 'collector_basic',
 				memberName: 'collect',
-				description: `Collect a new card every ${time}.`
+				description: `Collect a new card every ${time}`
 			});
 		this.collector = Collector;
 	}

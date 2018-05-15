@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'offer',
 				group: 'collector_trading',
 				memberName: 'offer',
-				description: 'Create a trade of cards with someone.',
+				description: 'Create a trade of cards with someone',
 				args:
 				[
 					{

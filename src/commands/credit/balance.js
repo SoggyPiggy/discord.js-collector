@@ -10,7 +10,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['bal'],
 				group: 'collector_credits',
 				memberName: 'balance',
-				description: 'Get your credit balance.'
+				description: 'Get your credit balance'
 			});
 		this.collector = Collector;
 	}

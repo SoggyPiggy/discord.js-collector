@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['g-x'],
 				group: 'collector_managment',
 				memberName: 'grind-x',
-				description: 'Grind the matching cards X times.',
+				description: 'Grind the matching cards X times',
 				details: 'Use filters and searching to select the cards you want to grind. If no search filters are given the filter \'-guarded\' is used.\nTo quick confirm you can just put a \'y\' at the end',
 				args:
 				[

@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['card', 'c'],
 				group: 'collector_card',
 				memberName: 'card-info',
-				description: 'View information about a card.',
+				description: 'View information about a card',
 				details: 'View card properties like the set it belongs to, rarity, if you\'ve collected the card, and more if you own the card.',
 				args:
 				[

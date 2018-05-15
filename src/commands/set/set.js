@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['set', 's'],
 				group: 'collector_sets',
 				memberName: 'set-info',
-				description: 'View information about a set.',
+				description: 'View information about a set',
 				args:
 				[
 					{

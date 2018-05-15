@@ -11,7 +11,7 @@ module.exports = class _Command extends Commando.Command
 				aliases: ['d'],
 				group: 'collector_card',
 				memberName: 'display',
-				description: 'View a render of a card.',
+				description: 'View a render of a card',
 				args:
 				[
 					{

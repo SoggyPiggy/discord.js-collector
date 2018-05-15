@@ -10,7 +10,7 @@ module.exports = class _Command extends Commando.Command
 				name: 'collection',
 				group: 'collector_basic',
 				memberName: 'collection',
-				description: 'View your collected cards.',
+				description: 'View your collected cards',
 				args:
 				[
 					{
