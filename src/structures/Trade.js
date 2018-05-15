@@ -84,23 +84,27 @@ module.exports = class Trade
 		let errors = []
 		for (let [card, count] of this.initiator.offers)
 		{
-			let owned = this.initiator.user.cards.get(card);
-			if (owned >= count) continue;
-			errors.push(`<@${this.initiator.user.id}> does not have ${count} of ${card}`);
+			if (this.initiator.user.cards.has(card, count)) continue;
+			errors.push(`${this.initiator.user} does not have ${count} of \`${card}\``);
 		}
 		for (let [card, count] of this.recipient.offers)
 		{
-			let owned = this.recipient.user.cards.get(card);
-			if (owned >= count) continue;
-			errors.push(`<@${this.recipient.user.id}> does not have ${count} of ${card}`);
+			if (this.recipient.user.cards.has(card)) continue;
+			errors.push(`${this.recipient.user} does not have ${count} of \`${card}\``);
 		}
 		return errors;
 	}
 
 	complete()
 	{
+		this.delete();
 		let errors = this.offersCheck();
-		if (errors.length > 0) throw new Error(errors.join('\n'));
+		if (errors.length > 0)
+		{
+			errors.unshift('**~~----------------~~[ Trade Errors ]~~----------------~~**');
+			errors.unshift(this.line());
+			return errors.join('\n');
+		}
 		for (let [card, count] of this.initiator.offers)
 		{
 			this.initiator.user.cards.remove(card, count);
@@ -111,6 +115,19 @@ module.exports = class Trade
 			this.recipient.user.cards.remove(card, count);
 			this.initiator.user.cards.add(card, count);
 		}
+		return true;
+	}
+
+	decline()
+	{
+		this.delete();
+	}
+
+	delete()
+	{
+		this.collector.trades.delete(this.id);
+		this.initiator.user.trades.delete(this.id);
+		this.recipient.user.trades.delete(this.id);
 	}
 
 	compress()
@@ -162,9 +179,9 @@ module.exports = class Trade
 		let items = [];
 		if (options.id) items.push(`\`${trade.id}\``);
 		if (options.initiator) items.push(`${trade.initiator.user}`);
-		if (options.offers) items.push(trade.initiator.offers.line(1));
+		if (options.offers) items.push(trade.initiator.offers.line(2));
 		if (options.recipient) items.push(`${trade.recipient.user}`);
-		if (options.requests) items.push(trade.recipient.offers.line(1));
+		if (options.requests) items.push(trade.recipient.offers.line(2));
 		return items.join(' ');
 	}
 

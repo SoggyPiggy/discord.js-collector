@@ -27,7 +27,19 @@ module.exports = class TradeManager extends Map
 		if (trade)
 		{
 			let updated = this.collector.db.trades.update({id: id}, trade.compress(), {upsert: true});
-			this.collector.emit('tradeSaved', trade);
+			this.collector.emit('tradeSaved', trade, updated);
+		}
+	}
+
+	delete(trade)
+	{
+		let id = this.parseID(trade);
+		trade =this.get(id);
+		if (trade)
+		{
+			super.delete(id);
+			this.collector.db.trades.remove({id: id});
+			this.collector.emit('tradeRemoved', trade);
 		}
 	}
 
