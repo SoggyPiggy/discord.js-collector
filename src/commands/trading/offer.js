@@ -8,7 +8,8 @@ module.exports = class _Command extends Commando.Command
 	{
 		super(Client,
 			{
-				name: 'offer',
+				name: 'offer-trade',
+				aliases: ['offer'],
 				group: 'collector_trading',
 				memberName: 'offer',
 				description: 'Create a trade of cards with someone',

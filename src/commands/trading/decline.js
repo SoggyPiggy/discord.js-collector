@@ -7,7 +7,8 @@ module.exports = class _Command extends Commando.Command
 	{
 		super(Client,
 			{
-				name: 'decline',
+				name: 'decline-trade',
+				aliases: ['decline'],
 				group: 'collector_trading',
 				memberName: 'decline',
 				description: 'Decline/Cancel a trade',
