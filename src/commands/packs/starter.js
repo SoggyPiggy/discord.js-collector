@@ -61,7 +61,7 @@ module.exports = class _Command extends Commando.Command
 		embed.setDescription(response.join('\n'));
 		try
 		{
-			let style = this.collector.cardstyles.get();
+			let style = this.collector.cardstyles.get(user.settings.get('cardstyle'));
 			let buffer = await style.render(renderData);
 			if (!buffer) throw new Error('Unable to render');
 

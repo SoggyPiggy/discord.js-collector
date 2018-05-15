@@ -46,7 +46,7 @@ module.exports = class _Command extends Commando.Command
 		let reply = message.channel.send(`<@${user.id}> Fetching your card \`${card.id}\` **${card.title}** *${card.rarity}*`)
 		try
 		{
-			let style = this.collector.cardstyles.get();
+			let style = this.collector.cardstyles.get(user.settings.get('cardstyle'));
 			let buffer = await style.render({card: card});
 			if (!buffer) throw new Error('Unable to render');
 
