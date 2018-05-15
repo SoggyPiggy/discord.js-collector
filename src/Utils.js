@@ -41,12 +41,7 @@ module.exports = class Utils
 		return data;
 	}
 	
-	formatSeriesID(id)
-	{
-		return parseID(id).replace(/\W/g, '').toLowerCase();
-	}
-
-	formatTradeID(id)
+	formatID(id)
 	{
 		return parseID(id).replace(/\W/g, '').toLowerCase();
 	}

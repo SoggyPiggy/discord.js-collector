@@ -30,7 +30,7 @@ module.exports = class _Command extends Commando.Command
 		let user = this.collector.users.get(message.author, false);
 		if (!user) return message.reply('You do not have any trades');
 		if (user.trades.size <= 0) return message.reply('You do not have any trades');
-		let tradeID = this.collector.utils.formatTradeID(args.tradeID);
+		let tradeID = this.collector.utils.formatID(args.tradeID);
 		let trade = user.trades.get(tradeID);
 		if (!trade) return message.reply(`Unable to find Trade: \`${tradeID}\``);
 		let embed = new Discord.MessageEmbed();

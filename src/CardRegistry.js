@@ -30,7 +30,7 @@ module.exports = class CardRegistry
 	registerSeries(data = {})
 	{
 		let series = new Series(data, this);
-		series.id = this.collector.utils.formatSeriesID(series.id);
+		series.id = this.collector.utils.formatID(series.id);
 		if (this.series.has(series.id)) throw new Error(`Series with id ${series.id} already registered`);
 		this.series.set(series.id, series);
 		this.collector.emit('debug', `Registered series ${series.id}.`);
@@ -44,7 +44,7 @@ module.exports = class CardRegistry
 		if (this.sets.has(set.id)) throw new Error(`Set with id ${set.id} already registered`);
 		if (!(set.series instanceof Series))
 		{
-			set.series = this.collector.utils.formatSeriesID(set.series);
+			set.series = this.collector.utils.formatID(set.series);
 			if (!this.series.has(set.series)) throw new Error(`Series with id ${set.series} has not been registered yet`);
 			set.series = this.series.get(set.series);
 		}
