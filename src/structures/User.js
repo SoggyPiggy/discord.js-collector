@@ -11,6 +11,8 @@ module.exports = class User
 		if (typeof data.cooldowns === 'undefined') data.cooldowns = {};
 		if (typeof data.cooldowns.collect === 'undefined') data.cooldowns.collect = {};
 		if (typeof data.cooldowns.collect.cooldown === 'undefined') data.cooldowns.collect.cooldown = 0;
+		if (typeof data.settings === 'undefined') data.settings = {};
+		if (typeof data.settings.cardstyle) data.settings.cardstyle = 'default';
 		if (typeof data.cards === 'undefined') data.cards = [];
 		if (typeof data.starterpack === 'undefined') data.starterpack = false;
 
@@ -21,6 +23,8 @@ module.exports = class User
 		this.xp = data.xp;
 		this.cooldowns = new Map();
 		this.cooldowns.set('collect', new collector.utils.Cooldown({ min: collector.options.collectMinCooldown, max: collector.options.collectMaxCooldown, cooldown: data.cooldowns.collect.cooldown}));
+		this.settings = new Map();
+		this.settings.set('cardstyle', data.settings.cardstyle)
 		this.cards = new CardCollection(collector, data.cards);
 		this.trades = new Map();
 		this.starterpack = data.starterpack;
@@ -56,9 +60,14 @@ module.exports = class User
 		data.credits = Number(this.credits);
 		data.xp = Number(this.xp);
 		data.cooldowns = {};
-		for (let v of this.cooldowns.keys())
+		for (let [key, value] of this.cooldowns)
 		{
-			data.cooldowns[v] = this.cooldowns.get(v).compress();
+			data.cooldowns[key] = value.compress();
+		}
+		data.settings = {};
+		for (let [key, value] of this.settings)
+		{
+			data.settings[key] = value;
 		}
 		data.cards = this.cards.compress();
 		return data;

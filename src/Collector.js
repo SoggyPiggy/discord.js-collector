@@ -35,6 +35,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.features.managment === 'undefined') options.features.managment = true;
 		if (typeof options.features.trading === 'undefined') options.features.trading = false;
 		if (typeof options.features.market === 'undefined') options.features.market = false;
+		if (typeof options.features.settings === 'undefined') options.features.settings = true;
 		if (typeof options.packs !== 'object') options.packs = {};
 		if (typeof options.packs.starter === 'undefined') options.packs.starter = 8;
 		if (typeof options.packs.booster === 'undefined') options.packs.booster = 3;
@@ -126,6 +127,12 @@ module.exports = class Collector extends EventEmitter
 			client.registry.registerCommand(new (require('./commands/market/history'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/listing'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/listings'))(client, this));
+		}
+
+		if (this.options.features.settings)
+		{
+			client.registry.registerGroup('collector_settings', 'Collector: Settings');
+			client.registry.registerCommand(new (require('./commands/settings/cardstyle'))(client, this));
 		}
 
 		client.registry.registerGroup('collector_informative', 'Collector: Help Center');
