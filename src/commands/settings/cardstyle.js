@@ -34,11 +34,11 @@ module.exports = class _Command extends Commando.Command
 		{
 			selection = this.collector.utils.formatID(selection);
 			if (this.collector.cardstyles.has(selection)) user.settings.set('cardstyle', selection);
-			else (this.collector.cardStyles.set('cardstyle', 'default'));
+			else (user.settings.set('cardstyle', null));
 			user.save();
 		}
 		let selected = user.settings.get('cardstyle');
-		if (selected === 'default') selected = this.collector.options.cardStyle;
+		if (selected === null) selected = this.collector.options.cardStyle;
 
 		let lines = [];
 		lines.push('**Card Styles**');
@@ -65,9 +65,9 @@ module.exports = class _Command extends Commando.Command
 
 			selection = this.collector.utils.formatID(selection);
 			if (this.collector.cardstyles.has(selection)) user.settings.set('cardstyle', selection);
-			else (this.collector.cardStyles.set('cardstyle', 'default'));
+			else (user.settings.set('cardstyle', null));
 			selection = user.settings.get('cardstyle');
-			if (selection === 'default') message.reply(`Card Style set to __Default__`);
+			if (selection === null) message.reply(`Card Style set: __Default__`);
 			else message.reply(`Card Style set: \`${selection}\``);
 			user.save();
 		}

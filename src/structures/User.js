@@ -12,7 +12,7 @@ module.exports = class User
 		if (typeof data.cooldowns.collect === 'undefined') data.cooldowns.collect = {};
 		if (typeof data.cooldowns.collect.cooldown === 'undefined') data.cooldowns.collect.cooldown = 0;
 		if (typeof data.settings === 'undefined') data.settings = {};
-		if (typeof data.settings.cardstyle) data.settings.cardstyle = 'default';
+		if (typeof data.settings.cardstyle === 'undefined') data.settings.cardstyle = null;
 		if (typeof data.cards === 'undefined') data.cards = [];
 		if (typeof data.starterpack === 'undefined') data.starterpack = false;
 

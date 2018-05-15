@@ -28,7 +28,7 @@ module.exports = class StyleRegistry extends Map
 
 	get(id)
 	{
-		if (typeof id !== 'undefined') return super.get(id);
+		if (typeof id !== 'undefined' && id !== null) return super.get(id);
 		return super.get(this.collector.options.cardStyle);
 	}
 }
