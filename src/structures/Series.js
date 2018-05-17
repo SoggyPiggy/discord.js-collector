@@ -32,21 +32,25 @@ module.exports = class
 		let count = 0;
 		if (this.collectable)
 		{
-			total += ((this.registry.allCollectable._total / this.registry.allCollectable.size) / this.chance);
+			let average = this.registry.allCollectable._total / this.registry.allCollectable.size
+			total += ((average / this.chance) / (average / this.registry.allCollectable._min));
 			count ++;
 		}
 		if (this.mutatable)
 		{
-			total += ((this.registry.allMutatable._total / this.registry.allMutatable.size) / this.chance);
-			count ++;
+			let average = this.registry.allMutatable._total / this.registry.allMutatable.size
+			total += ((average / this.chance) / (average / this.registry.allMutatable._min));
+			count++;
 		}
 		if (this.packable)
 		{
-			total += ((this.registry.allPackable._total / this.registry.allPackable.size) / this.chance);
-			count ++;
+			let average = this.registry.allPackable._total / this.registry.allPackable.size
+			total += ((average / this.chance) / (average / this.registry.allPackable._min));
+			count++;
 		}
-		if (total === 0) return Infinity;
-		else return (total / count);
+		let value = (total / count);
+		if (isNaN(value)) return Infinity;
+		else return value;
 	}
 
 	compress()

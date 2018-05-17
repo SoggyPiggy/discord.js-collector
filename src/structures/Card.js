@@ -43,9 +43,10 @@ module.exports = class Card
 
 	get value()
 	{
-		let value = (((this.$set.cards._total / this.$set.cards.size) / this.chance) * this.$set.value);
-		if (value === 0) return Infinity;
-		return value;
+		let average = this.$set.cards._total / this.$set.cards.size;
+		let value = ((((average / this.chance) / (average / this.$set.cards._min)) + this.$set.value) / 2);
+		if (isNaN(value)) return Infinity;
+		else return value;
 	}
 
 	inheritProperties()

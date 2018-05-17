@@ -42,9 +42,10 @@ module.exports = class Set
 
 	get value()
 	{
-		let value = (((this.series.all._total / this.series.all.size) / this.chance) * this.series.value);
-		if (value === 0) return Infinity;
-		return value;
+		let average = this.series.all._total / this.series.all.size;
+		let value = ((((average / this.chance) / (average / this.series.all._min)) + this.series.value) / 2);
+		if (isNaN(value)) return Infinity;
+		else return value;
 	}
 
 	owned(user)
