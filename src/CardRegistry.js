@@ -94,6 +94,7 @@ module.exports = class CardRegistry
 				}
 				case 'object':
 				{
+					if (data.omit) return;
 					if (data instanceof Card) this.registerCard(data);
 					else if (data instanceof Set) this.registerSet(data);
 					else if (typeof data.set !== 'undefined') this.registerCard(new Card(data));
