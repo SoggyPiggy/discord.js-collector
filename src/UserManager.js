@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const User = require('./structures/User');
 
 module.exports = class UserManager extends Map
@@ -25,7 +26,11 @@ module.exports = class UserManager extends Map
 			user = new User(this.collector, {id: id});
 			this.set(user.id, user);
 		}
-		if (typeof member.username !== 'undefined') user.username = `${member.username}#${member.discriminator}`;
+		if (member instanceof Discord.User)
+		{
+			user.member = member;
+			user.username = `${member.username}#${member.discriminator}`
+		}
 		return user
 	}
 

@@ -18,6 +18,7 @@ module.exports = class User
 
 		this.collector = collector;
 		this.id = data.id;
+		this.member = null;
 		this.username = data.username;
 		this.credits = data.credits;
 		this.xp = data.xp;
@@ -76,5 +77,17 @@ module.exports = class User
 	toString()
 	{
 		return `<@${this.id}>`;
+	}
+
+	async send(...args)
+	{
+		if (this.member !== null) return this.member.send(...args)
+		else if (this.collector.Commando)
+		{
+			let member = await this.collector.Commando.users.fetch(this.id);
+			if (!member) return;
+			this.member = member;
+			this.member.send(...args);
+		}
 	}
 }
