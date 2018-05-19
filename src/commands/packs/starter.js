@@ -78,6 +78,6 @@ module.exports = class _Command extends Commando.Command
 			reply = await reply;
 			reply.edit(`${user}`, embed);
 		}
-		this.collector.emit('starterpack', user, cards, renderData);
+		this.collector.emit('starterpack', {user, message, args}, cards, renderData);
 	}
 }

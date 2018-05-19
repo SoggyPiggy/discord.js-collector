@@ -43,5 +43,6 @@ module.exports = class _Command extends Commando.Command
 		else other = await this.client.users.fetch(trade.initiator.user.id);
 		embed.setDescription(trade.details({user: this.collector.users.get(this.collector.users.get(other)), collected: false}));
 		other.send(embed);
+		this.collector.emit('tradeDeclined', {user, message, args}, trade);
 	}
 }

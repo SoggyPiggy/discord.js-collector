@@ -49,5 +49,8 @@ module.exports = class _Command extends Commando.Command
 		message.channel.send(embed);
 		let initiator = await this.client.users.fetch(trade.initiator.user.id);
 		initiator.send(embed);
+		this.collector.emit('tradeAccepted', {user, message, args}, trade);
+		if (passed !== true) this.collector.emit('tradeAcceptedPassed', {user, message, args}, trade, passed);
+		else this.collector.emit('tradeAcceptedFailed', {user, message, args}, trade);
 	}
 }

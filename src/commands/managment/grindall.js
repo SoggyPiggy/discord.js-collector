@@ -62,6 +62,6 @@ module.exports = class _Command extends Commando.Command
 		}
 		user.save();
 		message.reply('Grind Completed')
-		this.collector.emit('grind', groundCards, groundCount, groundUnique);
+		this.collector.emit('grind', {user, message, args}, groundCards, groundCount, groundUnique);
 	}
 }

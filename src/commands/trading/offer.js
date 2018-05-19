@@ -81,6 +81,6 @@ module.exports = class _Command extends Commando.Command
 		else message.reply('Trade request completed.');
 		embed.setDescription(trade.details({user: recipient, collected: false}));
 		args.member.send(`${initiator} has made a trade offer.\nYou can use the \`accept\` or \`decline\` command to respond to the offer.`, embed);
-		this.collector.emit('tradeRequested', trade, initiator, recipient);
+		this.collector.emit('tradeRequested', {user, message, args}, trade);
 	}
 }

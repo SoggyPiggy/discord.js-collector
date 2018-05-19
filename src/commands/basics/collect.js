@@ -25,7 +25,7 @@ module.exports = class _Command extends Commando.Command
 		if (!cooldown.ready)
 		{
 			message.reply('You can not collect yet.');
-			this.collector.emit('collectFailed', user, message);
+			this.collector.emit('collectFailedCooldown', {user, message, args});
 			return;
 		}
 		let reply = message.channel.send(`<@${user.id}> Collecting Card...`);
@@ -66,6 +66,6 @@ module.exports = class _Command extends Commando.Command
 			reply = await reply;
 			reply.edit(`<@${user.id}> Collected \`${card.id}\` **${card.title}** *${card.rarity}*`);
 		}
-		this.collector.emit('collect', card, user, message);
+		this.collector.emit('collect', {user, message, args}, card);
 	}
 }

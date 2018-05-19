@@ -36,14 +36,14 @@ module.exports = class _Command extends Commando.Command
 		if (user.credits < args.credits)
 		{
 			message.reply('You do not have enough credits to complete the transfer.');
-			this.collector.emit('transferFailedCredits', user, message, args);
+			this.collector.emit('transferFailedCredits', {user, message, args});
 			return;
 		}
 		let target = this.collector.users.get(args.member, false);
 		if (!target)
 		{
 			message.reply('The user you are trying to transfer to has not interacted with the bot yet.');
-			this.collector.emit('transferFailedTarget', user, message, args);
+			this.collector.emit('transferFailedTarget', {user, message, args});
 			return;
 		}
 		user.credits -= args.credits;
@@ -51,6 +51,6 @@ module.exports = class _Command extends Commando.Command
 		target.credits += args.credits;
 		target.save();
 		message.channel.send(`<@${user.id}> Transfered **${this.collector.utils.formatCredits(args.credits)}** to <@${target.id}>`);
-		this.collector.emit('transfer', user, target, args.credits);
+		this.collector.emit('transfer', {user, message, args}, target);
 	}
 }

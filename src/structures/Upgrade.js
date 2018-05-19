@@ -35,9 +35,9 @@ module.exports = class Upgrade extends Map
 		this.set(this.size, {cost, callback});
 	}
 
-	async run(user, ...args)
+	async run(...args)
 	{
 		let level = user.upgrades.get(this.id);
-		this.get(level).callback.call(user, ...args);
+		this.get(level).callback.call(...args);
 	}
 }
