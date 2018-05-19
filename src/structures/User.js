@@ -1,4 +1,5 @@
 const CardCollection = require('./CardCollection');
+const UserUpgrades = require('./UserUpgrades');
 
 module.exports = class User
 {
@@ -14,6 +15,7 @@ module.exports = class User
 		if (typeof data.settings === 'undefined') data.settings = {};
 		if (typeof data.settings.cardstyle === 'undefined') data.settings.cardstyle = null;
 		if (typeof data.cards === 'undefined') data.cards = [];
+		if (typeof data.upgrades === 'undefined') data.upgrades = [];
 		if (typeof data.starterpack === 'undefined') data.starterpack = false;
 
 		this.collector = collector;
@@ -27,6 +29,7 @@ module.exports = class User
 		this.settings = new Map();
 		this.settings.set('cardstyle', data.settings.cardstyle)
 		this.cards = new CardCollection(collector, data.cards);
+		this.upgrades = new UserUpgrades(collector, data.upgrades);
 		this.trades = new Map();
 		this.starterpack = data.starterpack;
 	}
@@ -70,6 +73,7 @@ module.exports = class User
 		{
 			data.settings[key] = value;
 		}
+		data.upgrades = this.upgrades.compress();
 		data.cards = this.cards.compress();
 		return data;
 	}

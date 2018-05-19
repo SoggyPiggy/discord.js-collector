@@ -8,6 +8,7 @@ const UserManager = require('./UserManager');
 const Utils = require('./Utils');
 const TradeManager = require('./TradeManager');
 const CardStyles = require('./StyleRegistry');
+const UpgradeRegistry = require('./UpgradeRegistry');
 
 module.exports = class Collector extends EventEmitter
 {
@@ -61,6 +62,7 @@ module.exports = class Collector extends EventEmitter
 		this.registry = new CardRegistry(this);
 		this.cardstyles = new CardStyles(this);
 		this.trades = new TradeManager(this);
+		this.upgrades = new UpgradeRegistry(this);
 		
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
