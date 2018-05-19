@@ -12,7 +12,7 @@ module.exports = class Upgrade extends Map
 		this.on = data.on;
 		this.title = data.title;
 		this.description = data.description;
-		this.addLevel(0, ()=>{});
+		this.addLevel(0);
 	}
 	
 	init(Collector)
@@ -30,14 +30,20 @@ module.exports = class Upgrade extends Map
 		return this.size - 1;
 	}
 	
-	addLevel(cost, callback)
+	addLevel(cost, callback = ()=>{}, startup = ()=>{})
 	{
-		this.set(this.size, {cost, callback});
+		this.set(this.size, {cost, callback, startup});
 	}
 
 	async run(...args)
 	{
 		let level = user.upgrades.get(this.id);
 		this.get(level).callback.call(...args);
+	}
+
+	async startup(user)
+	{
+		let level = user.upgrades.get(this.id);
+		this.get(level).startup.call(user);
 	}
 }
