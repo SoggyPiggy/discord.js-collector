@@ -20,9 +20,9 @@ module.exports = class Upgrade extends Map
 		this.collector = Collector;
 		if (Array.isArray(this.on))
 		{
-			for (let v of this.on) {this.collector.on(v, this.run.bind(this));}
+			for (let v of this.on) {this.collector.on(v, (...args) => this.run(...args));}
 		}
-		else this.collector.on(this.on, this.run.bind(this));
+		else this.collector.on(this.on, (...args) => this.run(...args));
 	}
 
 	get max()
@@ -37,8 +37,9 @@ module.exports = class Upgrade extends Map
 
 	async run(...args)
 	{
-		let level = user.upgrades.get(this.id);
-		this.get(level).callback.call(...args);
+		let level = args[0].user.upgrades.get(this.id);
+		if (level > this.max) level = this.max;
+		this.get(level).callback(...args);
 	}
 
 	async startup(user)
