@@ -144,7 +144,7 @@ module.exports = class Utils
 			newArgs.push({key: value.key, prompt: value.prompt, type: value.type.id, default: true});
 		}
 		let arg = { key: 'addConfirmation', label: 'Confirmation', type: 'boolean' };
-		arg.prompt = `${prompt}\n(Y)es or (N)o`;
+		arg.prompt = `${prompt}\n**Y**es or **N**o`;
 		newArgs.push(arg);
 		let argumentcollector = new Commando.ArgumentCollector(message.command.client, newArgs);
 		let awaited = await argumentcollector.obtain(message, completedValues);
