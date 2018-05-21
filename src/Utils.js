@@ -16,6 +16,7 @@ module.exports = class Utils
 		this.CardHandler = require('./utils/handlers/CardHandler');
 		this.SetHandler = require('./utils/handlers/SetHandler');
 		this.OfferHandler = require('./utils/handlers/OfferHandler');
+		this.UpgradeHandler = require('./utils/handlers/UpgradeHandler');
 		this.Searcher = require('./utils/Searcher');
 		this.Cooldown = require('./utils/Cooldown');
 		this.smartsort = require('./utils/SmartSort');
