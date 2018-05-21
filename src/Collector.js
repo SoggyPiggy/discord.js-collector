@@ -36,6 +36,7 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.features.managment === 'undefined') options.features.managment = true;
 		if (typeof options.features.trading === 'undefined') options.features.trading = true;
 		if (typeof options.features.market === 'undefined') options.features.market = false;
+		if (typeof options.features.store === 'undefined') options.features.store = true;
 		if (typeof options.features.settings === 'undefined') options.features.settings = true;
 		if (typeof options.packs !== 'object') options.packs = {};
 		if (typeof options.packs.starter === 'undefined') options.packs.starter = 8;
@@ -129,6 +130,13 @@ module.exports = class Collector extends EventEmitter
 			client.registry.registerCommand(new (require('./commands/market/history'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/listing'))(client, this));
 			client.registry.registerCommand(new (require('./commands/market/listings'))(client, this));
+		}
+
+		if (this.options.features.store)
+		{
+			client.registry.registerGroup('collector_store', 'Collector: User Store');
+			client.registry.registerCommand(new (require('./commands/store/upgrade'))(client, this));
+			client.registry.registerCommand(new (require('./commands/store/upgrades'))(client, this));
 		}
 
 		if (this.options.features.settings)
