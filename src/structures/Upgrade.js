@@ -34,7 +34,7 @@ module.exports = class Upgrade extends Map
 	
 	addLevel(cost, callback = ()=>{}, startup = ()=>{})
 	{
-		this.set(this.size, {cost, callback, startup});
+		this.set(this.size, {level: this.size, cost, callback, startup});
 	}
 
 	async run(...args)
@@ -66,7 +66,7 @@ module.exports = class Upgrade extends Map
 		let items = [];
 		items.push(`\`${this.id}\` **${this.title}**`);
 		if (this.tags.length > 0 || this.description) items.push(`**~~-----------------------------------------------~~**`);
-		if (level) items.push(`**Owend:** ${level > this.max ? `${level}/--` : `${level}/${this.max}`}`);
+		if (level) items.push(`${level > this.max ? `**Own:** ${level}/--` : `**Level:** ${level}/${this.max}`}`);
 		if (this.tags.length > 0) items.push(`**Tags:** __${this.tags.join('__, __')}__`);
 		if (this.description) items.push(`${this.description}`);
 		return items.join(splitter);
@@ -89,5 +89,10 @@ module.exports = class Upgrade extends Map
 		if (options.id) lines.push(`\`${upgrade.id}\``);
 		if (options.id) lines.push(`**${upgrade.title}**`);
 		return lines.join(' ');
+	}
+
+	toString()
+	{
+		return this.line();
 	}
 }

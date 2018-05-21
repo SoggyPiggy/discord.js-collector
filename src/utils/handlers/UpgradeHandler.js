@@ -60,7 +60,7 @@ module.exports = class SetHandler extends Handler
 				{
 					fuseoptions.keys = fb.keys;
 					fuseoptions.threshold = fb.threshold;
-					fuses.push(new Fuse(fuseCards, fuseoptions));
+					fuses.push(new Fuse(fuseItems, fuseoptions));
 				}
 				break;
 			}
