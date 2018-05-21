@@ -85,6 +85,18 @@ module.exports = class _Command extends Commando.Command
 		${example('card:0001')}
 
 		__Fallback filter is Card__
+
+		${spltter('Upgrade Searching')}
+		${header('Title')} Search the upgrade title.
+		${example('title:Wumpus')}
+
+		${header('Tag')} Search the upgrade tags.
+		${example('tag:Discord')}
+
+		${header('Description')} Search the upgrade description.
+		${example('description:"A upgrade for collecting"')}
+
+		__Fallback filters are Title and Tag__
 		`;
 		information = information.replace(/^\t+/gm, '');
 		let embed = new Discord.MessageEmbed();
