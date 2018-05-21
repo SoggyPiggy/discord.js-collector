@@ -66,4 +66,15 @@ module.exports =
 			return (a.created > b.created) - (a.created < b.created);
 		})
 	},
+	upgrade: (upgrades) =>
+	{
+		upgrades.sort((a, b) =>
+		{
+			if (Array.isArray(a)) a = a[1];
+			if (Array.isArray(b)) b = b[1];
+			if (a.id > b.id) return 1;
+			if (a.id < b.id) return -1;
+			return 0;
+		})
+	}
 }
