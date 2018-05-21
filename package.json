@@ -1,6 +1,6 @@
 {
   "name": "discord.js-collector",
-  "version": "1.0.246",
+  "version": "1.0.247",
   "description": "A customizable card collecting framework for Discord.js-commando",
   "main": "./src/index",
   "repository": "https://github.com/SoggyPiggy/discord.js-collector.git",
@@ -8,7 +8,6 @@
   "license": "Apache-2.0",
   "private": false,
   "dependencies": {
-    "canvas-prebuilt": "^2.0.0-alpha.12",
     "diskdb": "^0.1.17",
     "fuse.js": "^3.2.0",
     "mkdirp": "^0.5.1",
@@ -17,6 +16,7 @@
     "then-request": "^6.0.0"
   },
   "devDependencies": {
+    "canvas-prebuilt": "^2.0.0-alpha.12",
     "discord.js": "hydrabolt/discord.js#master",
     "discord.js-commando": "gawdl3y/discord.js-commando#master",
     "sqlite": "^2.9.1"

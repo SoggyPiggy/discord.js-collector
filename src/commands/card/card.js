@@ -36,7 +36,7 @@ module.exports = class _Command extends Commando.Command
 			return;
 		}
 		let user = this.collector.users.get(message.author);
-		let owned = user.cards.get(card.id);
+		let owned = user.cards.get(card.id) || 0;
 		if (card.visibility > 1 && !owned)
 		{
 			message.reply(`Unable to find Card: \`${cardID}\``);
