@@ -12,7 +12,7 @@ module.exports = class _Command extends Commando.Command
 				group: 'collector_card',
 				memberName: 'cards',
 				description: 'View/Search through the list of cards',
-				details: 'View the list of all the cards. With extra arguments you can search through all the cards and selet which page you would like to view.\nYou can use the help command to read more about searching.',
+				details: 'View the list of all the cards. With extra arguments you can search through all the cards and select which page you would like to view.\nYou can use the help command to read more about searching.',
 				args:
 				[
 					{
