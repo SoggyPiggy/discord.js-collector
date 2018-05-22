@@ -43,8 +43,8 @@ module.exports = class Collector extends EventEmitter
 		if (typeof options.packs.booster === 'undefined') options.packs.booster = 3;
 		if (typeof options.packs.set === 'undefined') options.packs.set = options.packs.booster;
 		if (typeof options.pricing !== 'object') options.pricing = {};
-		if (typeof options.pricing.boosterpack === 'undefined') options.pricing.boosterpack = 400;
-		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 600;
+		if (typeof options.pricing.boosterpack === 'undefined') options.pricing.boosterpack = 450;
+		if (typeof options.pricing.setpack === 'undefined') options.pricing.setpack = 650;
 		if (typeof options.pricing.tradetax === 'undefined') options.pricing.tradetax = 0;
 		if (typeof options.pricing.markettax === 'undefined') options.pricing.markettax = 0;
 		if (typeof options.authorGratuity === 'undefined') options.authorGratuity = .2;

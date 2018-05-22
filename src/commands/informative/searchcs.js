@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 
 header = str => `**${str}**`;
-spltter = str => `**~~----------------~~[ ${str} ]~~----------------~~**`;
+spltter = str => `**~~--------~~[ ${str} ]~~--------~~**`;
 example = str => `    Example: \`${str}\``;
 
 module.exports = class _Command extends Commando.Command

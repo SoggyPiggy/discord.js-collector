@@ -26,7 +26,7 @@ module.exports = class _Command extends Commando.Command
 						label: 'Filter(s)',
 						prompt: 'What filters would you like to apply?',
 						type: 'string',
-						default: false
+						default: '-guarded'
 					}
 				]
 			});
