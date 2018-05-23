@@ -57,9 +57,11 @@ module.exports = class _Command extends Commando.Command
 		let response = [`${user} Setpack`]
 		let cards = [];
 		let renderData = [];
+		let total = 0;
 		while(cards.length < this.collector.options.packs.set)
 		{
-			let card = set.cards.random();
+			let adjustment = ((total / cards.length) / (3 / this.collector.options.packs.set)) || 0;
+			let card = set.cards.random(adjustment);
 			let isNew = !user.cards.has(card);
 			user.cards.add(card);
 			user.giveXP(card.xp);
@@ -74,6 +76,7 @@ module.exports = class _Command extends Commando.Command
 			}
 			cards.push(card);
 			renderData.push({card: card, new: isNew});
+			total += card.value
 		}
 		renderData.sort((a, b) =>
 		{
