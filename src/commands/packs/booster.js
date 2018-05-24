@@ -34,11 +34,13 @@ module.exports = class _Command extends Commando.Command
 		let response = []
 		let cards = [];
 		let renderData = [];
+		let total = 0;
 		while(cards.length < this.collector.options.packs.booster)
 		{
+			let adjustment = ((total / cards.length) / (3 / this.collector.options.packs.booster)) || 0;
 			let series = this.collector.registry.packable.random();
 			let set = series.sets.random();
-			let card = set.cards.random();
+			let card = set.cards.random(adjustment);
 			let isNew = !user.cards.has(card);
 			user.cards.add(card);
 			user.giveXP(card.xp);
@@ -53,6 +55,7 @@ module.exports = class _Command extends Commando.Command
 			}
 			cards.push(card);
 			renderData.push({card: card, new: isNew});
+			total += card.value
 		}
 		renderData.sort((a, b) =>
 		{
