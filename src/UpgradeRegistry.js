@@ -17,5 +17,14 @@ module.exports = class UpgradeRegistry extends Map
 		if (this.has(upgrade.id)) return this.collector.emit('error', upgrade, this);
 		upgrade.init(this.collector);
 		this.set(upgrade.id, upgrade);
+		this.runStartup(upgrade);
+	}
+
+	runStartup(upgrade)
+	{
+		for (let [id, user] of this.collector.users)
+		{
+			upgrade.startup(user);
+		}
 	}
 }

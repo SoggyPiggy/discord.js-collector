@@ -47,7 +47,7 @@ module.exports = class Upgrade extends Map
 	async startup(user)
 	{
 		let level = user.upgrades.get(this.id);
-		this.get(level).startup.call(user);
+		this.get(level).startup(user);
 	}
 
 	compress()

@@ -68,7 +68,11 @@ module.exports = class Collector extends EventEmitter
 		this.series = this.registry.series;
 		this.sets = this.registry.sets;
 		this.cards = this.registry.cards;
+
+		this._commandoReady = false;
 	}
+
+	get commandoReady() {return this._commandoReady}
 
 	registerDefaults()
 	{
@@ -77,6 +81,11 @@ module.exports = class Collector extends EventEmitter
 	registerCommando(client)
 	{
 		this.Commando = client;
+		client.on('ready', () =>
+		{
+			this.emit('commandoReady');
+			this._commandoReady = true;
+		})
 
 		client.registry.registerGroup('collector_basic', 'Collector: Basics');
 		client.registry.registerCommand(new (require('./commands/basics/collect'))(client, this));
