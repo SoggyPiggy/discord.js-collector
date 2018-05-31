@@ -44,7 +44,7 @@ module.exports = class Card
 	get value()
 	{
 		let average = this.$set.cards._total / this.$set.cards.size;
-		let value = ((((average / this.chance) / (average / this.$set.cards._min)) + this.$set.value) / 2);
+		let value = ((average / this.chance) / (average / this.$set.cards._min)) * this.$set.value;
 		if (isNaN(value)) return Infinity;
 		else return value;
 	}
